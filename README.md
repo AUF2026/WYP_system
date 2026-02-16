@@ -35,6 +35,6 @@ Se hai un problema complesso che richiede una soluzione reale, applicabile e det
 ---
 
 <p align="right">
-  <code>Q.E.D. // AUF2026 SYSTEM v1.0.42</code>
+  <code>Q.E.D. // AUF2026 SYSTEM</code>
 </p>
 
