@@ -1,0 +1,111 @@
+---
+
+### **Licenza Proprietaria Personalizzata per AUF2026**
+
+---
+
+**Licenza Proprietaria e di Utilizzo Commerciale**
+
+**Preambolo**
+
+Il presente contratto di licenza (la “Licenza”) regola l’utilizzo del software e delle tecnologie sviluppate nell’ambito di **AUF2026**, inclusi ma non limitati a teorie matematiche, algoritmi, metodi computazionali e altre informazioni coperte da diritti di proprietà intellettuale (collettivamente denominati “Tecnologia”). L’uso della Tecnologia è consentito esclusivamente alle condizioni di cui alla presente Licenza.
+
+---
+
+**1. Definizioni**
+
+1.1 **Licenziante**: AUF2026 / Lead Architect.
+
+1.2 **Licenziatario**: Il soggetto che ha ottenuto il diritto di utilizzare la Tecnologia secondo le condizioni di questa Licenza.
+
+1.3 **Tecnologia**: Tutti i diritti relativi al software, teorie matematiche, algoritmi, modelli computazionali e altro materiale protetto da proprietà intellettuali sviluppati nell’ambito di **AUF2026**.
+
+1.4 **Uso Commerciale**: L'utilizzo della Tecnologia per scopi di produzione, distribuzione o vendita, sia direttamente che indirettamente, che generano ricavi economici o vantaggi finanziari.
+
+1.5 **Uso non Commerciale**: L'uso della Tecnologia per attività accademiche, di ricerca e sviluppo, senza alcun fine commerciale.
+
+---
+
+**2. Concessione della Licenza**
+
+2.1 **Licenza Limitata**: Il Licenziante concede al Licenziatario una licenza non esclusiva, non trasferibile e non sublicenziabile per l’utilizzo della Tecnologia nelle modalità descritte in questa Licenza.
+
+2.2 **Uso Non Commerciale**: La Tecnologia può essere utilizzata per scopi non commerciali esclusivamente per la **ricerca** e lo **sviluppo accademico**. Il Licenziatario non potrà utilizzare la Tecnologia per scopi commerciali senza una licenza separata e specifica per tale scopo.
+
+2.3 **Licenza Commerciale Separata**: Qualora il Licenziatario desideri utilizzare la Tecnologia per scopi commerciali, dovrà stipulare un accordo separato che prevede il pagamento di royalties o una licenza commerciale, la cui entità sarà stabilita caso per caso.
+
+2.4 **Restrizioni**:
+
+* Il Licenziatario non può vendere, distribuire, o concedere in sublicenza la Tecnologia senza il permesso esplicito del Licenziante.
+* Il Licenziatario non può modificare, adattare, o creare opere derivate dalla Tecnologia senza il permesso esplicito del Licenziante.
+* Il Licenziatario non può trasferire i diritti derivanti da questa Licenza a terzi senza l'approvazione scritta del Licenziante.
+
+---
+
+**3. Proprietà Intellettuale**
+
+3.1 **Diritti di Proprietà**: La Tecnologia rimane di proprietà esclusiva del Licenziante. La presente Licenza non trasferisce alcun diritto di proprietà sulla Tecnologia.
+
+3.2 **Protezione della Proprietà Intellettuale**: Il Licenziatario si impegna a non danneggiare, compromettere o mettere a rischio la proprietà intellettuale del Licenziante. Qualsiasi violazione dei diritti di proprietà intellettuale del Licenziante comporterà azioni legali, compreso il risarcimento dei danni.
+
+---
+
+**4. Termini di Pagamento e Royalties**
+
+4.1 **Royalties per Uso Commerciale**: Qualora il Licenziatario desideri utilizzare la Tecnologia per scopi commerciali, sarà soggetto al pagamento di royalties. La percentuale delle royalties sarà determinata dal Licenziante e formalizzata in un accordo separato.
+
+4.2 **Penale per Violazione**: In caso di utilizzo non autorizzato della Tecnologia (incluso l’uso commerciale non licenziato o la distribuzione non consentita), il Licenziatario sarà tenuto a pagare una **penale pari a 50 milioni di euro (50.000.000 EUR)**. Tale penale è ragionevole considerando l’impatto economico e il valore della Tecnologia e ha lo scopo di dissuadere violazioni di questa Licenza.
+
+---
+
+**5. Durata e Risoluzione**
+
+5.1 **Durata**: La presente Licenza entra in vigore alla data di firma e continuerà fino alla risoluzione del contratto, a meno che non venga interrotta anticipatamente ai sensi delle disposizioni di cui alla presente Licenza.
+
+5.2 **Risoluzione per Violazione**: Il Licenziante ha il diritto di risolvere questa Licenza immediatamente in caso di violazione dei termini da parte del Licenziatario. In caso di risoluzione anticipata, il Licenziatario dovrà cessare immediatamente l’uso della Tecnologia e restituire o distruggere tutte le copie della Tecnologia in suo possesso.
+
+---
+
+**6. Confidenzialità**
+
+6.1 **Obbligo di Riservatezza**: Il Licenziatario si impegna a mantenere riservati i dettagli tecnici, commerciali e di altra natura relativi alla Tecnologia, inclusi eventuali miglioramenti, modifiche e altre informazioni riservate. Il Licenziatario non dovrà divulgare tali informazioni a terzi senza l'approvazione scritta del Licenziante.
+
+6.2 **Durata dell’Obbligo di Riservatezza**: L’obbligo di riservatezza rimarrà in vigore anche dopo la cessazione della Licenza, per un periodo di 10 anni dalla data di cessazione.
+
+---
+
+**7. Legge Applicabile e Foro Competente**
+
+7.1 **Legge Applicabile**: La presente Licenza è regolata dalle leggi della **Svizzera**, senza applicazione delle sue norme sui conflitti di legge.
+
+7.2 **Foro Competente**: In caso di controversie derivanti dalla presente Licenza, il foro competente sarà esclusivamente quello del **Tribunale di Zurigo**, Svizzera.
+
+---
+
+**8. Varie**
+
+8.1 **Intero Accordo**: La presente Licenza costituisce l’intero accordo tra le parti e sostituisce ogni accordo precedente, scritto o verbale, relativo alla Tecnologia.
+
+8.2 **Modifiche**: Qualsiasi modifica alla presente Licenza dovrà essere effettuata per iscritto e firmata da entrambe le parti.
+
+---
+
+**Firma del Licenziante**
+Nome: AUF2026 / Lead Architect
+Ruolo: Lead Architect
+Data: [Data]
+Firma: ___________________________
+
+**Firma del Licenziatario**
+Nome: [Nome del Licenziatario]
+Ruolo: [Ruolo del Licenziatario]
+Data: [Data]
+Firma: ___________________________
+
+---
+
+### **Conclusioni**
+
+Questa licenza personalizzata garantisce il pieno controllo sui diritti di **proprietà intellettuale**, definisce chiaramente le modalità di **utilizzo commerciale**, e stabilisce **penali significative** in caso di violazioni. Inoltre, la **clausola di confidenzialità** e l'obbligo di **approvazione scritta per modifiche e sublicenze** forniscono una protezione legale robusta per il tuo progetto **AUF2026**.
+
+---
