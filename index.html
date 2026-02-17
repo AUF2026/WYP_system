@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
     <style>
-	:root {
-    	  --neon: #00f2ff;
-    	  --link: var(--neon);
-    	  --bg: #000000;
-    	  --surface: #0a0a0a;
-    	  --font-main: 'Inter', sans-serif;
-    	  --font-mono: 'JetBrains Mono', monospace;
-	}
+        :root {
+            --neon: #00f2ff;
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
 
-	/* KILLER DEL BLU BROWSER */
-	a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
-	a:hover { filter: brightness(1.2); text-decoration: underline !important; }
+        /* KILLER DEL BLU BROWSER */
+        a, a:visited, a:active { color: var(--neon) !important; text-decoration: none !important; }
+        a:hover { filter: brightness(1.2); text-decoration: underline !important; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
@@ -29,22 +28,22 @@
 
         header { 
             width: 100%;
-            max-width: 800px;
+            max-width: 550px;
             margin: 0 auto;
-            padding: 80px 0 30px; 
+            padding: 60px 0 20px; 
             text-align: center; 
         }
 
+        /* LOGO BIT A BIT - SIZE AUTO - HEIGHT 85PX */
         .logo-box {
             filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4));
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
         }
 
-        /* LOGO GRANDE - SIZE AUTO */
         .logo-box svg {
             width: auto;
-            height: 85px; 
-            display: inline-block;
+            height: 85px; /* Forza la dimensione richiesta */
         }
 
         .tagline {
@@ -78,19 +77,18 @@
             border: 1px solid #222;
             padding: 20px;
             margin-bottom: 25px;
-            transition: border-color 0.4s;
         }
-        .description-box:focus-within { border-color: var(--neon); }
 
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
         .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; }
         .budget-container input { border-bottom: none; }
+        
         input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
 
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
             font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s; margin-top: 20px; line-height: 1.4;
+            transition: 0.3s; margin-top: 20px;
         }
         .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); }
 
@@ -110,7 +108,7 @@
 
 <header>
     <div class="logo-box">
-        <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+        <svg xmlns="http://www.w3.org" viewBox="0 0 250 85">
             <g transform="scale(0.85)">
                 <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
                 <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
@@ -132,7 +130,6 @@
     </section>
 
     <div class="wyp-card">
-        <!-- Rimosso action e method per gestire tutto via JS -->
         <form id="kernel-form">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -158,9 +155,8 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci parametri tecnici." required></textarea>
+                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico." required></textarea>
                 </div>
-
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
                     <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
@@ -168,7 +164,7 @@
             </div>
 
             <div class="field-group">
-                <label>ALLEGATI TECNICI (DOCKER, LOGS, SCHEMI)</label>
+                <label>ALLEGATI TECNICI</label>
                 <input type="file" name="Allegato">
             </div>
 
@@ -180,7 +176,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-core" id="submit-btn">Esegui Risoluzione</button>
+            <button type="submit" class="btn-core">Esegui Risoluzione</button>
         </form>
     </div>
 </main>
@@ -198,48 +194,27 @@
     const form = document.getElementById('kernel-form');
     const statusOverlay = document.getElementById('kernel-status');
     const statusLog = document.getElementById('status-log');
-    const FORMSPREE_ID = "TUO_ID_QUI"; // <--- INSERISCI QUI IL TUO ID
+    const FORMSPREE_ID = "TUO_ID_QUI"; // <--- INSERISCI QUI
 
-    form.addEventListener("submit", async function(event) {
-        event.preventDefault();
-        
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
         statusOverlay.style.display = 'flex';
-        statusLog.innerHTML = "";
         
-        const formData = new FormData(form);
-        const steps = [
-            "> Analisi entropia in corso...",
-            "> Mappatura spazio degli stati...",
-            "> Iniezione correzione deterministica...",
-            "> Sincronizzazione con il server..."
-        ];
-
-        // Animazione log fake
-        for (let step of steps) {
-            statusLog.innerHTML += `<div>${step}</div>`;
-            await new Promise(r => setTimeout(r, 800));
+        const steps = ["> Analisi entropia...", "> Spazio stati...", "> Iniezione correzione...", "> Invio dati..."];
+        for (let s of steps) {
+            statusLog.innerHTML += `<div>${s}</div>`;
+            await new Promise(r => setTimeout(r, 700));
         }
 
-        // Invio reale dei dati
         fetch(`https://formspree.io{FORMSPREE_ID}`, {
             method: "POST",
-            body: formData,
+            body: new FormData(form),
             headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if (response.ok) {
-                statusLog.innerHTML += `<div style="color:#00f2ff; margin-top:20px;">> Q.E.D. PROBLEMA RISOLTO.</div>`;
-                statusLog.innerHTML += `<div>Ricarico il sistema...</div>`;
-                setTimeout(() => location.reload(), 3000);
-            } else {
-                statusLog.innerHTML += `<div style="color:red;">> ERRORE KERNEL: INVIO FALLITO.</div>`;
-                setTimeout(() => statusOverlay.style.display = 'none', 3000);
-            }
-        }).catch(error => {
-            statusLog.innerHTML += `<div style="color:red;">> ECCEZIONE CRITICA: ${error.message}</div>`;
-            setTimeout(() => statusOverlay.style.display = 'none', 3000);
+        }).then(() => {
+            statusLog.innerHTML += `<div style="color:var(--neon); margin-top:15px;">> Q.E.D. RISOLTO.</div>`;
+            setTimeout(() => location.reload(), 2500);
         });
     });
 </script>
-
 </body>
 </html>
