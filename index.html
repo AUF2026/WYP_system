@@ -7,7 +7,7 @@
     <style>
         :root {
             --neon: #00f2ff;
-            --electric-blue: #2ddaff; /* Il blu forte del logo */
+            --electric-blue: #2ddaff;
             --bg: #000;
             --surface: #050505;
             --font-mono: 'JetBrains Mono', monospace;
@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* SCANLINE CRT */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), 
@@ -90,7 +89,7 @@
         label { 
             display: block; 
             font-size: 0.65rem; 
-            color: var(--electric-blue); /* Label più visibili */
+            color: var(--electric-blue); 
             margin-bottom: 18px; 
             letter-spacing: 3px; 
             text-transform: uppercase;
@@ -101,7 +100,7 @@
             width: 100%; 
             background: transparent; 
             border: none; 
-            color: var(--electric-blue) !important; /* Testo Blu Elettrico */
+            color: var(--electric-blue) !important; 
             font-size: 1.1rem; 
             outline: none; 
             font-family: var(--font-mono);
@@ -109,11 +108,8 @@
             font-weight: 600;
         }
 
-        /* Placeholder Blu ad alta visibilità */
         ::placeholder { color: rgba(45, 218, 255, 0.4) !important; text-transform: uppercase; }
-
         textarea { resize: none; text-transform: none; line-height: 1.6; }
-        
         select { cursor: pointer; -webkit-appearance: none; }
         option { background: #000; color: var(--electric-blue); }
 
@@ -283,6 +279,7 @@
 
         const data = new FormData(event.target);
         
+        // ENDPOINT CORRETTO CON /f/ PER CHIAMATE AJAX
         fetch("https://formspree.io", {
             method: 'POST',
             body: data,
