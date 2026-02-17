@@ -6,106 +6,39 @@
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
     <style>
 	:root {
-    	  --neon: #00f2ff; /* Colore Master (Azzurro) */
-    	  --link: var(--neon); /* Il link eredita sempre il colore Master */
+    	  --neon: #00f2ff;
     	  --bg: #000000;
     	  --surface: #0a0a0a;
     	  --font-main: 'Inter', sans-serif;
     	  --font-mono: 'JetBrains Mono', monospace;
 	}
-
-	/* KILLER DEL BLU BROWSER */
-	    a, a:visited, a:active {
-	    color: #00f2ff !important; 
-	    text-decoration: none !important;
-	}
-
-	    a:hover {
-	    filter: brightness(1.2);
-	    text-decoration: underline !important;
-	}
-
-
+	    a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
+	    a:hover { filter: brightness(1.2); text-decoration: underline !important; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
-
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: radial-gradient(var(--surface) 1px, transparent 1px);
             background-size: 30px 30px; z-index: -1; opacity: 0.5;
         }
-
-        header { 
-            width: 100%;
-            max-width: 550px;
-            margin: 0 auto;
-            padding: 60px 0 20px; 
-            text-align: center; 
-        }
-
-        .logo-box {
-            width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4));
-            padding: 0 10px;
-        }
-
-        .logo-box svg {
-            width: 100%;
-            height: auto;
-        }
-
-        .tagline {
-            font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px;
-            text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8;
-            text-align: center;
-        }
-
+        header { width: 100%; max-width: 550px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
+        .logo-box { width: 100%; height: auto; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4)); padding: 0 10px; }
+        .logo-box svg { width: 100%; height: auto; }
+        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center; }
         main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
-
-        .manifesto {
-            font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center;
-            border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc;
-            margin-top: 40px;
-        }
-
+        .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
         .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
-        
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        input, textarea {
-            height: auto; width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
-            color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
-        }
+        input, textarea { height: auto; width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
         input:focus { border-bottom-color: var(--neon); }
-
-        .description-box {
-            border: 1px solid #222;
-            padding: 20px;
-            margin-bottom: 25px;
-            transition: border-color 0.4s;
-        }
+        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: border-color 0.4s; }
         .description-box:focus-within { border-color: var(--neon); }
-
-        .btn-core {
-            width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
-            font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s; margin-top: 20px; line-height: 1.4;
-        }
+        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 20px; line-height: 1.4; }
         .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); }
-
-        #kernel-status {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column;
-            justify-content: center; align-items: center; font-family: var(--font-mono);
-            color: var(--neon); text-align: center; padding: 20px;
-        }
+        #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; padding: 20px; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
     </style>
 </head>
@@ -135,7 +68,7 @@
     </section>
 
     <div class="wyp-card">
-        <!-- FORM INTEGRATO CON IL TUO ENDPOINT FORMSPREE -->
+        <!-- AGGIORNATO CON IL TUO ID FINALE -->
         <form id="kernel-form" action="https://formspree.io" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -149,23 +82,20 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>IL PROBLEMA</label>
-                    <textarea name="Problem-Detail" id="message" rows="3" placeholder="DESCRIZIONE DETTAGLIATA PROBLEMA. Inserisci qui la richiesta dettagliata e fornisci valori reali, senza di essi non saremo in grado di fornirvi la soluzione!" required></textarea>
+                    <textarea name="Problem-Detail" id="message" rows="3" placeholder="DESCRIZIONE DETTAGLIATA PROBLEMA..." required></textarea>
                 </div>
                 <div class="field-group" style="margin-bottom: 0;">
                     <label style="color: var(--neon);">PROPOSTA DI SPESA - VALUTAZIONE CLIENTE.(€)</label>
-                    <input type="number" name="Budget-Proposal" id="budget" placeholder="Inserisci qui la somma che intendi investire." required>
+                    <input type="number" name="Budget-Proposal" id="budget" placeholder="Inserisci qui la somma." required>
                 </div>
             </div>
 
-            <!-- IL PULSANTE ATTIVA LA LOGICA JS -->
             <button type="button" onclick="initializeBypass()" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA <br> 120-DEC REALE E APPLICABILE</button>
         </form>
     </div>
 </main>
 
-<div id="kernel-status">
-    <div id="status-log"></div>
-</div>
+<div id="kernel-status"><div id="status-log"></div></div>
 
 <footer>
     ALAIN FAURE AUF2026&copy; <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | WYP? SYSTEM | Q.E.D
@@ -176,49 +106,27 @@
         const form = document.getElementById('kernel-form');
         const status = document.getElementById('kernel-status');
         const log = document.getElementById('status-log');
-        
-        if(!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
+        if(!form.checkValidity()) { form.reportValidity(); return; }
         status.style.display = 'flex';
-        const steps = [
-            "> INITIALIZING QUANTUM BYPASS...",
-            "> ANALYZING ENTROPY LEVELS...",
-            "> MAPPING PROBLEM SPACE...",
-            "> SOLVING O(1) COMPLEXITY...",
-            "> ENCRYPTING DATA PACKETS...",
-            "> EXECUTING UPLINK TO KERNEL..."
-        ];
-
+        const steps = ["> INITIALIZING...", "> ANALYZING ENTROPY...", "> MAPPING SPACE...", "> EXECUTING UPLINK..."];
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
             await new Promise(r => setTimeout(r, 600));
         }
-
         const formData = new FormData(form);
-        
         try {
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
-
             if (response.ok) {
-                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span><br><br><small>CHECK YOUR EMAIL FOR CONFIRMATION.</small>";
-                setTimeout(() => {
-                    status.style.display = 'none';
-                    form.reset();
-                }, 4000);
-            } else {
-                throw new Error();
-            }
+                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
+                setTimeout(() => { status.style.display = 'none'; form.reset(); }, 2500);
+            } else { throw new Error(); }
         } catch (error) {
-            log.innerHTML = "<span style='color: #ff3333'>UPLINK ERROR: KERNEL REJECTED CONNECTION.</span><br><br><button onclick='location.reload()' style='background:transparent; color:white; border:1px solid white; padding:10px; cursor:pointer;'>REBOOT SYSTEM</button>";
+            log.innerHTML = "<span style='color: #ff3333'>UPLINK ERROR. CHECK EMAIL ACTIVATION.</span>";
+            setTimeout(() => { status.style.display = 'none'; }, 3000);
         }
     }
 </script>
