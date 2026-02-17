@@ -10,43 +10,56 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--surface) 1px, transparent 1px); background-size: 30px 30px; z-index: -1; opacity: 0.5; }
-        header { width: 100%; max-width: 550px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
-        .logo-box { filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4)); }
-        /* Logo size auto come richiesto */
-        .logo-box svg { width: auto; height: 85px; } 
-        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; }
-        main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
-        .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
-        .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
-        .field-group { margin-bottom: 25px; }
-        label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
+        
+        header { width: 100%; max-width: 800px; margin: 0 auto; padding: 80px 0 40px; text-align: center; }
+        
+        /* LOGO GRANDE - SIZE AUTO */
+        .logo-box { filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5)); margin-bottom: 30px; }
+        .logo-box svg { width: auto; height: 110px; } /* Altezza aumentata per impatto visivo */
+
+        .tagline { font-family: var(--font-mono); font-size: 2.2rem; letter-spacing: 6px; text-transform: uppercase; color: var(--neon); opacity: 0.9; }
+        
+        main { max-width: 650px; margin: 0 auto; padding: 0 25px 100px; }
+        .manifesto { font-size: 1.2rem; line-height: 1.6; margin-bottom: 50px; text-align: center; border-left: 3px solid var(--neon); border-right: 3px solid var(--neon); padding: 10px 30px; color: #eee; }
+        
+        .wyp-card { background: var(--surface); border: 1px solid #1a1a1a; padding: 45px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .field-group { margin-bottom: 30px; }
+        label { display: block; font-family: var(--font-mono); font-size: 0.7rem; color: #666; margin-bottom: 10px; letter-spacing: 2px; }
+        
+        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 12px 0; font-size: 1.1rem; outline: none; transition: 0.3s; }
         select { color: var(--neon); cursor: pointer; }
         option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
-        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; }
         
-        /* Finestra Prezzo migliorata con simbolo fisso */
+        .description-box { border: 1px solid #222; padding: 25px; margin-bottom: 30px; background: rgba(255,255,255,0.02); }
+        
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
-        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.2rem; }
-        .budget-container input { border-bottom: none; padding: 10px 0; }
+        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 12px; font-size: 1.3rem; }
+        .budget-container input { border-bottom: none; }
 
-        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        input[type="file"] { border-bottom: none; font-size: 0.85rem; color: var(--neon); cursor: pointer; padding-top: 10px; }
+
+        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.4s; letter-spacing: 2px; }
+        .btn-core:hover { background: #fff; box-shadow: 0 0 30px var(--neon); transform: translateY(-2px); }
+
         #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 0.9rem; color: #6e6e6e; }
+        footer { padding: 50px; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: #444; letter-spacing: 1px; }
     </style>
 </head>
 <body>
+
 <header>
     <div class="logo-box">
-      <svg xmlns="http://www.w3.org" viewBox="0 0 250 85" width="auto">
-            <g transform="scale(1.0)">
+        <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+            <!-- Glitch Icon -->
+            <g transform="scale(0.85)">
                 <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
                 <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
                 <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
             </g>
+            <!-- WYP TEXT 50pt + QUADRATINO AZZURRO -->
             <g transform="translate(72, 58)">
                 <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5Z" fill="#ffffff"></path>
                 <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#00f2ff"></path>
@@ -68,6 +81,7 @@
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
             </div>
+            
             <div class="field-group">
                 <label>CANALE PRIVATO CRIPTATO</label>
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
@@ -87,78 +101,66 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci valori reali per una risoluzione deterministica." required></textarea>
+                    <textarea name="Messaggio" rows="4" placeholder="Sii specifico. Fornisci i parametri tecnici del problema." required></textarea>
                 </div>
 
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
-                    <input type="text" name="Obiettivo" placeholder="Qual è il punto di arrivo?" required>
-                </div>
-
-                <div class="field-group">
-                    <label>ALLEGATI TECNICI (LOG, PDF, CSV, TXT - MAX 5MB)</label>
-                    <input type="file" name="Allegato" style="border:none; color: var(--neon); font-size: 0.8rem;">
-                </div>
-
-                <div class="field-group" style="margin-bottom: 0;">
-                    <label style="color: var(--neon);">PROPOSTA DI SPESA - VALUTAZIONE CLIENTE</label>
-                    <div class="budget-container">
-                        <span>€</span>
-                        <input type="number" name="Budget" placeholder="Investimento previsto" required>
-                    </div>
+                    <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale desiderato?" required>
                 </div>
             </div>
-            <button type="button" onclick="initializeBypass()" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
+
+            <div class="field-group">
+                <label>ALLEGATI TECNICI (DOCKER, LOGS, SCHEMI)</label>
+                <input type="file" name="Allegato">
+            </div>
+
+            <div class="field-group">
+                <label>ALLOCAZIONE BUDGET (EUR)</label>
+                <div class="budget-container">
+                    <span>€</span>
+                    <input type="number" name="Budget" placeholder="0.00" step="100">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-core">Esegui Risoluzione</button>
         </form>
     </div>
 </main>
 
-<div id="kernel-status"><div id="status-log"></div></div>
+<div id="kernel-status">
+    <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
+    <div id="status-log" style="margin-top: 20px; line-height: 1.8;"></div>
+</div>
 
 <footer>
-    ALAIN FAURE AUF2026© <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | Q.E.D
+    WYP // ALGORITHMIC PROBLEM SOLVING // © 2024
 </footer>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const status = document.getElementById('kernel-status');
-        if (status) status.style.display = 'none';
-        document.getElementById('kernel-form').reset();
-    });
+    const form = document.getElementById('kernel-form');
+    const statusOverlay = document.getElementById('kernel-status');
+    const statusLog = document.getElementById('status-log');
 
-    async function initializeBypass() {
-        const form = document.getElementById('kernel-form');
-        const status = document.getElementById('kernel-status');
-        const log = document.getElementById('status-log');
-        
-        if(!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
-        status.style.display = 'flex';
-        const steps = [
-            "> INITIALIZING QUANTUM BYPASS...",
-            "> ANALYZING ENTROPY LEVELS...",
-            "> UPLOADING ASSETS...",
-            "> EXECUTING UPLINK TO KERNEL..."
+    form.onsubmit = function() {
+        statusOverlay.style.display = 'flex';
+        let steps = [
+            "Analisi entropia...",
+            "Definizione spazio degli stati...",
+            "Iniezione correzione deterministica...",
+            "Problema risolto. Invio dati al server."
         ];
-
-        for(let step of steps) {
-            log.innerHTML = `<span class="blink">${step}</span>`;
-            await new Promise(r => setTimeout(r, 600));
-        }
-
-        log.innerHTML = "<span style='color: #00f2ff'>UPLINK ESTABLISHED. SENDING DATA...</span>";
-        
-        setTimeout(() => {
-            form.submit(); 
-        }, 800);
-    }
+        let i = 0;
+        let interval = setInterval(() => {
+            if(i < steps.length) {
+                statusLog.innerHTML += `<div>> ${steps[i]}</div>`;
+                i++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 700);
+    };
 </script>
+
 </body>
 </html>
-
-
-
-
