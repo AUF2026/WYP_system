@@ -19,12 +19,12 @@
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
         input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
-        select { color: var(--neon); }
+        select { color: var(--neon); cursor: pointer; }
         option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
-        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; }
+        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: border-color 0.4s; }
+        .description-box:focus-within { border-color: var(--neon); }
         
-        /* Miglioria finestra Prezzo */
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
         .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.2rem; }
         .budget-container input { border-bottom: none; padding: 10px 0; }
@@ -40,7 +40,6 @@
 <header>
     <div class="logo-box">
         <svg xmlns="http://www.w3.org" viewBox="0 0 250 85" width="250">
-<svg xmlns="http://www.w3.org" viewBox="0 0 250 85">
             <g transform="scale(0.85)">
                 <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
                 <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
@@ -62,7 +61,6 @@
     </section>
 
     <div class="wyp-card">
-        <!-- Aggiunto enctype per permettere l'invio di file -->
         <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -73,7 +71,6 @@
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
 
-            <!-- Nuovo campo: Dominio del problema -->
             <div class="field-group">
                 <label>DOMINIO DI ANALISI</label>
                 <select name="Settore" required>
@@ -91,13 +88,11 @@
                     <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci valori reali per una risoluzione deterministica." required></textarea>
                 </div>
 
-                <!-- Nuovo campo: Obiettivo -->
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
                     <input type="text" name="Obiettivo" placeholder="Qual è il punto di arrivo?" required>
                 </div>
 
-                <!-- Campo File -->
                 <div class="field-group">
                     <label>ALLEGATI TECNICI (LOG, PDF, CSV - MAX 5MB)</label>
                     <input type="file" name="Allegato" style="border:none; color: var(--neon); font-size: 0.8rem;">
@@ -115,6 +110,7 @@
         </form>
     </div>
 </main>
+
 <div id="kernel-status"><div id="status-log"></div></div>
 
 <footer>
@@ -125,7 +121,6 @@
     document.addEventListener("DOMContentLoaded", function() {
         const status = document.getElementById('kernel-status');
         if (status) status.style.display = 'none';
-        document.getElementById('kernel-form').reset();
     });
 
     async function initializeBypass() {
@@ -160,4 +155,3 @@
 </script>
 </body>
 </html>
-
