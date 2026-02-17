@@ -18,9 +18,14 @@
         .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
+        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
+        select { color: var(--neon); cursor: pointer; }
+        option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
         .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; }
+        .budget-input-wrapper { display: flex; align-items: center; border-bottom: 1px solid #222; }
+        .budget-input-wrapper span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; }
+        .budget-input-wrapper input { border-bottom: none; }
         .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
         #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; }
         .blink { animation: blink 1s infinite; }
@@ -29,7 +34,6 @@
     </style>
 </head>
 <body>
-
 <header>
     <div class="logo-box">
         <svg xmlns="http://www.w3.org" viewBox="0 0 250 85" width="250">
@@ -46,31 +50,60 @@
 
 <main>
     <section class="manifesto">
-        COLLASSIAMO L'ENTROPIA DEI TUOI PROBLEMI COMPLESSI.<br>
-        <b>SaaS Architecture. Risoluzione O(1) deterministico.</b>
+        ANALISI DETERMINISTICA E RISOLUZIONE COMPLESSITÀ.<br>
+        <b>Fornisci i dati grezzi. Noi collassiamo l'entropia.</b>
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
+        <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
-                <label>IDENTITÀ ASSET</label>
-                <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
+                <label>IDENTITÀ ASSET / COMPANY</label>
+                <input type="text" name="Azienda" placeholder="NOME SOCIETÀ O BRAND" required>
             </div>
+            
             <div class="field-group">
-                <label>CANALE PRIVATO CRIPTATO</label>
-                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
+                <label>CANALE CRIPTATO (EMAIL)</label>
+                <input type="email" name="Email" placeholder="indirizzo@dominio.it" required>
             </div>
+
+            <div class="field-group">
+                <label>AMBITO DEL PROBLEMA</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>Seleziona dominio...</option>
+                    <option value="Software-Architecture">Software Architecture & SaaS</option>
+                    <option value="Automation">Automazione & Scripting</option>
+                    <option value="Data-Entropy">Analisi Dati & Entropia</option>
+                    <option value="Security-Bypass">Security & System Bypass</option>
+                    <option value="Other">Altro (Specificare sotto)</option>
+                </select>
+            </div>
+
             <div class="description-box">
                 <div class="field-group">
-                    <label>IL PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
+                    <label>DETTAGLI TECNICI DEL PROBLEMA</label>
+                    <textarea name="Messaggio" rows="4" placeholder="Descrivi il blocco attuale. Sii specifico sui dati." required></textarea>
                 </div>
+
+                <div class="field-group">
+                    <label>OBIETTIVO DETERMINISTICO (COSA VUOI OTTENERE?)</label>
+                    <input type="text" name="Obiettivo" placeholder="Risultato finale atteso" required>
+                </div>
+
+                <div class="field-group">
+                    <label>DOCUMENTAZIONE / LOG / FILE (MAX 5MB)</label>
+                    <input type="file" name="Allegato" style="border:none; font-size: 0.8rem; color: var(--neon);">
+                </div>
+
                 <div class="field-group" style="margin-bottom: 0;">
-                    <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
-                    <input type="number" name="Budget" placeholder="Somma da investire" required>
+                    <label style="color: var(--neon);">VALUTAZIONE INVESTIMENTO CLIENTE</label>
+                    <div class="budget-input-wrapper">
+                        <span>€</span>
+                        <input type="number" name="Budget" placeholder="Somma destinata alla soluzione" required>
+                    </div>
                 </div>
             </div>
-            <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
+
+            <button type="button" onclick="initializeBypass()" class="btn-core">AVVIA PROCESSO DI RISOLUZIONE</button>
         </form>
     </div>
 </main>
@@ -79,14 +112,13 @@
 <footer>
     ALAIN FAURE AUF2026© <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | Q.E.D
 </footer>
+
 <script>
-    // Forza la chiusura dell'overlay all'istante appena la pagina carica
     document.addEventListener("DOMContentLoaded", function() {
         const status = document.getElementById('kernel-status');
-        if (status) {
-            status.style.display = 'none';
-        }
-        document.getElementById('kernel-form').reset();
+        if (status) status.style.display = 'none';
+        const form = document.getElementById('kernel-form');
+        if(form) form.reset();
     });
 
     async function initializeBypass() {
@@ -99,31 +131,22 @@
             return;
         }
 
-        // Mostra l'interfaccia di caricamento
         status.style.display = 'flex';
-        
         const steps = [
-            "> INITIALIZING QUANTUM BYPASS...",
-            "> ANALYZING ENTROPY LEVELS...",
-            "> MAPPING PROBLEM SPACE...",
-            "> EXECUTING UPLINK TO KERNEL..."
+            "> INITIALIZING SCANNER...",
+            "> UPLOADING ASSETS...",
+            "> CALCULATING DETERMINISTIC PATH...",
+            "> COLLAPSING ENTROPY...",
+            "> UPLINK ESTABLISHED. SENDING..."
         ];
 
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
-            await new Promise(r => setTimeout(r, 600));
+            await new Promise(r => setTimeout(r, 700));
         }
 
-        log.innerHTML = "<span style='color: #00f2ff'>UPLINK ESTABLISHED. SENDING DATA...</span>";
-        
-        // Timeout breve prima del submit fisico
-        setTimeout(() => {
-            form.submit(); 
-        }, 800);
+        setTimeout(() => { form.submit(); }, 500);
     }
 </script>
 </body>
 </html>
-
-
-
