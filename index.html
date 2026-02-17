@@ -79,13 +79,15 @@
 <footer>
     ALAIN FAURE AUF2026© <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | Q.E.D
 </footer>
-
 <script>
-    // Al caricamento della pagina, resetta lo stato (pulisce l'overlay se presente)
-    window.onload = function() {
-        document.getElementById('kernel-status').style.display = 'none';
+    // Forza la chiusura dell'overlay all'istante appena la pagina carica
+    document.addEventListener("DOMContentLoaded", function() {
+        const status = document.getElementById('kernel-status');
+        if (status) {
+            status.style.display = 'none';
+        }
         document.getElementById('kernel-form').reset();
-    };
+    });
 
     async function initializeBypass() {
         const form = document.getElementById('kernel-form');
@@ -97,6 +99,7 @@
             return;
         }
 
+        // Mostra l'interfaccia di caricamento
         status.style.display = 'flex';
         
         const steps = [
@@ -113,13 +116,14 @@
 
         log.innerHTML = "<span style='color: #00f2ff'>UPLINK ESTABLISHED. SENDING DATA...</span>";
         
+        // Timeout breve prima del submit fisico
         setTimeout(() => {
-            // Esegue l'invio fisico
             form.submit(); 
-        }, 1000);
+        }, 800);
     }
 </script>
 </body>
 </html>
+
 
 
