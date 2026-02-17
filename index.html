@@ -68,7 +68,7 @@
     </section>
 
     <div class="wyp-card">
-        <!-- AGGIORNATO CON IL TUO ID FINALE -->
+        <!-- ACTION INTEGRATA CON ID mojnwnwg -->
         <form id="kernel-form" action="https://formspree.io" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -106,13 +106,25 @@
         const form = document.getElementById('kernel-form');
         const status = document.getElementById('kernel-status');
         const log = document.getElementById('status-log');
-        if(!form.checkValidity()) { form.reportValidity(); return; }
+        
+        if(!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
         status.style.display = 'flex';
-        const steps = ["> INITIALIZING...", "> ANALYZING ENTROPY...", "> MAPPING SPACE...", "> EXECUTING UPLINK..."];
+        const steps = [
+            "> INITIALIZING QUANTUM BYPASS...", 
+            "> ANALYZING ENTROPY LEVELS...", 
+            "> MAPPING PROBLEM SPACE...", 
+            "> EXECUTING UPLINK TO KERNEL..."
+        ];
+
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
             await new Promise(r => setTimeout(r, 600));
         }
+
         const formData = new FormData(form);
         try {
             const response = await fetch(form.action, {
@@ -120,11 +132,17 @@
                 body: formData,
                 headers: { 'Accept': 'application/json' }
             });
+
             if (response.ok) {
-                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
-                setTimeout(() => { status.style.display = 'none'; form.reset(); }, 2500);
-            } else { throw new Error(); }
-        } catch (error) {
+                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span>";
+                setTimeout(() => {
+                    status.style.display = 'none';
+                    form.reset();
+                }, 2500);
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
             log.innerHTML = "<span style='color: #ff3333'>UPLINK ERROR. CHECK EMAIL ACTIVATION.</span>";
             setTimeout(() => { status.style.display = 'none'; }, 3000);
         }
