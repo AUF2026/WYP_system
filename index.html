@@ -4,45 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- SCRIPT HCAPTCHA - FONDAMENTALE PER IL BYPASS -->
-    <script src="https://js.hcaptcha.com" async defer></script>
+    <!-- SCRIPT RECAPTCHA REALE -->
+    <script src="https://www.google.com" async defer></script>
     <style>
-        :root { --neon: #00f2ff; --bg: #000000; --surface: #0a0a0a; --font-mono: 'JetBrains Mono', monospace; }
-        a, a:visited { color: var(--neon) !important; text-decoration: none !important; }
+	:root {
+    	  --neon: #00f2ff;
+    	  --bg: #000000;
+    	  --surface: #0a0a0a;
+    	  --font-main: 'Inter', sans-serif;
+    	  --font-mono: 'JetBrains Mono', monospace;
+	}
+
+	/* KILLER DEL BLU BROWSER */
+	a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
+	a:hover { filter: brightness(1.2); text-decoration: underline !important; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--surface) 1px, transparent 1px); background-size: 30px 30px; z-index: -1; opacity: 0.5; }
-        header { width: 100%; max-width: 550px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
-        .logo-box { filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4)); }
-        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; }
+        body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(var(--surface) 1px, transparent 1px);
+            background-size: 30px 30px; z-index: -1; opacity: 0.5;
+        }
+
+        header { 
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 0 20px; 
+            text-align: center; 
+        }
+
+        .logo-box {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5));
+            padding: 0 10px;
+        }
+
+        .logo-box svg { width: 100%; height: auto; }
+
+        .tagline {
+            font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px;
+            text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8;
+            text-align: center;
+        }
+
         main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
-        .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
+
+        .manifesto {
+            font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center;
+            border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc;
+            margin-top: 40px;
+        }
+
         .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
+        
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
+        
+        input, textarea, select {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
+            color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
+        }
+        select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
+        option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
-        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; }
-        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; }
+
+        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
+        .description-box:focus-within { border-color: var(--neon); }
+
+        .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
+        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
+        .budget-container input { border-bottom: none; }
+        
+        input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
+
+        .btn-core {
+            width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
+            font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s; margin-top: 20px; line-height: 1.4;
+        }
+        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
+
+        #kernel-status {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column;
+            justify-content: center; align-items: center; font-family: var(--font-mono);
+            color: var(--neon); text-align: center; padding: 20px;
+        }
+        #status-log { font-size: 1.2rem; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 0.9rem; color: #6e6e6e; }
-        /* STILE DARK PER IL WIDGET */
-        .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
+
+        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
+        
+        /* CENTRATURA RECAPTCHA */
+        .g-recaptcha { margin: 20px 0; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo-box">
-        <svg xmlns="http://www.w3.org" viewBox="0 0 250 85" width="250">
+        <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
             <g transform="scale(0.85)">
                 <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
                 <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
                 <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
             </g>
-            <text x="75" y="55" fill="white" font-family="monospace" font-size="32" font-weight="bold">WYP?</text>
+            <g transform="translate(72, 58)">
+                <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5Z" fill="#ffffff"></path>
+                <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#00f2ff"></path>
+            </g>
         </svg>
     </div>
     <div class="tagline">It’s Solved! Deterministically.</div>
@@ -55,7 +131,8 @@
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
+        <!-- ACTION REALE MOJNWNWG -->
+        <form id="my-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -64,19 +141,37 @@
                 <label>CANALE PRIVATO CRIPTATO</label>
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
+            <div class="field-group">
+                <label>DOMINIO DI ANALISI</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SELEZIONA AMBITO...</option>
+                    <option value="SaaS-Arch">SaaS & Software Architecture</option>
+                    <option value="Automation">Automazione Processi</option>
+                    <option value="Data-Entropy">Analisi Dati / Database</option>
+                    <option value="Security">Cyber Security / Bypass</option>
+                </select>
+            </div>
+
             <div class="description-box">
                 <div class="field-group">
-                    <label>IL PROBLEMA</label>
+                    <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
                     <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
                 </div>
-                <div class="field-group" style="margin-bottom: 0;">
+                <div class="field-group">
                     <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
-                    <input type="number" name="Budget" placeholder="Somma da investire" required>
+                    <div class="budget-container">
+                        <span>€</span>
+                        <input type="number" name="Budget" placeholder="Somma da investire" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>ALLEGATI TECNICI (LOG / ARCH)</label>
+                    <input type="file" name="upload">
                 </div>
             </div>
 
-            <!-- INSERISCI LA TUA SITE KEY QUI -->
-            <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001" data-theme="dark"></div>
+            <!-- WIDGET RECAPTCHA GOOGLE - INSERISCI SITE KEY -->
+            <div class="g-recaptcha" data-sitekey="LA_TUA_SITE_KEY_RECAPTCHA" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
         </form>
@@ -90,24 +185,21 @@
 </footer>
 
 <script>
-    var form = document.getElementById("my-form");
-    var statusOverlay = document.getElementById("kernel-status");
-    var log = document.getElementById("status-log");
+    const form = document.getElementById("my-form");
+    const statusOverlay = document.getElementById("kernel-status");
+    const log = document.getElementById("status-log");
 
-    async function handleSubmit(event) {
+    form.addEventListener("submit", async function(event) {
         event.preventDefault();
-        
-        // 1. Check validità HTML5
         if(!form.checkValidity()) { form.reportValidity(); return; }
 
-        // 2. Check hCaptcha (se non risolto, blocca l'animazione)
-        const hCaptchaResponse = hcaptcha.getResponse();
-        if (!hCaptchaResponse) {
-            alert("ERRORE: Sincronizzazione hCaptcha necessaria.");
+        // Verifica reCAPTCHA
+        const gResponse = grecaptcha.getResponse();
+        if (!gResponse) {
+            alert("ERRORE: Sincronizzazione reCAPTCHA necessaria per l'Uplink.");
             return;
         }
 
-        // 3. Avvio Sequenza Kernel
         statusOverlay.style.display = "flex";
         const steps = ["> INITIALIZING...", "> ANALYZING ENTROPY...", "> MAPPING SPACE...", "> EXECUTING UPLINK..."];
         
@@ -116,9 +208,8 @@
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // 4. Invio Dati
-        var data = new FormData(event.target);
-        fetch(event.target.action, {
+        const data = new FormData(form);
+        fetch(form.action, {
             method: 'POST',
             body: data,
             headers: { 'Accept': 'application/json' }
@@ -126,20 +217,15 @@
             if (response.ok) {
                 log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
                 form.reset();
-                hcaptcha.reset();
+                grecaptcha.reset();
                 setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
             } else {
-                // FALLBACK: Rimuove il listener e invia nativamente per gestire il captcha
-                form.removeEventListener("submit", handleSubmit);
                 form.submit();
             }
         }).catch(error => {
-            // FALLBACK per Brave o errori di rete
-            form.removeEventListener("submit", handleSubmit);
             form.submit();
         });
-    }
-    form.addEventListener("submit", handleSubmit);
+    });
 </script>
 </body>
 </html>
