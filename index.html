@@ -139,7 +139,7 @@
         <form id="kernel-form" action="https://formspree.io" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
-                
+                <input type="text" name="Brand-Company" id="brand" placeholder="BRAND / AZIENDA" required>
             </div>
             <div class="field-group">
                 <label>CANALE PRIVATO CRIPTATO</label>
@@ -177,15 +177,12 @@
         const status = document.getElementById('kernel-status');
         const log = document.getElementById('status-log');
         
-        // Controllo validità prima di procedere
         if(!form.checkValidity()) {
             form.reportValidity();
             return;
         }
 
-        // Overlay attivato
         status.style.display = 'flex';
-        
         const steps = [
             "> INITIALIZING QUANTUM BYPASS...",
             "> ANALYZING ENTROPY LEVELS...",
@@ -195,13 +192,11 @@
             "> EXECUTING UPLINK TO KERNEL..."
         ];
 
-        // Simulazione caricamento estetica
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // Invio reale dei dati a Formspree tramite Fetch
         const formData = new FormData(form);
         
         try {
@@ -214,13 +209,13 @@
             });
 
             if (response.ok) {
-                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span><br><br><small>CONTROLLA LA TUA EMAIL PER LA CONFERMA.</small>";
+                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span><br><br><small>CHECK YOUR EMAIL FOR CONFIRMATION.</small>";
                 setTimeout(() => {
                     status.style.display = 'none';
                     form.reset();
                 }, 4000);
             } else {
-                throw new Error("Uplink failed");
+                throw new Error();
             }
         } catch (error) {
             log.innerHTML = "<span style='color: #ff3333'>UPLINK ERROR: KERNEL REJECTED CONNECTION.</span><br><br><button onclick='location.reload()' style='background:transparent; color:white; border:1px solid white; padding:10px; cursor:pointer;'>REBOOT SYSTEM</button>";
