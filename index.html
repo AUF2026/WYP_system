@@ -124,7 +124,8 @@
     </section>
 
     <div class="wyp-card">
-        <form id="kernel-form">
+        <!-- INVIO STANDARD BLINDATO PER ALLEGATI -->
+        <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -182,37 +183,12 @@
     const form = document.getElementById('kernel-form');
     const statusOverlay = document.getElementById('kernel-status');
     const statusLog = document.getElementById('status-log');
-    const FORMSPREE_ID = "mwkgpjpj"; 
 
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
+    form.onsubmit = function() {
         statusOverlay.style.display = 'flex';
-        statusLog.innerHTML = "<div>> Analisi entropia...</div>";
-
-        const data = new FormData(form);
-
-        fetch(`https://formspree.io{FORMSPREE_ID}`, {
-            method: "POST",
-            body: data,
-            headers: {
-                'Accept': 'application/json'
-                // NOTA: NON impostare Content-Type, il browser lo fa da solo per FormData
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                statusLog.innerHTML += "<div>> Spazio stati mappato.</div><div>> Q.E.D. RISOLTO.</div>";
-                setTimeout(() => location.reload(), 2500);
-            } else {
-                return response.json().then(err => { throw err; });
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            statusLog.innerHTML += `<div style='color:red;'>> ERRORE KERNEL: ${error.error || 'INVIO FALLITO'}.</div>`;
-            setTimeout(() => statusOverlay.style.display = 'none', 3000);
-        });
-    });
+        statusLog.innerHTML = "<div>> Analisi entropia...</div><div>> Spazio stati...</div><div>> Invio dati protetti...</div>";
+        // Il browser gestisce l'invio fisico senza errori CORS/AJAX.
+    };
 </script>
 </body>
 </html>
