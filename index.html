@@ -83,8 +83,9 @@
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
             font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s; margin-top: 20px;
+            transition: 0.3s; margin-top: 20px; line-height: 1.4;
         }
+        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
 
         #kernel-status {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -124,8 +125,8 @@
     </section>
 
     <div class="wyp-card">
-        <!-- INVIO STANDARD BLINDATO PER ALLEGATI -->
-        <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
+        <!-- INVIO POST NATIVO: NIENTE ERRORI AJAX -->
+        <form action="https://formspree.io" method="POST" enctype="multipart/form-data" onsubmit="document.getElementById('kernel-status').style.display='flex';">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -151,7 +152,7 @@
                 </div>
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
-                    <input type="text" name="Obiettivo" placeholder="Stato finale?" required>
+                    <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
                 </div>
             </div>
             <div class="field-group">
@@ -165,30 +166,19 @@
                     <input type="number" name="Budget" placeholder="0.00">
                 </div>
             </div>
-            <button type="submit" class="btn-core">Esegui Risoluzione</button>
+            <button type="submit" class="btn-core">INVIA RICHIESTA SOLUZIONE DETERMINISTICA</button>
         </form>
     </div>
 </main>
 
 <div id="kernel-status">
     <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
-    <div id="status-log" style="margin-top:20px;"></div>
+    <div style="margin-top:20px;">> Spazio stati mappato.<br>> Invio dati protetti in corso...</div>
 </div>
 
 <footer>
     WYP // ALGORITHMIC PROBLEM SOLVING // © 2024
 </footer>
 
-<script>
-    const form = document.getElementById('kernel-form');
-    const statusOverlay = document.getElementById('kernel-status');
-    const statusLog = document.getElementById('status-log');
-
-    form.onsubmit = function() {
-        statusOverlay.style.display = 'flex';
-        statusLog.innerHTML = "<div>> Analisi entropia...</div><div>> Spazio stati...</div><div>> Invio dati protetti...</div>";
-        // Il browser gestisce l'invio fisico senza errori CORS/AJAX.
-    };
-</script>
 </body>
 </html>
