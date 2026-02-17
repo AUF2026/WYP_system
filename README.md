@@ -1,5 +1,4 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com" width="450" alt="WYP LOGO">
 # █ AUF2026 // KERNEL ARCHITECT █
 </div>
 <p align="center">
