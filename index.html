@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- SCRIPT RECAPTCHA REALE -->
+    <!-- SCRIPT RECAPTCHA GOOGLE -->
     <script src="https://www.google.com" async defer></script>
     <style>
 	:root {
@@ -100,9 +100,7 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
-        
-        /* CENTRATURA RECAPTCHA */
-        .g-recaptcha { margin: 20px 0; display: flex; justify-content: center; }
+        .g-recaptcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
@@ -131,7 +129,6 @@
     </section>
 
     <div class="wyp-card">
-        <!-- ACTION REALE MOJNWNWG -->
         <form id="my-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -170,7 +167,7 @@
                 </div>
             </div>
 
-            <!-- WIDGET RECAPTCHA GOOGLE - INSERISCI SITE KEY -->
+            <!-- RECAPTCHA WIDGET - INSERISCI SITE KEY REALE -->
             <div class="g-recaptcha" data-sitekey="LA_TUA_SITE_KEY_RECAPTCHA" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
@@ -193,15 +190,19 @@
         event.preventDefault();
         if(!form.checkValidity()) { form.reportValidity(); return; }
 
-        // Verifica reCAPTCHA
         const gResponse = grecaptcha.getResponse();
         if (!gResponse) {
-            alert("ERRORE: Sincronizzazione reCAPTCHA necessaria per l'Uplink.");
+            alert("ERRORE: Sincronizzazione reCAPTCHA necessaria.");
             return;
         }
 
         statusOverlay.style.display = "flex";
-        const steps = ["> INITIALIZING...", "> ANALYZING ENTROPY...", "> MAPPING SPACE...", "> EXECUTING UPLINK..."];
+        const steps = [
+            "> INITIALIZING QUANTUM BYPASS...", 
+            "> ANALYZING ENTROPY LEVELS...", 
+            "> MAPPING PROBLEM SPACE...", 
+            "> EXECUTING UPLINK TO KERNEL..."
+        ];
         
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
