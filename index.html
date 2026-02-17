@@ -188,14 +188,20 @@
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
         
-        if(!form.checkValidity()) { form.reportValidity(); return; }
+        // 1. Validazione Campi Originali
+        if(!form.checkValidity()) { 
+            form.reportValidity(); 
+            return; 
+        }
 
+        // 2. Validazione hCaptcha (Obbligatoria per Formspree)
         const hCaptchaResponse = hcaptcha.getResponse();
         if (!hCaptchaResponse) {
-            alert("SINCRO HCAPTCHA NECESSARIA.");
+            alert("SINCRO HCAPTCHA NECESSARIA PER L'UPLINK.");
             return;
         }
 
+        // 3. Attivazione Overlay e Sequenza Animata Hacker
         statusOverlay.style.display = "flex";
         const steps = [
             "> INITIALIZING QUANTUM BYPASS...", 
@@ -209,6 +215,7 @@
             await new Promise(r => setTimeout(r, 600));
         }
 
+        // 4. Esecuzione Uplink via Fetch API
         const data = new FormData(form);
         fetch(form.action, {
             method: 'POST',
@@ -216,17 +223,25 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
-                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
+                // Successo: Reset sistema
+                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span>";
                 form.reset();
                 hcaptcha.reset();
-                setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
+                setTimeout(() => { 
+                    statusOverlay.style.display = "none"; 
+                }, 2500);
             } else {
-                form.submit();
+                // Fallback Deterministico: se il server rifiuta JSON, forza invio nativo
+                log.innerHTML = "<span style='color: #00f2ff'>PROTOCOL MISMATCH. FORCING SECURE REDIRECT...</span>";
+                setTimeout(() => { form.submit(); }, 1000);
             }
         }).catch(error => {
+            // Fallback per Brave Shield o interruzioni di rete
             form.submit();
         });
     });
 </script>
+
 </body>
 </html>
+
