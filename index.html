@@ -200,14 +200,8 @@
                 statusLog.innerHTML += "<div>> Spazio stati mappato.</div><div>> Q.E.D. RISOLTO.</div>";
                 setTimeout(() => location.reload(), 2500);
             } else {
-                return response.json().then(data => {
-                    if (data.code === "TYPE_EMAIL_REQUIRED") {
-                        statusLog.innerHTML += "<div style='color:red;'>> ERRORE: EMAIL RICHIESTA.</div>";
-                    } else {
-                        statusLog.innerHTML += "<div style='color:red;'>> ERRORE KERNEL: INVIO FALLITO.</div>";
-                    }
-                    setTimeout(() => statusOverlay.style.display = 'none', 3000);
-                });
+                statusLog.innerHTML += "<div style='color:red;'>> ERRORE KERNEL: INVIO FALLITO.</div>";
+                setTimeout(() => statusOverlay.style.display = 'none', 3000);
             }
         })
         .catch(error => {
