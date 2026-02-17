@@ -29,7 +29,7 @@
 
         header { 
             width: 100%;
-            max-width: 800px; /* Allargato per far respirare il logo grande */
+            max-width: 800px;
             margin: 0 auto;
             padding: 80px 0 30px; 
             text-align: center; 
@@ -43,7 +43,7 @@
         /* LOGO GRANDE - SIZE AUTO */
         .logo-box svg {
             width: auto;
-            height: 85px; /* Altezza originale richiesta */
+            height: 85px; 
             display: inline-block;
         }
 
@@ -82,7 +82,6 @@
         }
         .description-box:focus-within { border-color: var(--neon); }
 
-        /* Integrazione Budget & File */
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
         .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; }
         .budget-container input { border-bottom: none; }
@@ -133,7 +132,8 @@
     </section>
 
     <div class="wyp-card">
-        <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
+        <!-- Rimosso action e method per gestire tutto via JS -->
+        <form id="kernel-form">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -180,14 +180,14 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-core">Esegui Risoluzione</button>
+            <button type="submit" class="btn-core" id="submit-btn">Esegui Risoluzione</button>
         </form>
     </div>
 </main>
 
 <div id="kernel-status">
     <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
-    <div id="status-log"></div>
+    <div id="status-log" style="margin-top:20px;"></div>
 </div>
 
 <footer>
@@ -198,18 +198,47 @@
     const form = document.getElementById('kernel-form');
     const statusOverlay = document.getElementById('kernel-status');
     const statusLog = document.getElementById('status-log');
+    const FORMSPREE_ID = "TUO_ID_QUI"; // <--- INSERISCI QUI IL TUO ID
 
-    form.onsubmit = function() {
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
         statusOverlay.style.display = 'flex';
-        let steps = ["> Analisi entropia...", "> Spazio stati...", "> Iniezione correzione...", "> Invio dati."];
-        let i = 0;
-        let interval = setInterval(() => {
-            if(i < steps.length) {
-                statusLog.innerHTML += `<div>${steps[i]}</div>`;
-                i++;
-            } else { clearInterval(interval); }
-        }, 800);
-    };
+        statusLog.innerHTML = "";
+        
+        const formData = new FormData(form);
+        const steps = [
+            "> Analisi entropia in corso...",
+            "> Mappatura spazio degli stati...",
+            "> Iniezione correzione deterministica...",
+            "> Sincronizzazione con il server..."
+        ];
+
+        // Animazione log fake
+        for (let step of steps) {
+            statusLog.innerHTML += `<div>${step}</div>`;
+            await new Promise(r => setTimeout(r, 800));
+        }
+
+        // Invio reale dei dati
+        fetch(`https://formspree.io{FORMSPREE_ID}`, {
+            method: "POST",
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                statusLog.innerHTML += `<div style="color:#00f2ff; margin-top:20px;">> Q.E.D. PROBLEMA RISOLTO.</div>`;
+                statusLog.innerHTML += `<div>Ricarico il sistema...</div>`;
+                setTimeout(() => location.reload(), 3000);
+            } else {
+                statusLog.innerHTML += `<div style="color:red;">> ERRORE KERNEL: INVIO FALLITO.</div>`;
+                setTimeout(() => statusOverlay.style.display = 'none', 3000);
+            }
+        }).catch(error => {
+            statusLog.innerHTML += `<div style="color:red;">> ECCEZIONE CRITICA: ${error.message}</div>`;
+            setTimeout(() => statusOverlay.style.display = 'none', 3000);
+        });
+    });
 </script>
 
 </body>
