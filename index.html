@@ -56,13 +56,9 @@
         #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
         .status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 3px; text-align: center; font-family: var(--font-mono); }
 
-        footer {
-            color: #ffffff; /* Colore bianco per il testo del footer */
-            background-color: #33333300; /* Colore scuro per lo sfondo */
-            font-size: 0.7rem;
-            padding: 20px 0;
-            text-align: center;
-        }
+        footer { color: #ffffff; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        footer a { color: #00f2ff; text-decoration: none; }
+        footer a:hover { color: #ffffff; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -115,25 +111,6 @@
                     <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
                     <option value="IoT-Solutions">IOT SOLUTIONS</option>
                     <option value="Serverless">SERVERLESS ARCHITECTURE</option>
-                    <option value="ML-Models">MACHINE LEARNING MODELS</option>
-                    <option value="Quantum-Computing">QUANTUM COMPUTING</option>
-                    <option value="Aerospace">AEROSPACE & DEFENSE TECHNOLOGIES</option>
-                    <option value="Transport-Systems">TRANSPORTATION SYSTEMS</option>
-                    <option value="Smart-Cities">SMART CITIES & INFRASTRUCTURE</option>
-                    <option value="Gov-Tech">GOVERNMENT & PUBLIC SECTOR</option>
-                    <option value="Energy-Systems">ENERGY MANAGEMENT & OPTIMIZATION</option>
-                    <option value="HealthTech">HEALTHCARE TECHNOLOGIES</option>
-                    <option value="Telecommunications">TELECOMMUNICATIONS INFRASTRUCTURE</option>
-                    <option value="Public-Safety">PUBLIC SAFETY & SECURITY</option>
-                    <option value="Railway-Tech">RAILWAY TECHNOLOGIES</option>
-                    <option value="Smart-Grids">SMART GRID SOLUTIONS</option>
-                    <option value="Maritime-Tech">MARITIME & PORT TECHNOLOGIES</option>
-                    <option value="Transport-Logistics">TRANSPORT & LOGISTICS SYSTEMS</option>
-                    <option value="Construction-Tech">CONSTRUCTION & ENGINEERING</option>
-                    <option value="Industrial-Design">INDUSTRIAL DESIGN & PROTOTYPING</option>
-                    <option value="Telecom-Security">TELECOM SECURITY SYSTEMS</option>
-                    <option value="Energy-Production">ENERGY PRODUCTION & DISTRIBUTION</option>
-                    <option value="Satellite-Tech">SATELLITE & SPACE TECHNOLOGIES</option>
                     <option value="Other">OTHER / ALTRO</option>
                 </select>
             </div>
@@ -148,17 +125,18 @@
                     <input type="number" name="Budget" placeholder="000.000" required>
                 </div>
             </div>
-            <button type="submit" class="btn-execute" id="submit-btn">EXECUTE_SUBMIT</button>
+            <button type="submit" class="btn-execute">EXECUTE_SUBMIT</button>
         </form>
     </main>
-<style>
+
+    <footer>WYP // ENTROPY_COLLAPSAR</footer>
 </div>
 
 <div id="kernel-status">
     <div class="status-text" id="status-log"></div>
 </div>
 
-<script><script>
+<script>
     const form = document.getElementById("my-form");
     const kernel = document.getElementById("kernel-status");
     const log = document.getElementById("status-log");
@@ -171,20 +149,20 @@
     ];
 
     form.addEventListener("submit", async function(e) {
-        e.preventDefault(); // BLOCCA IL REDIRECT DI FORMSPREE
+        e.preventDefault();
         kernel.style.display = "flex";
         log.innerHTML = "";
         
-        // Animazione terminale
+        // Animazione Terminale
         for (const step of steps) {
             log.innerHTML += step + "<br>";
-            await new Promise(r => setTimeout(r, 400));
+            await new Promise(r => setTimeout(r, 450));
         }
 
         const formData = new FormData(form);
         
         try {
-            // INVIO ASINCRONO (RESTI SULLA TUA PAGINA)
+            // Invio asincrono a Formspree
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -193,33 +171,19 @@
 
             if (response.ok) {
                 log.innerHTML += "<br>[SUCCESS] REBOOTING SYSTEM...";
-                // FORZA IL REFRESH TOTALE DOPO 1 SECONDO
+                // FORZA IL REFRESH TOTALE PER PULIRE LA CACHE E IL FORM
                 setTimeout(() => {
-                    window.location.href = window.location.pathname + "?t=" + Date.now();
+                    window.location.href = window.location.pathname + "?refresh=" + Date.now();
                 }, 1000);
             } else {
                 throw new Error();
             }
         } catch (err) {
-            log.innerHTML += "<br><span style='color:red'>[CRITICAL_ERROR] RESETTING...</span>";
-            setTimeout(() => { kernel.style.display = "none"; }, 2000);
+            log.innerHTML += "<br><span style='color:red'>[CRITICAL_ERROR] UPLOAD FAILED.</span>";
+            setTimeout(() => { kernel.style.display = "none"; }, 3000);
         }
     });
 </script>
-        <footer>
-          <p>For inquiries, contact us at: <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a></p>
-          <p>&copy; 2026 WYP. All rights reserved.</p>
-        </footer>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
