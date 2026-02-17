@@ -125,8 +125,8 @@
     </section>
 
     <div class="wyp-card">
-        <!-- FORM SECONDO SCHEMA UFFICIALE FORMSPREE -->
-        <form action="https://formspree.io" method="POST" enctype="multipart/form-data" onsubmit="document.getElementById('kernel-status').style.display='flex';">
+        <!-- INTEGRAZIONE AJAX PROFESSIONALE SECONDO DOCUMENTAZIONE FORMSPREE -->
+        <form id="kernel-form">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -172,19 +172,61 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-core">INVIA RICHIESTA SOLUZIONE DETERMINISTICA</button>
+            <button type="submit" id="submit-button" class="btn-core">INVIA RICHIESTA SOLUZIONE DETERMINISTICA</button>
         </form>
     </div>
 </main>
 
 <div id="kernel-status">
     <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
-    <div style="margin-top:20px;">> Spazio stati mappato.<br>> Gestione Captcha e sincronizzazione server...</div>
+    <div id="status-log" style="margin-top:20px;"></div>
 </div>
 
 <footer>
     WYP // ALGORITHMIC PROBLEM SOLVING // © 2024
 </footer>
+
+<script>
+    const form = document.getElementById("kernel-form");
+    const statusOverlay = document.getElementById('kernel-status');
+    const statusLog = document.getElementById('status-log');
+    
+    async function handleSubmit(event) {
+      event.preventDefault();
+      statusOverlay.style.display = 'flex';
+      statusLog.innerHTML = "<div>> Analisi entropia in corso...</div>";
+      
+      const data = new FormData(event.target);
+      
+      fetch("https://formspree.io", {
+        method: "POST",
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          statusLog.innerHTML += "<div>> Spazio stati mappato.</div><div>> Q.E.D. PROBLEMA RISOLTO.</div>";
+          form.reset();
+          setTimeout(() => { location.reload(); }, 3000);
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              statusLog.innerHTML += `<div style="color:red;">> ERRORE: ${data["errors"].map(error => error["message"]).join(", ")}</div>`;
+            } else {
+              statusLog.innerHTML += "<div style='color:red;'>> ERRORE KERNEL: INVIO FALLITO.</div>";
+            }
+            setTimeout(() => { statusOverlay.style.display = 'none'; }, 4000);
+          })
+        }
+      }).catch(error => {
+        statusLog.innerHTML += "<div style='color:red;'>> ECCEZIONE CRITICA SISTEMA.</div>";
+        setTimeout(() => { statusOverlay.style.display = 'none'; }, 4000);
+      });
+    }
+    
+    form.addEventListener("submit", handleSubmit);
+</script>
 
 </body>
 </html>
