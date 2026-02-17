@@ -1,16 +1,12 @@
 <div align="center">
-
-<img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" width="450" alt="WYP LOGO">
-
+<img src="https://raw.githubusercontent.com" width="450" alt="WYP LOGO">
 # █ AUF2026 // KERNEL ARCHITECT █
-
-<code>SYSTEM STATUS: ONLINE // ENTROPY LEVEL: O(1)</code>
-
----
-
 </div>
-
----
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" width="auto" alt="WYP LOGO">
+  <br>
+  <code>SYSTEM STATUS: ONLINE // ENTROPY LEVEL: O(1)</code>
+</p>
 
 ### 🛡️ INTELLECTUAL PROPERTY & DETERMINISTIC LOGIC
 Sono il Lead Architect di **WYP? SYSTEM**. Mi occupo di collassare l'entropia di problemi complessi attraverso architetture SaaS deterministiche. Il codice ospitato in questo spazio non è "Open Source" nel senso tradizionale; è un asset protetto.
