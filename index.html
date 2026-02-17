@@ -163,7 +163,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-core" onclick="document.getElementById('kernel-status').style.display='flex';">Inizializza Kernel</button>
+            <button type="submit" class="btn-core">Inizializza Kernel</button>
         </form>
     </div>
 </main>
@@ -176,6 +176,15 @@
 <footer>
     WYP © 2024 | WHAT'S YOUR PROBLEM? IT'S SOLVED.
 </footer>
+
+<script>
+    // FIX: Usiamo l'evento nativo per attivare l'animazione e far procedere il POST
+    document.getElementById('kernel-form').onsubmit = function() {
+        document.getElementById('kernel-status').style.display = 'flex';
+        // NESSUN preventDefault() -> Il browser invia i dati, Formspree vede il POST, 
+        // e se serve il captcha ti manda sulla sua pagina senza errori "Method Unsupported".
+    };
+</script>
 
 </body>
 </html>
