@@ -100,7 +100,6 @@
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
 
-        /* WIDGET HCAPTCHA STILE */
         .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
@@ -139,19 +138,36 @@
                 <label>CANALE PRIVATO CRIPTATO</label>
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
+            <div class="field-group">
+                <label>DOMINIO DI ANALISI</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SELEZIONA AMBITO...</option>
+                    <option value="SaaS-Arch">SaaS & Software Architecture</option>
+                    <option value="Automation">Automazione Processi</option>
+                    <option value="Data-Entropy">Analisi Dati / Database</option>
+                    <option value="Security">Cyber Security / Bypass</option>
+                </select>
+            </div>
+
             <div class="description-box">
                 <div class="field-group">
-                    <label>IL PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
+                    <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
+                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico." required></textarea>
                 </div>
-                <div class="field-group" style="margin-bottom: 0;">
-                    <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
-                    <input type="number" name="Budget" placeholder="Somma da investire" required>
+                <div class="field-group">
+                    <label>BUDGET ALLOCATO (EUR)</label>
+                    <div class="budget-container">
+                        <span>€</span>
+                        <input type="number" name="Budget" placeholder="0.00" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>ALLEGATI TECNICI (LOG / ARCH)</label>
+                    <input type="file" name="upload">
                 </div>
             </div>
 
-            <!-- WIDGET HCAPTCHA - SITE KEY REALE -->
-            <div class="h-captcha" data-sitekey="LA_TUA_SITE_KEY" data-theme="dark"></div>
+            <div class="h-captcha" data-sitekey="LA_TUA_SITE_KEY_QUI" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
         </form>
@@ -171,7 +187,6 @@
 
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
-        
         if(!form.checkValidity()) { form.reportValidity(); return; }
 
         const hCaptchaResponse = hcaptcha.getResponse();
