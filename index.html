@@ -162,8 +162,9 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Fornisci i parametri tecnici." required></textarea>
+                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci parametri tecnici." required></textarea>
                 </div>
+
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
                     <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
@@ -201,26 +202,44 @@
     const form = document.getElementById('kernel-form');
     const statusOverlay = document.getElementById('kernel-status');
     const statusLog = document.getElementById('status-log');
-    const FORMSPREE_ID = "TUO_ID_QUI"; // <--- INSERISCI IL TUO ID
+    const FORMSPREE_ID = "TUO_ID_QUI"; // <--- INSERISCI QUI IL TUO ID
 
     form.addEventListener("submit", async function(e) {
         e.preventDefault();
         statusOverlay.style.display = 'flex';
         
-        const steps = ["> Analisi entropia...", "> Spazio stati...", "> Iniezione correzione...", "> Invio dati."];
-        for (let s of steps) {
-            statusLog.innerHTML += `<div>${s}</div>`;
-            await new Promise(r => setTimeout(r, 700));
+        const formData = new FormData(form);
+        const steps = [
+            "> Analisi entropia in corso...",
+            "> Mappatura spazio degli stati...",
+            "> Iniezione correzione deterministica...",
+            "> Sincronizzazione con il server..."
+        ];
+
+        // Animazione log sequenziale
+        for (let i = 0; i < steps.length; i++) {
+            statusLog.innerHTML += `<div>${steps[i]}</div>`;
+            await new Promise(r => setTimeout(r, 600));
         }
 
-        fetch(`https://formspree.io{FORMSPREE_ID}`, {
-            method: "POST",
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        }).then(() => {
-            statusLog.innerHTML += `<div style="color:var(--neon); margin-top:15px;">> Q.E.D. RISOLTO.</div>`;
-            setTimeout(() => location.reload(), 2500);
-        });
+        // Invio reale dei dati
+        try {
+            const response = await fetch(`https://formspree.io{FORMSPREE_ID}`, {
+                method: "POST",
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                statusLog.innerHTML += `<div style="color:var(--neon); margin-top:15px;">> Q.E.D. PROBLEMA RISOLTO.</div>`;
+                setTimeout(() => location.reload(), 2500);
+            } else {
+                throw new Error();
+            }
+        } catch (err) {
+            statusLog.innerHTML += `<div style="color:red;">> ERRORE KERNEL: INVIO FALLITO.</div>`;
+            setTimeout(() => statusOverlay.style.display = 'none', 3000);
+        }
     });
 </script>
 </body>
