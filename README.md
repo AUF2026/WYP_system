@@ -31,7 +31,7 @@ Se hai un problema complesso che richiede una soluzione reale, applicabile e det
 
 *   **Official System:** [ACCEDI AL KERNEL WYP]([https://AUF2026.github.io](https://auf2026.github.io/WYP_system/)
 *   **Secure Email:** [AUF2026@protonmail.com](mailto:AUF2026@protonmail.com)
-*   **Location:** Zurich, CH / Global Uplink
+*   **Location:** Genova, IT / Zurich, CH / Global Uplink
 
 ---
 
