@@ -6,8 +6,7 @@
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
     <style>
 	:root {
-    	  --neon: #00f2ff; /* Colore Master (Azzurro) */
-    	  --link: var(--neon); /* Il link eredita sempre il colore Master */
+    	  --neon: #00f2ff;
     	  --bg: #000000;
     	  --surface: #0a0a0a;
     	  --font-main: 'Inter', sans-serif;
@@ -15,16 +14,8 @@
 	}
 
 	/* KILLER DEL BLU BROWSER */
-	    a, a:visited, a:active {
-	    color: #00f2ff !important; 
-	    text-decoration: none !important;
-	}
-
-	    a:hover {
-	    filter: brightness(1.2);
-	    text-decoration: underline !important;
-	}
-
+	a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
+	a:hover { filter: brightness(1.2); text-decoration: underline !important; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
@@ -37,25 +28,24 @@
 
         header { 
             width: 100%;
-            max-width: 550px;
+            max-width: 600px; /* Larghezza aumentata per far esplodere il logo */
             margin: 0 auto;
-            padding: 60px 0 20px; 
+            padding: 80px 0 20px; 
             text-align: center; 
         }
 
+        /* LOGO CHE RIEMPIE DA SX A DX */
         .logo-box {
             width: 100%;
             height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4));
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5));
             padding: 0 10px;
         }
 
         .logo-box svg {
-            width: 100%;
-            height: auto;
+            width: 100%; /* Riempi tutto il contenitore */
+            height: auto; /* Mantieni proporzioni originali (size=auto) */
         }
 
         .tagline {
@@ -78,34 +68,35 @@
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
         
         input, textarea, select {
-            height: auto; width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
             color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
         }
-        select { color: var(--neon); cursor: pointer; }
+        select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
         option { background: #000; color: #fff; }
-        
-        input:focus, textarea:focus, select:focus { border-bottom-color: var(--neon); }
+        input:focus, textarea:focus { border-bottom-color: var(--neon); }
 
+        /* FINESTRA PROFESSIONALE DESCRIZIONE */
         .description-box {
             border: 1px solid #222;
             padding: 20px;
             margin-bottom: 25px;
-            transition: border-color 0.4s;
+            transition: 0.3s;
         }
         .description-box:focus-within { border-color: var(--neon); }
 
-        /* Integrazione Budget & File coerente con il tuo stile */
+        /* FINESTRA BUDGET PROFESSIONALE */
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
-        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; }
+        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
         .budget-container input { border-bottom: none; }
+        
         input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
 
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
             font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s; margin-top: 20px; line-height: 1.4;
+            transition: 0.3s; margin-top: 20px;
         }
-        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); }
+        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
 
         #kernel-status {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -171,9 +162,8 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci parametri tecnici." required></textarea>
+                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Fornisci i parametri tecnici." required></textarea>
                 </div>
-
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
                     <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
@@ -217,13 +207,7 @@
         e.preventDefault();
         statusOverlay.style.display = 'flex';
         
-        const steps = [
-            "> Analisi entropia...",
-            "> Spazio stati...",
-            "> Iniezione correzione...",
-            "> Sincronizzazione server..."
-        ];
-
+        const steps = ["> Analisi entropia...", "> Spazio stati...", "> Iniezione correzione...", "> Invio dati."];
         for (let s of steps) {
             statusLog.innerHTML += `<div>${s}</div>`;
             await new Promise(r => setTimeout(r, 700));
@@ -233,14 +217,11 @@
             method: "POST",
             body: new FormData(form),
             headers: { 'Accept': 'application/json' }
-        }).then(res => {
-            if (res.ok) {
-                statusLog.innerHTML += `<div style="color:var(--neon); margin-top:15px;">> Q.E.D. RISOLTO.</div>`;
-                setTimeout(() => location.reload(), 2500);
-            }
+        }).then(() => {
+            statusLog.innerHTML += `<div style="color:var(--neon); margin-top:15px;">> Q.E.D. RISOLTO.</div>`;
+            setTimeout(() => location.reload(), 2500);
         });
     });
 </script>
-
 </body>
 </html>
