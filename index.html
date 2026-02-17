@@ -34,7 +34,6 @@
             text-align: center; 
         }
 
-        /* LOGO ESPLOSO DA SX A DX */
         .logo-box {
             width: 100%;
             height: auto;
@@ -126,7 +125,7 @@
     </section>
 
     <div class="wyp-card">
-        <!-- INVIO NATIVO SECONDO SCHEMA FORMSPREE: mwkgpjpj -->
+        <!-- INVIO POST STANDARD PER BYPASSARE ERRORI JS -->
         <form action="https://formspree.io" method="POST" enctype="multipart/form-data" onsubmit="document.getElementById('kernel-status').style.display='flex';">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -135,8 +134,7 @@
             
             <div class="field-group">
                 <label>CANALE PRIVATO CRIPTATO</label>
-                <!-- Name="email" è fondamentale per Formspree -->
-                <input type="email" name="email" placeholder="INSERISCI EMAIL" required>
+                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
 
             <div class="field-group">
@@ -181,7 +179,7 @@
 
 <div id="kernel-status">
     <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
-    <div style="margin-top:20px;">> Spazio stati mappato.<br>> Sincronizzazione con il server Formspree in corso...</div>
+    <div style="margin-top:20px;">> Spazio stati mappato.<br>> Sincronizzazione server e Captcha in corso...</div>
 </div>
 
 <footer>
