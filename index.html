@@ -125,7 +125,7 @@
     </section>
 
     <div class="wyp-card">
-        <!-- INVIO NATIVO: UNICO MODO PER EVITARE "METHOD UNSUPPORTED" CON CAPTCHA ATTIVO -->
+        <!-- INVIO NATIVO: UNICO MODO PER GESTIRE RECAPTCHA FORMSPREE SENZA ERRORI HTTP -->
         <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -172,6 +172,7 @@
 <div id="kernel-status">
     <p>ACCESSO KERNEL IN CORSO...</p>
     <p class="blink">SINCRONIZZAZIONE DATI... █▒▒▒▒▒▒▒▒▒</p>
+    <p style="font-size: 0.7rem; margin-top: 20px; opacity: 0.5;">Verifica reCAPTCHA in corso...</p>
 </div>
 
 <footer>
@@ -179,8 +180,7 @@
 </footer>
 
 <script>
-    // Questo script NON blocca l'invio (no preventDefault).
-    // Attiva solo l'animazione un istante prima che il browser faccia il POST.
+    // FIX DETERMINISTICO: Attiva overlay visivo e lascia che il browser gestisca il POST nativo.
     document.getElementById('kernel-form').onsubmit = function() {
         document.getElementById('kernel-status').style.display = 'flex';
     };
