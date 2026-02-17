@@ -3,143 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
+    <title>WYP | OPERATIONAL TERMINAL</title>
     <style>
         :root {
             --neon: #00f2ff;
-            --bg: #000000;
-            --surface: #0a0a0a;
-            --font-main: 'Inter', sans-serif;
+            --electric-blue: #2ddaff; 
+            --bg: #000;
+            --surface: #050505;
             --font-mono: 'JetBrains Mono', monospace;
+            --col-width: 650px;
         }
-        a, a:visited, a:active { color: var(--neon) !important; text-decoration: none !important; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(var(--surface) 1px, transparent 1px);
-            background-size: 30px 30px; z-index: -1; opacity: 0.5;
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            font-family: var(--font-mono); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            overflow-x: hidden;
         }
-        header { width: 100%; max-width: 600px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
-        .logo-box { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5)); padding: 0 10px; }
-        .logo-box svg { width: 100%; height: auto; }
-        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center; }
-        main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
-        .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
-        .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
-        .field-group { margin-bottom: 25px; }
-        label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; font-family: var(--font-mono); }
-        select { color: var(--neon); cursor: pointer; border-radius: 0; -webkit-appearance: none; }
-        option { background: #000; color: #fff; }
-        input:focus, textarea:focus, select:focus { border-bottom-color: var(--neon); }
-        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
-        .description-box:focus-within { border-color: var(--neon); }
-        .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
-        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
-        .budget-container input { border-bottom: none; }
-        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 20px; }
-        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
-        #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; padding: 20px; }
-        .blink { animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
+
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: var(--col-width);
+            padding: 80px 20px 120px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header { width: 100%; text-align: center; margin-bottom: 60px; }
+
+        .logo-box { 
+            width: 100%; 
+            filter: drop-shadow(0 0 25px var(--electric-blue));
+            animation: boot 1.5s ease-out;
+        }
+        .logo-box svg { width: 100%; height: auto; display: block; }
+
+        @keyframes boot {
+            0% { opacity: 0; transform: scale(0.98); filter: brightness(3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .tagline { 
+            font-size: 1.6rem; 
+            font-weight: 900;
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            margin-top: 40px; 
+            color: var(--electric-blue); 
+            text-shadow: 0 0 15px rgba(45, 218, 255, 0.6);
+            line-height: 1.1;
+        }
+
+        .sub-claim {
+            font-size: 0.75rem;
+            color: #555;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .terminal-container { 
+            background: var(--surface); 
+            border: 1px solid #151515; 
+            box-shadow: 0 0 60px rgba(0,0,0,1);
+        }
+
+        .field-group { 
+            padding: 30px; 
+            border-bottom: 1px solid #111; 
+            transition: 0.3s;
+        }
+        .field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
+
+        label { 
+            display: block; 
+            font-size: 0.65rem; 
+            color: var(--electric-blue); 
+            margin-bottom: 18px; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        input, textarea, select { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--electric-blue) !important; 
+            font-size: 1.1rem; 
+            outline: none; 
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        ::placeholder { color: rgba(45, 218, 255, 0.4) !important; text-transform: uppercase; }
+
+        textarea { resize: none; text-transform: none; line-height: 1.6; }
+        
+        select { cursor: pointer; -webkit-appearance: none; }
+        option { background: #000; color: var(--electric-blue); }
+
+        .budget-row { display: flex; align-items: center; }
+        .budget-row span { color: var(--electric-blue); font-size: 1.6rem; margin-right: 20px; font-weight: 900; }
+
+        .btn-execute {
+            width: 100%; 
+            background: transparent; 
+            border: 1px solid var(--electric-blue); 
+            color: var(--electric-blue); 
+            padding: 40px;
+            font-family: var(--font-mono); 
+            font-weight: 900; 
+            font-size: 1.3rem;
+            letter-spacing: 10px; 
+            text-transform: uppercase; 
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            margin-top: -1px;
+        }
+        .btn-execute:hover { 
+            background: var(--electric-blue); 
+            color: #000; 
+            box-shadow: 0 0 50px rgba(45, 218, 255, 0.5); 
+        }
+
+        #kernel-status {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000; flex-direction: column;
+            justify-content: center; align-items: center; padding: 40px;
+        }
+        .status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 3px; text-align: center; font-family: var(--font-mono); }
+
+        footer { padding: 80px 0 20px; font-size: 0.7rem; color: #222; letter-spacing: 10px; text-align: center; text-transform: uppercase; }
+
+        @media (max-width: 480px) {
+            .tagline { font-size: 1.2rem; letter-spacing: 1px; }
+            .wrapper { padding: 40px 15px; }
+            .btn-execute { padding: 30px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
-<header>
-    <div class="logo-box">
-        <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
-            <g transform="scale(0.85)">
-                <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
-                <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
-                <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
-            </g>
-            <g transform="translate(72, 58)">
-                <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5Z" fill="#ffffff"></path>
-                <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#00f2ff"></path>
-            </g>
-        </svg>
-    </div>
-    <div class="tagline">It’s Solved! Deterministically.</div>
-</header>
-<main>
-    <section class="manifesto">
-        COLLASSIAMO L'ENTROPIA DEI TUOI PROBLEMI COMPLESSI.<br>
-        <b>SaaS Architecture. Risoluzione O(1) deterministico.</b>
-    </section>
-    <div class="wyp-card">
+
+<div class="wrapper">
+    <header>
+        <div class="logo-box">
+            <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+                <g transform="scale(0.85)">
+                    <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
+                    <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
+                    <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
+                </g>
+                <g transform="translate(72, 58)">
+                    <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z" fill="#ffffff"></path>
+                    <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#2ddaff"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
+        <div class="sub-claim">Deterministic Resolution O(1)</div>
+    </header>
+
+    <main class="terminal-container">
         <form id="my-form" action="https://formspree.io" method="POST">
             <div class="field-group">
-                <label>IDENTITÀ ASSET</label>
-                <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
+                <label>IDENT_ASSET</label>
+                <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
             </div>
+
             <div class="field-group">
-                <label>CANALE PRIVATO CRIPTATO</label>
-                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
+                <label>SECURE_COMM_CHANNEL</label>
+                <input type="email" name="Email" placeholder="PUB_KEY@EMAIL.COM" required>
             </div>
+
             <div class="field-group">
-                <label>DOMINIO DI ANALISI</label>
+                <label>ANALYSIS_DOMAIN</label>
                 <select name="Settore" required>
                     <option value="" disabled selected>SET DOMAIN...</option>
-<option value="SaaS-Arch">SaaS ARCHITECTURE</option>
-<option value="Bypass-Logic">PROCESS BYPASSING</option>
-<option value="AI-Ops">AI INTEGRATION</option>
-<option value="Security">CYBER SECURITY</option>
-<option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
-<option value="Automation">INDUSTRIAL AUTOMATION</option>
-<option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
-<option value="DevOps">DEVOPS & CI/CD</option>
-<option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
-<option value="Edge-Computing">EDGE COMPUTING</option>
-<option value="API-Integration">API INTEGRATION</option>
-<option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
-<option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
-<option value="IoT-Solutions">IOT SOLUTIONS</option>
-<option value="Serverless">SERVERLESS ARCHITECTURE</option>
-<option value="ML-Models">MACHINE LEARNING MODELS</option>
-<option value="Quantum-Computing">QUANTUM COMPUTING</option>
-<option value="Aerospace">AEROSPACE & DEFENSE TECHNOLOGIES</option>
-<option value="Transport-Systems">TRANSPORTATION SYSTEMS</option>
-<option value="Smart-Cities">SMART CITIES & INFRASTRUCTURE</option>
-<option value="Gov-Tech">GOVERNMENT & PUBLIC SECTOR</option>
-<option value="Energy-Systems">ENERGY MANAGEMENT & OPTIMIZATION</option>
-<option value="HealthTech">HEALTHCARE TECHNOLOGIES</option>
-<option value="Telecommunications">TELECOMMUNICATIONS INFRASTRUCTURE</option>
-<option value="Public-Safety">PUBLIC SAFETY & SECURITY</option>
-<option value="Railway-Tech">RAILWAY TECHNOLOGIES</option>
-<option value="Smart-Grids">SMART GRID SOLUTIONS</option>
-<option value="Maritime-Tech">MARITIME & PORT TECHNOLOGIES</option>
-<option value="Transport-Logistics">TRANSPORT & LOGISTICS SYSTEMS</option>
-<option value="Construction-Tech">CONSTRUCTION & ENGINEERING</option>
-<option value="Industrial-Design">INDUSTRIAL DESIGN & PROTOTYPING</option>
-<option value="Telecom-Security">TELECOM SECURITY SYSTEMS</option>
-<option value="Energy-Production">ENERGY PRODUCTION & DISTRIBUTION</option>
-<option value="Satellite-Tech">SATELLITE & SPACE TECHNOLOGIES</option>
+                    <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
+                    <option value="Bypass-Logic">PROCESS BYPASSING</option>
+                    <option value="AI-Ops">AI INTEGRATION</option>
+                    <option value="Security">CYBER SECURITY</option>
+                    <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
+                    <option value="Automation">INDUSTRIAL AUTOMATION</option>
+                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
+                    <option value="DevOps">DEVOPS & CI/CD</option>
+                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
+                    <option value="Edge-Computing">EDGE COMPUTING</option>
+                    <option value="API-Integration">API INTEGRATION</option>
+                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
+                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
+                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
+                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
+                    <option value="ML-Models">MACHINE LEARNING MODELS</option>
+                    <option value="Quantum-Computing">QUANTUM COMPUTING</option>
+                    <option value="Aerospace">AEROSPACE & DEFENSE TECHNOLOGIES</option>
+                    <option value="Transport-Systems">TRANSPORTATION SYSTEMS</option>
+                    <option value="Smart-Cities">SMART CITIES & INFRASTRUCTURE</option>
+                    <option value="Gov-Tech">GOVERNMENT & PUBLIC SECTOR</option>
+                    <option value="Energy-Systems">ENERGY MANAGEMENT & OPTIMIZATION</option>
+                    <option value="HealthTech">HEALTHCARE TECHNOLOGIES</option>
+                    <option value="Telecommunications">TELECOMMUNICATIONS INFRASTRUCTURE</option>
+                    <option value="Public-Safety">PUBLIC SAFETY & SECURITY</option>
+                    <option value="Railway-Tech">RAILWAY TECHNOLOGIES</option>
+                    <option value="Smart-Grids">SMART GRID SOLUTIONS</option>
+                    <option value="Maritime-Tech">MARITIME & PORT TECHNOLOGIES</option>
+                    <option value="Transport-Logistics">TRANSPORT & LOGISTICS SYSTEMS</option>
+                    <option value="Construction-Tech">CONSTRUCTION & ENGINEERING</option>
+                    <option value="Industrial-Design">INDUSTRIAL DESIGN & PROTOTYPING</option>
+                    <option value="Telecom-Security">TELECOM SECURITY SYSTEMS</option>
+                    <option value="Energy-Production">ENERGY PRODUCTION & DISTRIBUTION</option>
+                    <option value="Satellite-Tech">SATELLITE & SPACE TECHNOLOGIES</option>
+                    <option value="Other">OTHER / ALTRO</option>
                 </select>
             </div>
-            <div class="description-box">
-                <div class="field-group">
-                    <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
-                </div>
-                <div class="field-group">
-                    <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
-                    <div class="budget-container">
-                        <span>€</span>
-                        <input type="number" name="Budget" placeholder="Somma da investire" required>
-                    </div>
+
+            <div class="field-group">
+                <label>PROBLEM_LOG_DESC</label>
+                <textarea name="Messaggio" rows="3" placeholder="INPUT RAW DATA..." required></textarea>
+            </div>
+
+            <div class="field-group" style="border-bottom: none;">
+                <label>RESOURCE_COMMITMENT</label>
+                <div class="budget-row">
+                    <span>€</span>
+                    <input type="number" name="Budget" placeholder="000.000" required>
                 </div>
             </div>
-            <button type="submit" class="btn-core" id="submit-btn">INIZIALIZZA RISOLUZIONE</button>
+
+            <button type="submit" class="btn-execute" id="submit-btn">EXECUTE_SUBMIT</button>
         </form>
-    </div>
-</main>
-<div id="kernel-status">
-    <div id="status-log"></div>
-    <div class="blink">_</div>
+    </main>
+
+    <footer>WYP // ENTROPY_COLLAPSAR</footer>
 </div>
-<footer>&copy; 2024 WYP. COLLAPSING ENTROPY WORLDWIDE.</footer>
+
+<div id="kernel-status">
+    <div class="status-text" id="status-log"></div>
+</div>
 
 <script>
     const form = document.getElementById("my-form");
@@ -148,21 +261,22 @@
     const log = document.getElementById("status-log");
 
     const steps = [
-        "ACCESSO KERNEL IN CORSO...",
-        "ANALISI ARCHITETTURA SAAS...",
-        "BYPASSANDO L'ENTROPIA...",
-        "RISOLUZIONE O(1) CALCOLATA.",
-        "INVIO DATI AL SERVER..."
+        "> CONNECTING TO KERNEL...",
+        "> UPLOADING DATA SET...",
+        "> ANALYZING VULNERABILITIES...",
+        "> O(1) RESOLUTION FOUND.",
+        "> PACKET SENT SUCCESSFULLY."
     ];
 
     async function handleSubmit(event) {
         event.preventDefault();
         btn.disabled = true;
         kernel.style.display = "flex";
+        log.innerHTML = "";
 
         for (const step of steps) {
-            log.innerText = step;
-            await new Promise(r => setTimeout(r, 600));
+            log.innerHTML += step + "<br>";
+            await new Promise(r => setTimeout(r, 450));
         }
 
         const data = new FormData(event.target);
@@ -172,12 +286,12 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
-                log.innerText = "RISOLTO. IL TEAM TI CONTATTERÀ.";
+                log.innerHTML += "<br><span style='color:#fff'>[SUCCESS] ACCESS GRANTED.</span>";
                 form.reset();
-                setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; }, 3000);
+                setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; log.innerHTML=""; }, 2500);
             } else { throw new Error(); }
         }).catch(() => {
-            log.innerText = "ERRORE CRITICO. RE-INDIRIZZAMENTO...";
+            log.innerHTML += "<br><span style='color:red'>[ERROR] FALLBACK INITIATED...</span>";
             form.removeEventListener("submit", handleSubmit);
             setTimeout(() => { form.submit(); }, 1000);
         });
@@ -186,4 +300,3 @@
 </script>
 </body>
 </html>
-
