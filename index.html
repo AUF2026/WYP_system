@@ -30,9 +30,9 @@
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
         input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; font-family: var(--font-mono); }
-        select { color: var(--neon); cursor: pointer; }
+        select { color: var(--neon); cursor: pointer; border-radius: 0; -webkit-appearance: none; }
         option { background: #000; color: #fff; }
-        input:focus, textarea:focus { border-bottom-color: var(--neon); }
+        input:focus, textarea:focus, select:focus { border-bottom-color: var(--neon); }
         .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
         .description-box:focus-within { border-color: var(--neon); }
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
@@ -86,6 +86,9 @@
                     <option value="Automation">Automazione Processi</option>
                     <option value="Data-Entropy">Analisi Dati / Database</option>
                     <option value="Security">Cyber Security / Bypass</option>
+                    <option value="AI-Integration">AI Integration & LLM Ops</option>
+                    <option value="Legacy-Refactor">Legacy Code Refactoring</option>
+                    <option value="Cloud-Migration">Cloud Migration & Infra</option>
                 </select>
             </div>
             <div class="description-box">
@@ -127,43 +130,29 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
-        
-        // Disabilita UI e mostra Kernel
         btn.disabled = true;
         kernel.style.display = "flex";
 
-        // Animazione
         for (const step of steps) {
             log.innerText = step;
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // Fetch asincrona corretta
         const data = new FormData(event.target);
         fetch(event.target.action, {
             method: 'POST',
             body: data,
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
                 log.innerText = "RISOLTO. IL TEAM TI CONTATTERÀ.";
                 form.reset();
-                setTimeout(() => { 
-                    kernel.style.display = "none"; 
-                    btn.disabled = false; 
-                }, 3000);
-            } else {
-                // Se Formspree risponde con errore (es. Method Unsupported)
-                throw new Error("Formspree Error");
-            }
-        }).catch(error => {
-            // Fallback: invio standard se AJAX fallisce
+                setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; }, 3000);
+            } else { throw new Error(); }
+        }).catch(() => {
             log.innerText = "ERRORE CRITICO. RE-INDIRIZZAMENTO...";
-            setTimeout(() => {
-                form.submit();
-            }, 1000);
+            form.removeEventListener("submit", handleSubmit);
+            setTimeout(() => { form.submit(); }, 1000);
         });
     }
     form.addEventListener("submit", handleSubmit);
