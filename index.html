@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- SCRIPT HCAPTCHA INTEGRATO SENZA TOCCARE IL RESTO -->
+    <!-- SCRIPT HCAPTCHA -->
     <script src="https://js.hcaptcha.com" async defer></script>
     <style>
 	:root {
@@ -100,7 +100,7 @@
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
 
-        /* WIDGET HCAPTCHA CENTRATO */
+        /* WIDGET HCAPTCHA STILE */
         .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
@@ -139,7 +139,6 @@
                 <label>CANALE PRIVATO CRIPTATO</label>
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
-            
             <div class="description-box">
                 <div class="field-group">
                     <label>IL PROBLEMA</label>
@@ -151,7 +150,7 @@
                 </div>
             </div>
 
-            <!-- HCAPTCHA WIDGET - SITE KEY REALE -->
+            <!-- WIDGET HCAPTCHA - SITE KEY REALE -->
             <div class="h-captcha" data-sitekey="LA_TUA_SITE_KEY" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
@@ -173,22 +172,19 @@
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
         
-        // 1. Validazione Campi
         if(!form.checkValidity()) { form.reportValidity(); return; }
 
-        // 2. Controllo hCaptcha
         const hCaptchaResponse = hcaptcha.getResponse();
         if (!hCaptchaResponse) {
             alert("SINCRO HCAPTCHA NECESSARIA.");
             return;
         }
 
-        // 3. Overlay Animazione Hacker
         statusOverlay.style.display = "flex";
         const steps = [
-            "> INITIALIZING QUANTUM BYPASS...",
-            "> ANALYZING ENTROPY LEVELS...",
-            "> MAPPING PROBLEM SPACE...",
+            "> INITIALIZING QUANTUM BYPASS...", 
+            "> ANALYZING ENTROPY LEVELS...", 
+            "> MAPPING PROBLEM SPACE...", 
             "> EXECUTING UPLINK TO KERNEL..."
         ];
         
@@ -197,7 +193,6 @@
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // 4. Invio Dati Fetch
         const data = new FormData(form);
         fetch(form.action, {
             method: 'POST',
@@ -210,11 +205,9 @@
                 hcaptcha.reset();
                 setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
             } else {
-                // FALLBACK DETERMINISTICO: se fallisce JSON, invia nativo
                 form.submit();
             }
         }).catch(error => {
-            // FALLBACK se Brave blocca la fetch
             form.submit();
         });
     });
