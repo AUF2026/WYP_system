@@ -125,6 +125,7 @@
     </section>
 
     <div class="wyp-card">
+        <!-- INVIO NATIVO: UNICO MODO PER EVITARE "METHOD UNSUPPORTED" CON CAPTCHA ATTIVO -->
         <form id="kernel-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
@@ -178,11 +179,10 @@
 </footer>
 
 <script>
-    // FIX: Usiamo l'evento nativo per attivare l'animazione e far procedere il POST
+    // Questo script NON blocca l'invio (no preventDefault).
+    // Attiva solo l'animazione un istante prima che il browser faccia il POST.
     document.getElementById('kernel-form').onsubmit = function() {
         document.getElementById('kernel-status').style.display = 'flex';
-        // NESSUN preventDefault() -> Il browser invia i dati, Formspree vede il POST, 
-        // e se serve il captcha ti manda sulla sua pagina senza errori "Method Unsupported".
     };
 </script>
 
