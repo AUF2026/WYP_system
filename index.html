@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- SCRIPT RECAPTCHA CORRETTO -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         :root {
             --neon: #00f2ff;
@@ -52,8 +50,6 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
-
-        .g-recaptcha { margin: 20px 0; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
@@ -119,9 +115,6 @@
                     <input type="file" name="upload" accept=".jpg,.png,.pdf">
                 </div>
             </div>
-
-            <!-- WIDGET RECAPTCHA GOOGLE - INSERISCI SITE KEY -->
-            <div class="g-recaptcha" data-sitekey="LA_TUA_KEY_SITE" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
         </form>
