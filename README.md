@@ -28,7 +28,7 @@ L'accesso ai repository di questo profilo costituisce accettazione dei termini d
 ### 📨 UPLINK CHANNELS
 Se hai un problema complesso che richiede una soluzione reale, applicabile e deterministica, usa i canali criptati qui sotto:
 
-*   **Official System:** [ACCEDI AL KERNEL WYP](https://tuo-username.github.io)
+*   **Official System:** [ACCEDI AL KERNEL WYP](https://AUF2026.github.io)
 *   **Secure Email:** [AUF2026@protonmail.com](mailto:AUF2026@protonmail.com)
 *   **Location:** Zurich, CH / Global Uplink
 
