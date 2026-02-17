@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- 1. SCRIPT HCAPTCHA OBBLIGATORIO -->
+    <!-- SCRIPT HCAPTCHA - OBBLIGATORIO PER FORMSPREE -->
     <script src="https://js.hcaptcha.com" async defer></script>
     <style>
         :root { --neon: #00f2ff; --bg: #000000; --surface: #0a0a0a; --font-mono: 'JetBrains Mono', monospace; }
@@ -28,7 +28,7 @@
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 0.9rem; color: #6e6e6e; }
-        /* Centratura widget */
+        /* Centratura widget hCaptcha */
         .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
@@ -45,7 +45,7 @@
             <text x="75" y="55" fill="white" font-family="monospace" font-size="32" font-weight="bold">WYP?</text>
         </svg>
     </div>
-    <div class="tagline">It’s Solved!</div>
+    <div class="tagline">It’s Solved! Deterministically.</div>
 </header>
 
 <main>
@@ -55,7 +55,7 @@
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
+        <form id="my-form" action="https://formspree.io" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -75,8 +75,8 @@
                 </div>
             </div>
 
-            <!-- 2. WIDGET HCAPTCHA FISICO -->
-            <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001" data-theme="dark"></div>
+            <!-- WIDGET HCAPTCHA - INSERISCI LA TUA SITE KEY REALE -->
+            <div class="h-captcha" data-sitekey="INSERISCI_SITE_KEY_QUI" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
         </form>
@@ -94,51 +94,55 @@
     const statusOverlay = document.getElementById("kernel-status");
     const log = document.getElementById("status-log");
 
-    form.addEventListener("submit", async function(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         
-        // Check validità
+        // 1. Validazione form
         if(!form.checkValidity()) { form.reportValidity(); return; }
 
-        // Check hCaptcha
+        // 2. Controllo hCaptcha
         const hCaptchaResponse = hcaptcha.getResponse();
         if (!hCaptchaResponse) {
             alert("SINCRO HCAPTCHA NECESSARIA.");
             return;
         }
 
+        // 3. Mostra l'overlay
         statusOverlay.style.display = "flex";
-        const steps = ["> INITIALIZING...", "> ANALYZING ENTROPY...", "> MAPPING SPACE...", "> EXECUTING UPLINK..."];
+        const steps = [
+            "> INITIALIZING QUANTUM BYPASS...", 
+            "> ANALYZING ENTROPY LEVELS...", 
+            "> MAPPING PROBLEM SPACE...", 
+            "> EXECUTING UPLINK TO KERNEL..."
+        ];
         
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
             await new Promise(r => setTimeout(r, 600));
         }
 
-        const data = new FormData(form);
-        
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            });
-
+        // 4. Invio Dati
+        const data = new FormData(event.target);
+        fetch(event.target.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
             if (response.ok) {
                 log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
                 form.reset();
                 hcaptcha.reset();
                 setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
             } else {
-                // Fallback: se fallisce (es. Brave blocca JSON), manda il POST nativo
-                log.innerHTML = "REDIRECTING TO SECURE UPLINK...";
-                setTimeout(() => { form.submit(); }, 1000);
+                // BYPASS: Fallback nativo se il server rifiuta JSON
+                form.submit();
             }
-        } catch (error) {
-            // Fallback estremo
+        }).catch(error => {
+            // BYPASS: Fallback nativo se Brave blocca la fetch
             form.submit();
-        }
-    });
+        });
+    }
+    form.addEventListener("submit", handleSubmit);
 </script>
 </body>
 </html>
