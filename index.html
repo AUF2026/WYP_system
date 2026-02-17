@@ -74,7 +74,6 @@
         </form>
     </div>
 </main>
-
 <div id="kernel-status"><div id="status-log"></div></div>
 
 <footer>
@@ -82,6 +81,12 @@
 </footer>
 
 <script>
+    // Al caricamento della pagina, resetta lo stato (pulisce l'overlay se presente)
+    window.onload = function() {
+        document.getElementById('kernel-status').style.display = 'none';
+        document.getElementById('kernel-form').reset();
+    };
+
     async function initializeBypass() {
         const form = document.getElementById('kernel-form');
         const status = document.getElementById('kernel-status');
@@ -92,7 +97,6 @@
             return;
         }
 
-        // Attivazione interfaccia neon
         status.style.display = 'flex';
         
         const steps = [
@@ -102,22 +106,20 @@
             "> EXECUTING UPLINK TO KERNEL..."
         ];
 
-        // Sequenza estetica
         for(let step of steps) {
             log.innerHTML = `<span class="blink">${step}</span>`;
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // FORZATURA DETERMINISTICA (Bypass Formspree Free)
         log.innerHTML = "<span style='color: #00f2ff'>UPLINK ESTABLISHED. SENDING DATA...</span>";
         
         setTimeout(() => {
-            // Questo comando invia il form "fisicamente" e ricarica la pagina. 
-            // Formspree NON può bloccarlo.
+            // Esegue l'invio fisico
             form.submit(); 
         }, 1000);
     }
 </script>
 </body>
 </html>
+
 
