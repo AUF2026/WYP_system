@@ -6,7 +6,6 @@
   <code>SYSTEM STATUS: ONLINE // ENTROPY LEVEL: O(1)</code>
 </p>
 
-
 ---
 
 ### 🛡️ INTELLECTUAL PROPERTY & DETERMINISTIC LOGIC
