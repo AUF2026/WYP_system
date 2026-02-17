@@ -1,7 +1,7 @@
 # █ AUF2026 // KERNEL ARCHITECT █
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com" width="450" alt="WYP LOGO">
+  <img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" width="auto" alt="WYP LOGO">
   <br>
   <code>SYSTEM STATUS: ONLINE // ENTROPY LEVEL: O(1)</code>
 </p>
