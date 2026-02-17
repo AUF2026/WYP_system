@@ -125,15 +125,18 @@
     </section>
 
     <div class="wyp-card">
-        <form id="kernel-form">
+        <!-- FORM SECONDO SCHEMA UFFICIALE FORMSPREE -->
+        <form action="https://formspree.io" method="POST" enctype="multipart/form-data" onsubmit="document.getElementById('kernel-status').style.display='flex';">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
             </div>
+            
             <div class="field-group">
                 <label>CANALE PRIVATO CRIPTATO</label>
                 <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
+
             <div class="field-group">
                 <label>DOMINIO DI ANALISI</label>
                 <select name="Settore" required>
@@ -144,6 +147,7 @@
                     <option value="Security">Cyber Security / Bypass</option>
                 </select>
             </div>
+
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
@@ -151,13 +155,15 @@
                 </div>
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
-                    <input type="text" name="Obiettivo" placeholder="Stato finale?" required>
+                    <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
                 </div>
             </div>
+
             <div class="field-group">
                 <label>ALLEGATI TECNICI (DOCKER, LOGS, SCHEMI)</label>
                 <input type="file" name="Allegato">
             </div>
+
             <div class="field-group">
                 <label>ALLOCAZIONE BUDGET (EUR)</label>
                 <div class="budget-container">
@@ -165,6 +171,7 @@
                     <input type="number" name="Budget" placeholder="0.00">
                 </div>
             </div>
+
             <button type="submit" class="btn-core">INVIA RICHIESTA SOLUZIONE DETERMINISTICA</button>
         </form>
     </div>
@@ -172,43 +179,12 @@
 
 <div id="kernel-status">
     <div class="blink">> INIZIALIZZAZIONE KERNEL...</div>
-    <div id="status-log" style="margin-top:20px;"></div>
+    <div style="margin-top:20px;">> Spazio stati mappato.<br>> Gestione Captcha e sincronizzazione server...</div>
 </div>
 
 <footer>
     WYP // ALGORITHMIC PROBLEM SOLVING // © 2024
 </footer>
 
-<script>
-    const form = document.getElementById('kernel-form');
-    const statusOverlay = document.getElementById('kernel-status');
-    const statusLog = document.getElementById('status-log');
-    const FORMSPREE_ID = "mwkgpjpj"; 
-
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        statusOverlay.style.display = 'flex';
-        statusLog.innerHTML = "<div>> Analisi entropia...</div>";
-
-        fetch(`https://formspree.io{FORMSPREE_ID}`, {
-            method: "POST",
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(response => {
-            if (response.ok) {
-                statusLog.innerHTML += "<div>> Spazio stati mappato.</div><div>> Q.E.D. RISOLTO.</div>";
-                setTimeout(() => location.reload(), 2500);
-            } else {
-                statusLog.innerHTML += "<div style='color:red;'>> ERRORE KERNEL: INVIO FALLITO.</div>";
-                setTimeout(() => statusOverlay.style.display = 'none', 3000);
-            }
-        })
-        .catch(error => {
-            statusLog.innerHTML += "<div style='color:red;'>> ECCEZIONE CRITICA.</div>";
-            setTimeout(() => statusOverlay.style.display = 'none', 3000);
-        });
-    });
-</script>
 </body>
 </html>
