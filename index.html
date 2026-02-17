@@ -41,10 +41,28 @@
         option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
 
-        .btn-core { width: 100%; background: var(--neon); color: #000; border: none; padding: 25px; font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 20px; line-height: 1.4; }
+        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
+        .description-box:focus-within { border-color: var(--neon); }
+
+        .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
+        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
+        .budget-container input { border-bottom: none; }
+
+        input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
+
+        .btn-core {
+            width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
+            font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s; margin-top: 20px; line-height: 1.4;
+        }
         .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
 
-        #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; font-family: var(--font-mono); color: var(--neon); text-align: center; padding: 20px; }
+        #kernel-status {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column;
+            justify-content: center; align-items: center; font-family: var(--font-mono);
+            color: var(--neon); text-align: center; padding: 20px;
+        }
         #status-log { font-size: 1.2rem; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -53,6 +71,7 @@
     </style>
 </head>
 <body>
+
 <header>
     <div class="logo-box">
         <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
@@ -77,8 +96,7 @@
     </section>
 
     <div class="wyp-card">
-        <!-- ACTION REALE MOJNWNWG -->
-        <form id="my-form" action="https://formspree.io/f/mwkwpozw" method="POST" enctype="multipart/form-data">
+        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST" enctype="multipart/form-data">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -126,5 +144,46 @@
 <footer>
     ALAIN FAURE AUF2026© <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | Q.E.D
 </footer>
+
+<script>
+    const form = document.getElementById("my-form");
+    const statusOverlay = document.getElementById("kernel-status");
+    const log = document.getElementById("status-log");
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        if(!form.checkValidity()) { form.reportValidity(); return; }
+
+        statusOverlay.style.display = "flex";
+        const steps = [
+            "> INITIALIZING QUANTUM BYPASS...", 
+            "> ANALYZING ENTROPY LEVELS...", 
+            "> MAPPING PROBLEM SPACE...", 
+            "> EXECUTING UPLINK TO KERNEL..."
+        ];
+
+        for(let step of steps) {
+            log.innerHTML = `<span class="blink">${step}</span>`;
+            await new Promise(r => setTimeout(r, 600));
+        }
+
+        const data = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL.</span>";
+                form.reset();
+                setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
+            } else {
+                log.innerHTML = "Errore nel caricamento, riprova.";
+            }
+        }).catch(error => {
+            log.innerHTML = "Errore nel caricamento, riprova.";
+        });
+    });
+</script>
 </body>
 </html>
