@@ -79,8 +79,6 @@
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
         .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
         .budget-container input { border-bottom: none; }
-        
-        input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
 
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
@@ -129,7 +127,7 @@
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io" method="POST" enctype="multipart/form-data">
+        <form id="my-form" action="https://formspree.io" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
@@ -160,11 +158,6 @@
                     <span>€</span>
                     <input type="number" name="Budget" placeholder="0.00" required>
                 </div>
-            </div>
-
-            <div class="field-group">
-                <label>DOCUMENTAZIONE ALLEGATA (LOGS/ASSETS)</label>
-                <input type="file" name="Allegato">
             </div>
 
             <div class="h-captcha" data-sitekey="TUA_SITE_KEY" data-theme="dark"></div>
@@ -208,7 +201,6 @@
     async function handleSubmit(event) {
         event.preventDefault();
         
-        // Controllo hCaptcha
         const hCaptchaRes = hcaptcha.getResponse();
         if (!hCaptchaRes) {
             alert("Verifica di essere un umano prima di procedere.");
