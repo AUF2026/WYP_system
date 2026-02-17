@@ -13,8 +13,6 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        /* KILLER DEL BLU BROWSER */
-        a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
 
@@ -29,8 +27,8 @@
         .logo-box svg { width: 100%; height: auto; }
 
         .tagline {
-            font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px;
-            text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8;
+            font-family: var(--font-mono); font-size: 1.5rem; letter-spacing: 5px;
+            text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center;
         }
 
         main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
@@ -48,7 +46,8 @@
             width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
             color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
         }
-        select { color: var(--neon); cursor: pointer; }
+        select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
+        option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
 
         .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; }
@@ -56,14 +55,15 @@
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
             font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s; margin-top: 20px;
+            transition: 0.3s; margin-top: 20px; line-height: 1.4;
         }
+        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
 
         #kernel-status {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column;
             justify-content: center; align-items: center; font-family: var(--font-mono);
-            color: var(--neon); text-align: center;
+            color: var(--neon); text-align: center; padding: 20px;
         }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -75,6 +75,7 @@
 
 <header>
     <div class="logo-box">
+        <!-- Logo SVG WYP -->
         <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
             <g transform="scale(0.85)">
                 <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
@@ -93,57 +94,58 @@
 <main>
     <section class="manifesto">
         COLLASSIAMO L'ENTROPIA DEI TUOI PROBLEMI COMPLESSI.<br>
-        <b>SaaS Architecture. Risoluzione O(1) deterministico.</b>
+        <b>SaaS Architecture. Risoluzione O(1).</b>
     </section>
 
     <div class="wyp-card">
-        <!-- FORM IBRIDO: INVIO POST REALE PER GESTIRE IL CAPTCHA NATIVO -->
-        <form id="kernel-form" action="https://formspree.io" method="POST">
+        <!-- INVIO NATIVO: RISOLVE "METHOD UNSUPPORTED" -->
+        <form action="https://formspree.io" method="POST" id="kernel-form">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
-                <input type="text" name="Azienda" required>
+                <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
             </div>
+            
             <div class="field-group">
                 <label>EMAIL</label>
-                <input type="email" name="Email" required>
+                <input type="email" name="_replyto" placeholder="INSERISCI EMAIL" required>
             </div>
+
             <div class="field-group">
-                <label>AMBITO</label>
+                <label>AMBITO ANALISI</label>
                 <select name="Settore" required>
-                    <option value="SaaS">SaaS Architecture</option>
-                    <option value="Automation">Automation</option>
+                    <option value="SaaS">SaaS & Software Architecture</option>
+                    <option value="Automation">Automazione Processi</option>
+                    <option value="Security">Cyber Security</option>
                 </select>
             </div>
+
             <div class="description-box">
                 <div class="field-group">
-                    <label>PROBLEMA</label>
+                    <label>PROBLEMA DETTAGLIATO</label>
                     <textarea name="Messaggio" rows="3" required></textarea>
                 </div>
             </div>
-            <button type="submit" class="btn-core" id="submit-btn">Inizializza Kernel</button>
+
+            <button type="submit" class="btn-core">Inizializza Kernel</button>
         </form>
     </div>
 </main>
 
 <div id="kernel-status">
     <p>ACCESSO KERNEL IN CORSO...</p>
-    <p class="blink">SINCRONIZZAZIONE DATI... █▒▒▒▒▒▒▒▒▒</p>
-    <p style="font-size: 0.7rem; margin-top: 20px; opacity: 0.6;">Verifica Captcha in corso...</p>
+    <p class="blink">SINCRONIZZAZIONE PACCHETTI... █▒▒▒▒▒▒▒▒▒</p>
+    <p style="font-size: 0.7rem; margin-top: 20px; opacity: 0.5;">Verifica identità in corso sul server Formspree...</p>
 </div>
 
 <footer>WYP © 2024</footer>
 
 <script>
-    const form = document.getElementById('kernel-form');
-    const overlay = document.getElementById('kernel-status');
-
-    form.onsubmit = function(e) {
-        // 1. Mostra l'overlay con l'animazione subito
-        overlay.style.display = 'flex';
-        
-        // 2. Lasciamo che il browser invii il form normalmente (niente preventDefault)
-        // Questo permette a Formspree di attivare il captcha standard senza crash.
+    // Questo script NON blocca l'invio, ma attiva solo l'animazione.
+    // Il browser invierà il POST e gestirà il Captcha senza errori "Method Unsupported".
+    document.getElementById('kernel-form').onsubmit = function() {
+        document.getElementById('kernel-status').style.display = 'flex';
     };
 </script>
+
 </body>
 </html>
