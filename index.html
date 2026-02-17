@@ -90,7 +90,7 @@
         label { 
             display: block; 
             font-size: 0.65rem; 
-            color: var(--electric-blue); 
+            color: var(--electric-blue); /* Label più visibili */
             margin-bottom: 18px; 
             letter-spacing: 3px; 
             text-transform: uppercase;
@@ -101,7 +101,7 @@
             width: 100%; 
             background: transparent; 
             border: none; 
-            color: var(--electric-blue) !important; 
+            color: var(--electric-blue) !important; /* Testo Blu Elettrico */
             font-size: 1.1rem; 
             outline: none; 
             font-family: var(--font-mono);
@@ -109,6 +109,7 @@
             font-weight: 600;
         }
 
+        /* Placeholder Blu ad alta visibilità */
         ::placeholder { color: rgba(45, 218, 255, 0.4) !important; text-transform: uppercase; }
 
         textarea { resize: none; text-transform: none; line-height: 1.6; }
@@ -282,7 +283,6 @@
 
         const data = new FormData(event.target);
         
-        // DATI REALI INSERITI QUI
         fetch("https://formspree.io", {
             method: 'POST',
             body: data,
