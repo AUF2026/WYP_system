@@ -7,7 +7,7 @@
     <style>
         :root {
             --neon: #00f2ff;
-            --electric-blue: #2ddaff; 
+            --electric-blue: #2ddaff; /* Il blu forte del logo */
             --bg: #000;
             --surface: #050505;
             --font-mono: 'JetBrains Mono', monospace;
@@ -25,6 +25,7 @@
             overflow-x: hidden;
         }
 
+        /* SCANLINE CRT */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), 
@@ -280,7 +281,9 @@
         }
 
         const data = new FormData(event.target);
-        fetch(event.target.action, {
+        
+        // DATI REALI INSERITI QUI
+        fetch("https://formspree.io", {
             method: 'POST',
             body: data,
             headers: { 'Accept': 'application/json' }
@@ -288,7 +291,11 @@
             if (response.ok) {
                 log.innerHTML += "<br><span style='color:#fff'>[SUCCESS] ACCESS GRANTED.</span>";
                 form.reset();
-                setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; log.innerHTML=""; }, 2500);
+                setTimeout(() => { 
+                    kernel.style.display = "none"; 
+                    btn.disabled = false; 
+                    log.innerHTML=""; 
+                }, 2500);
             } else { throw new Error(); }
         }).catch(() => {
             log.innerHTML += "<br><span style='color:red'>[ERROR] FALLBACK INITIATED...</span>";
