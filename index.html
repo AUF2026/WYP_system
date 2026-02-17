@@ -15,15 +15,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--bg); 
-            color: #fff; 
-            font-family: var(--font-mono); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            overflow-x: hidden;
-        }
+        body { background: var(--bg); color: #fff; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
 
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -32,83 +24,25 @@
             z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
         }
 
-        .wrapper {
-            width: 100%;
-            max-width: var(--col-width);
-            padding: 80px 20px 120px;
-            display: flex;
-            flex-direction: column;
-        }
-
+        .wrapper { width: 100%; max-width: var(--col-width); padding: 80px 20px 120px; display: flex; flex-direction: column; }
         header { width: 100%; text-align: center; margin-bottom: 60px; }
 
-        .logo-box { 
-            width: 100%; 
-            filter: drop-shadow(0 0 25px var(--electric-blue));
-            animation: boot 1.5s ease-out;
-        }
+        .logo-box { width: 100%; filter: drop-shadow(0 0 25px var(--electric-blue)); animation: boot 1.5s ease-out; }
         .logo-box svg { width: 100%; height: auto; display: block; }
 
-        @keyframes boot {
-            0% { opacity: 0; transform: scale(0.98); filter: brightness(3); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes boot { 0% { opacity: 0; transform: scale(0.98); filter: brightness(3); } 100% { opacity: 1; transform: scale(1); } }
 
-        .tagline { 
-            font-size: 1.6rem; 
-            font-weight: 900;
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            margin-top: 40px; 
-            color: var(--electric-blue); 
-            text-shadow: 0 0 15px rgba(45, 218, 255, 0.6);
-            line-height: 1.1;
-        }
+        .tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: var(--electric-blue); text-shadow: 0 0 15px rgba(45, 218, 255, 0.6); line-height: 1.1; }
+        .sub-claim { font-size: 0.75rem; color: #555; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
 
-        .sub-claim {
-            font-size: 0.75rem;
-            color: #555;
-            letter-spacing: 4px;
-            margin-top: 15px;
-            text-transform: uppercase;
-        }
-
-        .terminal-container { 
-            background: var(--surface); 
-            border: 1px solid #151515; 
-            box-shadow: 0 0 60px rgba(0,0,0,1);
-        }
-
-        .field-group { 
-            padding: 30px; 
-            border-bottom: 1px solid #111; 
-            transition: 0.3s;
-        }
+        .terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); }
+        .field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
         .field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
 
-        label { 
-            display: block; 
-            font-size: 0.65rem; 
-            color: var(--electric-blue); 
-            margin-bottom: 18px; 
-            letter-spacing: 3px; 
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
+        label { display: block; font-size: 0.65rem; color: var(--electric-blue); margin-bottom: 18px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
+        input, textarea, select { width: 100%; background: transparent; border: none; color: var(--electric-blue) !important; font-size: 1.1rem; outline: none; font-family: var(--font-mono); text-transform: uppercase; font-weight: 600; }
+        ::placeholder { color: rgba(45, 218, 255, 0.4) !important; }
 
-        input, textarea, select { 
-            width: 100%; 
-            background: transparent; 
-            border: none; 
-            color: var(--electric-blue) !important; 
-            font-size: 1.1rem; 
-            outline: none; 
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        ::placeholder { color: rgba(45, 218, 255, 0.4) !important; text-transform: uppercase; }
         textarea { resize: none; text-transform: none; line-height: 1.6; }
         select { cursor: pointer; -webkit-appearance: none; }
         option { background: #000; color: var(--electric-blue); }
@@ -116,41 +50,13 @@
         .budget-row { display: flex; align-items: center; }
         .budget-row span { color: var(--electric-blue); font-size: 1.6rem; margin-right: 20px; font-weight: 900; }
 
-        .btn-execute {
-            width: 100%; 
-            background: transparent; 
-            border: 1px solid var(--electric-blue); 
-            color: var(--electric-blue); 
-            padding: 40px;
-            font-family: var(--font-mono); 
-            font-weight: 900; 
-            font-size: 1.3rem;
-            letter-spacing: 10px; 
-            text-transform: uppercase; 
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-            margin-top: -1px;
-        }
-        .btn-execute:hover { 
-            background: var(--electric-blue); 
-            color: #000; 
-            box-shadow: 0 0 50px rgba(45, 218, 255, 0.5); 
-        }
+        .btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.3rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; }
+        .btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45, 218, 255, 0.5); }
 
-        #kernel-status {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 10000; flex-direction: column;
-            justify-content: center; align-items: center; padding: 40px;
-        }
+        #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
         .status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 3px; text-align: center; font-family: var(--font-mono); }
 
         footer { padding: 80px 0 20px; font-size: 0.7rem; color: #222; letter-spacing: 10px; text-align: center; text-transform: uppercase; }
-
-        @media (max-width: 480px) {
-            .tagline { font-size: 1.2rem; letter-spacing: 1px; }
-            .wrapper { padding: 40px 15px; }
-            .btn-execute { padding: 30px; font-size: 1rem; }
-        }
     </style>
 </head>
 <body>
@@ -180,12 +86,10 @@
                 <label>IDENT_ASSET</label>
                 <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
             </div>
-
             <div class="field-group">
                 <label>SECURE_COMM_CHANNEL</label>
                 <input type="email" name="Email" placeholder="PUB_KEY@EMAIL.COM" required>
             </div>
-
             <div class="field-group">
                 <label>ANALYSIS_DOMAIN</label>
                 <select name="Settore" required>
@@ -196,43 +100,13 @@
                     <option value="Security">CYBER SECURITY</option>
                     <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
                     <option value="Automation">INDUSTRIAL AUTOMATION</option>
-                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
-                    <option value="DevOps">DEVOPS & CI/CD</option>
-                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
-                    <option value="Edge-Computing">EDGE COMPUTING</option>
-                    <option value="API-Integration">API INTEGRATION</option>
-                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
-                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
-                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
-                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
-                    <option value="ML-Models">MACHINE LEARNING MODELS</option>
-                    <option value="Quantum-Computing">QUANTUM COMPUTING</option>
-                    <option value="Aerospace">AEROSPACE & DEFENSE TECHNOLOGIES</option>
-                    <option value="Transport-Systems">TRANSPORTATION SYSTEMS</option>
-                    <option value="Smart-Cities">SMART CITIES & INFRASTRUCTURE</option>
-                    <option value="Gov-Tech">GOVERNMENT & PUBLIC SECTOR</option>
-                    <option value="Energy-Systems">ENERGY MANAGEMENT & OPTIMIZATION</option>
-                    <option value="HealthTech">HEALTHCARE TECHNOLOGIES</option>
-                    <option value="Telecommunications">TELECOMMUNICATIONS INFRASTRUCTURE</option>
-                    <option value="Public-Safety">PUBLIC SAFETY & SECURITY</option>
-                    <option value="Railway-Tech">RAILWAY TECHNOLOGIES</option>
-                    <option value="Smart-Grids">SMART GRID SOLUTIONS</option>
-                    <option value="Maritime-Tech">MARITIME & PORT TECHNOLOGIES</option>
-                    <option value="Transport-Logistics">TRANSPORT & LOGISTICS SYSTEMS</option>
-                    <option value="Construction-Tech">CONSTRUCTION & ENGINEERING</option>
-                    <option value="Industrial-Design">INDUSTRIAL DESIGN & PROTOTYPING</option>
-                    <option value="Telecom-Security">TELECOM SECURITY SYSTEMS</option>
-                    <option value="Energy-Production">ENERGY PRODUCTION & DISTRIBUTION</option>
-                    <option value="Satellite-Tech">SATELLITE & SPACE TECHNOLOGIES</option>
                     <option value="Other">OTHER / ALTRO</option>
                 </select>
             </div>
-
             <div class="field-group">
                 <label>PROBLEM_LOG_DESC</label>
                 <textarea name="Messaggio" rows="3" placeholder="INPUT RAW DATA..." required></textarea>
             </div>
-
             <div class="field-group" style="border-bottom: none;">
                 <label>RESOURCE_COMMITMENT</label>
                 <div class="budget-row">
@@ -240,7 +114,6 @@
                     <input type="number" name="Budget" placeholder="000.000" required>
                 </div>
             </div>
-
             <button type="submit" class="btn-execute" id="submit-btn">EXECUTE_SUBMIT</button>
         </form>
     </main>
@@ -254,53 +127,29 @@
 
 <script>
     const form = document.getElementById("my-form");
-    const btn = document.getElementById("submit-btn");
     const kernel = document.getElementById("kernel-status");
     const log = document.getElementById("status-log");
 
     const steps = [
         "> CONNECTING TO KERNEL...",
         "> UPLOADING DATA SET...",
-        "> ANALYZING VULNERABILITIES...",
         "> O(1) RESOLUTION FOUND.",
         "> PACKET SENT SUCCESSFULLY."
     ];
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        btn.disabled = true;
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
         kernel.style.display = "flex";
         log.innerHTML = "";
-
+        
         for (const step of steps) {
             log.innerHTML += step + "<br>";
             await new Promise(r => setTimeout(r, 450));
         }
 
-        const data = new FormData(event.target);
-        
-        // ENDPOINT CORRETTO CON /f/ PER CHIAMATE AJAX
-        fetch("https://formspree.io", {
-            method: 'POST',
-            body: data,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if (response.ok) {
-                log.innerHTML += "<br><span style='color:#fff'>[SUCCESS] ACCESS GRANTED.</span>";
-                form.reset();
-                setTimeout(() => { 
-                    kernel.style.display = "none"; 
-                    btn.disabled = false; 
-                    log.innerHTML=""; 
-                }, 2500);
-            } else { throw new Error(); }
-        }).catch(() => {
-            log.innerHTML += "<br><span style='color:red'>[ERROR] FALLBACK INITIATED...</span>";
-            form.removeEventListener("submit", handleSubmit);
-            setTimeout(() => { form.submit(); }, 1000);
-        });
-    }
-    form.addEventListener("submit", handleSubmit);
+        // INVIO TRADIZIONALE FALLBACK SICURO
+        setTimeout(() => { form.submit(); }, 500);
+    });
 </script>
 </body>
 </html>
