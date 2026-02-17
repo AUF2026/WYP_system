@@ -95,11 +95,11 @@
             justify-content: center; align-items: center; font-family: var(--font-mono);
             color: var(--neon); text-align: center; padding: 20px;
         }
+        #status-log { font-size: 1.2rem; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
-
         .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
@@ -167,7 +167,8 @@
                 </div>
             </div>
 
-            <div class="h-captcha" data-sitekey="LA_TUA_SITE_KEY" data-theme="dark"></div>
+            <!-- SITE KEY PUBBLICA HCAPTCHA -->
+            <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001" data-theme="dark"></div>
 
             <button type="submit" id="my-form-button" class="btn-core">OTTIENI SOLUZIONE DETERMINISTICA</button>
         </form>
@@ -187,21 +188,16 @@
 
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
-        
-        // 1. Validazione Campi Originali
-        if(!form.checkValidity()) { 
-            form.reportValidity(); 
-            return; 
-        }
+        if(!form.checkValidity()) { form.reportValidity(); return; }
 
-        // 2. Validazione hCaptcha (Obbligatoria per Formspree)
+        // Verifica hCaptcha
         const hCaptchaResponse = hcaptcha.getResponse();
         if (!hCaptchaResponse) {
             alert("SINCRO HCAPTCHA NECESSARIA PER L'UPLINK.");
             return;
         }
 
-        // 3. Attivazione Overlay e Sequenza Animata Hacker
+        // Overlay
         statusOverlay.style.display = "flex";
         const steps = [
             "> INITIALIZING QUANTUM BYPASS...", 
@@ -215,7 +211,6 @@
             await new Promise(r => setTimeout(r, 600));
         }
 
-        // 4. Esecuzione Uplink via Fetch API
         const data = new FormData(form);
         fetch(form.action, {
             method: 'POST',
@@ -223,25 +218,17 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
-                // Successo: Reset sistema
                 log.innerHTML = "<span style='color: #00f2ff'>UPLINK SUCCESSFUL. SOLUTION PENDING.</span>";
                 form.reset();
                 hcaptcha.reset();
-                setTimeout(() => { 
-                    statusOverlay.style.display = "none"; 
-                }, 2500);
+                setTimeout(() => { statusOverlay.style.display = "none"; }, 2500);
             } else {
-                // Fallback Deterministico: se il server rifiuta JSON, forza invio nativo
-                log.innerHTML = "<span style='color: #00f2ff'>PROTOCOL MISMATCH. FORCING SECURE REDIRECT...</span>";
-                setTimeout(() => { form.submit(); }, 1000);
+                form.submit();
             }
         }).catch(error => {
-            // Fallback per Brave Shield o interruzioni di rete
             form.submit();
         });
     });
 </script>
-
 </body>
 </html>
-
