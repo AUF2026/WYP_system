@@ -6,8 +6,8 @@
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
     <style>
 	:root {
-    	  --neon: #00f2ff; /* Colore Master (Azzurro) */
-    	  --link: var(--neon); /* Il link eredita sempre il colore Master */
+    	  --neon: #00f2ff;
+    	  --link: var(--neon);
     	  --bg: #000000;
     	  --surface: #0a0a0a;
     	  --font-main: 'Inter', sans-serif;
@@ -15,16 +15,8 @@
 	}
 
 	/* KILLER DEL BLU BROWSER */
-	    a, a:visited, a:active {
-	    color: #00f2ff !important; 
-	    text-decoration: none !important;
-	}
-
-	    a:hover {
-	    filter: brightness(1.2);
-	    text-decoration: underline !important;
-	}
-
+	a, a:visited, a:active { color: #00f2ff !important; text-decoration: none !important; }
+	a:hover { filter: brightness(1.2); text-decoration: underline !important; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
@@ -37,25 +29,22 @@
 
         header { 
             width: 100%;
-            max-width: 550px;
+            max-width: 800px; /* Allargato per far respirare il logo grande */
             margin: 0 auto;
-            padding: 60px 0 20px; 
+            padding: 80px 0 30px; 
             text-align: center; 
         }
 
         .logo-box {
-            width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             filter: drop-shadow(0 0 15px rgba(45, 218, 255, 0.4));
-            padding: 0 10px;
+            margin-bottom: 20px;
         }
 
+        /* LOGO GRANDE - SIZE AUTO */
         .logo-box svg {
-            width: 100%;
-            height: auto;
+            width: auto;
+            height: 85px; /* Altezza originale richiesta */
+            display: inline-block;
         }
 
         .tagline {
@@ -77,15 +66,13 @@
         .field-group { margin-bottom: 25px; }
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
         
-        /* Estensione stili ai nuovi elementi */
         input, textarea, select {
-            height: auto; width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
             color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
         }
-        select { color: var(--neon); cursor: pointer; }
+        select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
         option { background: #000; color: #fff; }
-        
-        input:focus, textarea:focus, select:focus { border-bottom-color: var(--neon); }
+        input:focus, textarea:focus { border-bottom-color: var(--neon); }
 
         .description-box {
             border: 1px solid #222;
@@ -99,7 +86,7 @@
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
         .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; }
         .budget-container input { border-bottom: none; }
-        input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; }
+        input[type="file"] { border-bottom: none; font-size: 0.8rem; color: var(--neon); padding-top: 10px; cursor: pointer; }
 
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
@@ -132,7 +119,6 @@
             </g>
             <g transform="translate(72, 58)">
                 <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5Z" fill="#ffffff"></path>
-                <!-- Il quadratino azzurro originale -->
                 <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#00f2ff"></path>
             </g>
         </svg>
@@ -172,12 +158,12 @@
             <div class="description-box">
                 <div class="field-group">
                     <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
-                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Fornisci i parametri tecnici." required></textarea>
+                    <textarea name="Messaggio" rows="3" placeholder="Sii specifico. Inserisci parametri tecnici." required></textarea>
                 </div>
 
                 <div class="field-group">
                     <label>RISULTATO FINALE ATTESO (Q.E.D.)</label>
-                    <input type="text" name="Obiettivo" placeholder="Qual è il punto di arrivo?" required>
+                    <input type="text" name="Obiettivo" placeholder="Qual è lo stato finale?" required>
                 </div>
             </div>
 
@@ -215,11 +201,11 @@
 
     form.onsubmit = function() {
         statusOverlay.style.display = 'flex';
-        let steps = ["Analisi entropia...", "Definizione spazio stati...", "Iniezione correzione...", "Invio dati."];
+        let steps = ["> Analisi entropia...", "> Spazio stati...", "> Iniezione correzione...", "> Invio dati."];
         let i = 0;
         let interval = setInterval(() => {
             if(i < steps.length) {
-                statusLog.innerHTML += `<div>> ${steps[i]}</div>`;
+                statusLog.innerHTML += `<div>${steps[i]}</div>`;
                 i++;
             } else { clearInterval(interval); }
         }, 800);
