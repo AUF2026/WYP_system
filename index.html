@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WYP | WHAT'S YOUR PROBLEM? IT'S SOLVED.</title>
-    <!-- SCRIPT HCAPTCHA -->
-    <script src="https://js.hcaptcha.com" async defer></script>
     <style>
         :root {
             --neon: #00f2ff;
@@ -28,47 +26,21 @@
             background-size: 30px 30px; z-index: -1; opacity: 0.5;
         }
 
-        header { 
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 60px 0 20px; 
-            text-align: center; 
-        }
+        header { width: 100%; max-width: 600px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
 
-        .logo-box {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5));
-            padding: 0 10px;
-        }
-
+        .logo-box { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5)); padding: 0 10px; }
         .logo-box svg { width: 100%; height: auto; }
 
-        .tagline {
-            font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px;
-            text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8;
-            text-align: center;
-        }
+        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center; }
 
         main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
-
-        .manifesto {
-            font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center;
-            border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc;
-            margin-top: 40px;
-        }
+        .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
 
         .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
-        
         .field-group { margin-bottom: 25px; }
+
         label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
-        
-        input, textarea, select {
-            width: 100%; background: transparent; border: none; border-bottom: 1px solid #222;
-            color: #fff; padding: 10px 0; font-size: 1rem; outline: none;
-        }
+        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
         select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
         option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
@@ -98,7 +70,6 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
-        .h-captcha { margin-bottom: 20px; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
@@ -127,40 +98,39 @@
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io" method="POST">
+        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
             <div class="field-group">
                 <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
             </div>
-
             <div class="field-group">
-                <label>SETTORE CRITICO</label>
+                <label>CANALE PRIVATO CRIPTATO</label>
+                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
+            </div>
+            <div class="field-group">
+                <label>DOMINIO DI ANALISI</label>
                 <select name="Settore" required>
-                    <option value="" disabled selected>SELEZIONA DOMINIO</option>
-                    <option value="SaaS / Software">SaaS / SOFTWARE</option>
-                    <option value="E-Commerce">E-COMMERCE</option>
-                    <option value="Personal Branding">PERSONAL BRANDING</option>
-                    <option value="Cybersecurity">CYBERSECURITY</option>
-                    <option value="Altro">ALTRO (DETTAGLIA SOTTO)</option>
+                    <option value="" disabled selected>SELEZIONA AMBITO...</option>
+                    <option value="SaaS-Arch">SaaS & Software Architecture</option>
+                    <option value="Automation">Automazione Processi</option>
+                    <option value="Data-Entropy">Analisi Dati / Database</option>
+                    <option value="Security">Cyber Security / Bypass</option>
                 </select>
             </div>
 
-            <div class="field-group">
-                <label>ANALISI PROBLEMATICA</label>
-                <div class="description-box">
-                    <textarea name="Messaggio" placeholder="QUAL È IL PROBLEMA? SII SPIETATO." rows="5" required></textarea>
+            <div class="description-box">
+                <div class="field-group">
+                    <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
+                    <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
+                </div>
+                <div class="field-group">
+                    <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
+                    <div class="budget-container">
+                        <span>€</span>
+                        <input type="number" name="Budget" placeholder="Somma da investire" required>
+                    </div>
                 </div>
             </div>
-
-            <div class="field-group">
-                <label>ALLOCAZIONE RISORSE (BUDGET)</label>
-                <div class="budget-container">
-                    <span>€</span>
-                    <input type="number" name="Budget" placeholder="0.00" required>
-                </div>
-            </div>
-
-            <div class="h-captcha" data-sitekey="TUA_SITE_KEY" data-theme="dark"></div>
 
             <button type="submit" class="btn-core" id="submit-btn">INIZIALIZZA RISOLUZIONE</button>
         </form>
@@ -194,19 +164,12 @@
         kernel.style.display = "flex";
         for (let step of steps) {
             log.innerText = step;
-            await new Promise(r => setTimeout(r, 800));
+            await new Promise(r => setTimeout(r, 700));
         }
     }
 
     async function handleSubmit(event) {
         event.preventDefault();
-        
-        const hCaptchaRes = hcaptcha.getResponse();
-        if (!hCaptchaRes) {
-            alert("Verifica di essere un umano prima di procedere.");
-            return;
-        }
-
         const data = new FormData(event.target);
         btn.disabled = true;
         
@@ -220,7 +183,6 @@
             if (response.ok) {
                 log.innerText = "RISOLTO. IL TEAM TI CONTATTERÀ.";
                 form.reset();
-                hcaptcha.reset();
                 setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; }, 3000);
             } else {
                 throw new Error();
