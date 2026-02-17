@@ -13,6 +13,10 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
+        /* KILLER DEL BLU BROWSER */
+        a, a:visited, a:active { color: var(--neon) !important; text-decoration: none !important; }
+        a:hover { filter: brightness(1.2); text-decoration: underline !important; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: #fff; font-family: var(--font-main); overflow-x: hidden; }
 
@@ -23,41 +27,37 @@
         }
 
         header { width: 100%; max-width: 600px; margin: 0 auto; padding: 60px 0 20px; text-align: center; }
+
         .logo-box { width: 100%; height: auto; display: block; filter: drop-shadow(0 0 20px rgba(45, 218, 255, 0.5)); padding: 0 10px; }
         .logo-box svg { width: 100%; height: auto; }
-        .tagline { font-family: var(--font-mono); font-size: 1.8rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center; }
+
+        .tagline { font-family: var(--font-mono); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase; margin-top: 50px; color: var(--neon); opacity: 0.8; text-align: center; }
 
         main { max-width: 600px; margin: 0 auto; padding: 0 25px 80px; }
         .manifesto { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; text-align: center; border-left: 2px solid var(--neon); border-right: 2px solid var(--neon); padding: 0 25px; color: #ccc; margin-top: 40px; }
 
-        .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; position: relative; }
-        .field-group { margin-bottom: 30px; }
+        .wyp-card { background: var(--surface); border: 1px solid #151515; padding: 40px; }
+        .field-group { margin-bottom: 25px; }
 
-        label { display: block; font-family: var(--font-mono); font-size: 0.65rem; color: #555; margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; }
-        input, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 12px 0; font-size: 1rem; outline: none; transition: 0.3s; font-family: var(--font-mono); }
+        label { display: block; font-family: var(--font-mono); font-size: 0.6rem; color: #555; margin-bottom: 8px; letter-spacing: 2px; }
+        input, textarea, select { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; padding: 10px 0; font-size: 1rem; outline: none; }
+        select { color: var(--neon); cursor: pointer; font-family: var(--font-mono); }
+        option { background: #000; color: #fff; }
         input:focus, textarea:focus { border-bottom-color: var(--neon); }
 
-        /* MENU SETTORI CUSTOM */
-        .custom-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .sector-opt { 
-            border: 1px solid #222; padding: 15px; font-family: var(--font-mono); font-size: 0.7rem; 
-            color: #666; cursor: pointer; text-align: center; transition: 0.2s; text-transform: uppercase;
-        }
-        .sector-opt:hover { border-color: #444; color: #aaa; }
-        .sector-opt.active { border-color: var(--neon); color: var(--neon); background: rgba(0, 242, 255, 0.05); }
+        .description-box { border: 1px solid #222; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
+        .description-box:focus-within { border-color: var(--neon); }
 
-        .description-box { border: 1px solid #222; padding: 25px; margin-bottom: 25px; }
-        
         .budget-container { display: flex; align-items: center; border-bottom: 1px solid #222; }
-        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 15px; font-size: 1.2rem; }
+        .budget-container span { color: var(--neon); font-family: var(--font-mono); padding-right: 10px; font-size: 1.1rem; }
         .budget-container input { border-bottom: none; }
 
         .btn-core {
             width: 100%; background: var(--neon); color: #000; border: none; padding: 25px;
             font-size: 1rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.4s; margin-top: 20px; font-family: var(--font-main);
+            transition: 0.3s; margin-top: 20px; line-height: 1.4;
         }
-        .btn-core:hover { box-shadow: 0 0 40px rgba(0, 242, 255, 0.4); transform: scale(1.02); }
+        .btn-core:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.5); transform: translateY(-2px); }
 
         #kernel-status {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -65,11 +65,11 @@
             justify-content: center; align-items: center; font-family: var(--font-mono);
             color: var(--neon); text-align: center; padding: 20px;
         }
-        #status-log { font-size: 1.2rem; letter-spacing: 2px; }
+        #status-log { font-size: 1.2rem; }
         .blink { animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: #333; }
+        footer { padding: 40px; text-align: center; font-family: var(--font-mono); font-size: 1.0rem; color: #6e6e6e; }
     </style>
 </head>
 <body>
@@ -88,47 +88,43 @@
             </g>
         </svg>
     </div>
-    <div class="tagline">Entropy Collapsed.</div>
+    <div class="tagline">It’s Solved! Deterministically.</div>
 </header>
 
 <main>
     <section class="manifesto">
-        RISOLUZIONE DETERMINISTICA DI PROBLEMI COMPLESSI.<br>
-        <b>SaaS Architecture & Process Bypass.</b>
+        COLLASSIAMO L'ENTROPIA DEI TUOI PROBLEMI COMPLESSI.<br>
+        <b>SaaS Architecture. Risoluzione O(1) deterministico.</b>
     </section>
 
     <div class="wyp-card">
-        <form id="my-form" action="https://formspree.io" method="POST">
-            
+        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
             <div class="field-group">
-                <label>Asset Identity</label>
+                <label>IDENTITÀ ASSET</label>
                 <input type="text" name="Azienda" placeholder="BRAND / AZIENDA" required>
             </div>
-
             <div class="field-group">
-                <label>Private Channel</label>
-                <input type="email" name="Email" placeholder="EMAIL DI CONTATTO" required>
+                <label>CANALE PRIVATO CRIPTATO</label>
+                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
             </div>
-
             <div class="field-group">
-                <label>Analysis Domain</label>
-                <input type="hidden" name="Settore" id="sector-input" required>
-                <div class="custom-select-grid">
-                    <div class="sector-opt" onclick="selectSector(this, 'SaaS Architecture')">SaaS Architecture</div>
-                    <div class="sector-opt" onclick="selectSector(this, 'Process Automation')">Automation</div>
-                    <div class="sector-opt" onclick="selectSector(this, 'Data Entropy')">Data Analysis</div>
-                    <div class="sector-opt" onclick="selectSector(this, 'Cyber Security')">Cyber Security</div>
-                </div>
+                <label>DOMINIO DI ANALISI</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SELEZIONA AMBITO...</option>
+                    <option value="SaaS-Arch">SaaS & Software Architecture</option>
+                    <option value="Automation">Automazione Processi</option>
+                    <option value="Data-Entropy">Analisi Dati / Database</option>
+                    <option value="Security">Cyber Security / Bypass</option>
+                </select>
             </div>
 
             <div class="description-box">
                 <div class="field-group">
-                    <label>Problem Analysis</label>
-                    <textarea name="Messaggio" rows="4" placeholder="DESCRIZIONE TECNICA DEL PROBLEMA..." required></textarea>
+                    <label>DESCRIZIONE DETTAGLIATA PROBLEMA</label>
+                    <textarea name="Messaggio" rows="3" placeholder="DESCRIZIONE DETTAGLIATA..." required></textarea>
                 </div>
-                
-                <div class="field-group" style="margin-bottom: 0;">
-                    <label style="color: var(--neon);">Resource Allocation (€)</label>
+                <div class="field-group">
+                    <label style="color: var(--neon);">PROPOSTA DI SPESA (€)</label>
                     <div class="budget-container">
                         <span>€</span>
                         <input type="number" name="Budget" placeholder="Somma da investire" required>
@@ -136,7 +132,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-core" id="submit-btn">Execute Resolution</button>
+            <button type="submit" class="btn-core" id="submit-btn">INIZIALIZZA RISOLUZIONE</button>
         </form>
     </div>
 </main>
@@ -146,47 +142,37 @@
     <div class="blink">_</div>
 </div>
 
-<footer>&copy; 2024 WYP. COLLAPSING ENTROPY.</footer>
+<footer>
+    &copy; 2024 WYP. COLLAPSING ENTROPY WORLDWIDE.
+</footer>
 
 <script>
-    // Gestione Menu Custom
-    function selectSector(el, val) {
-        document.querySelectorAll('.sector-opt').forEach(opt => opt.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('sector-input').value = val;
-    }
-
     const form = document.getElementById("my-form");
     const btn = document.getElementById("submit-btn");
     const kernel = document.getElementById("kernel-status");
     const log = document.getElementById("status-log");
 
     const steps = [
-        "INITIALIZING KERNEL...",
-        "DECRYPTING PROBLEM DOMAIN...",
-        "ANALYZING ASSET VULNERABILITIES...",
-        "O(1) SOLUTION FOUND.",
-        "PUSHING DATA TO CLOUD..."
+        "ACCESSO KERNEL IN CORSO...",
+        "ANALISI ARCHITETTURA SAAS...",
+        "BYPASSANDO L'ENTROPIA...",
+        "RISOLUZIONE O(1) CALCOLATA.",
+        "INVIO DATI AL SERVER..."
     ];
 
     async function runAnimation() {
         kernel.style.display = "flex";
         for (let step of steps) {
             log.innerText = step;
-            await new Promise(r => setTimeout(r, 600));
+            await new Promise(r => setTimeout(r, 700));
         }
     }
 
     async function handleSubmit(event) {
         event.preventDefault();
-        
-        if(!document.getElementById('sector-input').value) {
-            alert("Seleziona un Dominio di Analisi.");
-            return;
-        }
-
         const data = new FormData(event.target);
         btn.disabled = true;
+        
         await runAnimation();
 
         fetch(event.target.action, {
@@ -195,15 +181,14 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
-                log.innerText = "SUCCESS. SYSTEM STABILIZED.";
+                log.innerText = "RISOLTO. IL TEAM TI CONTATTERÀ.";
                 form.reset();
-                document.querySelectorAll('.sector-opt').forEach(opt => opt.classList.remove('active'));
                 setTimeout(() => { kernel.style.display = "none"; btn.disabled = false; }, 3000);
             } else {
                 throw new Error();
             }
         }).catch(() => {
-            log.innerText = "CRITICAL ERROR. FALLBACK TO DIRECT SUBMIT...";
+            log.innerText = "ERRORE CRITICO. RE-INDIRIZZAMENTO...";
             form.removeEventListener("submit", handleSubmit);
             setTimeout(() => { form.submit(); }, 1500);
         });
