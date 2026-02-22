@@ -38,6 +38,7 @@
         .tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: #1A85F8; text-shadow: 0 0 15px rgba(45, 218, 255, 0.6); line-height: 1.1; }
         .sub-claim { font-size: 0.75rem; color: #2DDAFF; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
 
+        .intro-description { margin-bottom: 40px; font-size: 1rem; line-height: 1.6; color: #999; }
         .terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); }
         .field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
         .field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
@@ -53,13 +54,13 @@
         .budget-row { display: flex; align-items: center; }
         .budget-row span { color: var(--electric-blue); font-size: 1.6rem; margin-right: 20px; font-weight: 900; }
 
-        .btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.3rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; }
+        .btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; }
         .btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45, 218, 255, 0.5); }
 
         #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
         .status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 3px; text-align: center; font-family: var(--font-mono); }
 
-        footer { color: #ffffff; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        footer { color: #999; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
         footer a { color: #00f2ff; text-decoration: none; }
         footer a:hover { color: #ffffff; text-decoration: underline; }
     </style>
@@ -84,19 +85,26 @@
         <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
         <div class="sub-claim">Deterministic Resolution O(1)</div>
     </header>
-
+  
+    <!-- Aggiunta la div con la descrizione -->
+    <div class="intro-description">
+       <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
+    Il nostro ecosistema è governato dalla logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con una precisione infinitesimale di <strong>110 decimali su 120</strong>, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Il nostro approccio ha già permesso la progettazione di soluzioni deterministiche per sistemi e valvole aerospaziali utilizzate da <strong>NASA</strong> e <strong>SpaceX</strong>, oltre all'ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo ottenuto la risoluzione certificata dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali: chiunque tenti di sfidare questa architettura troverà nell'inevitabile rigore del determinismo la propria definitiva sconfitta.
+</p>
+    </div>
+  
     <main class="terminal-container">
         <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
             <div class="field-group">
-                <label>IDENT_ASSET</label>
+                <label>IDENT - ASSET - AZIENDA</label>
                 <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
             </div>
             <div class="field-group">
-                <label>SECURE_COMM_CHANNEL</label>
-                <input type="email" name="Email" placeholder="PUB_KEY@EMAIL.COM" required>
+                <label>SECURE COMM - CHANNEL</label>
+                <input type="email" name="Email" placeholder="Inserisci la tua email qui es: PUB_KEY@EMAIL.COM" required>
             </div>
             <div class="field-group">
-                <label>ANALYSIS_DOMAIN</label>
+                <label>ANALYSIS - DOMAIN - SETTORE</label>
                 <select name="Settore" required>
                     <option value="" disabled selected>SET DOMAIN...</option>
                     <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
@@ -118,17 +126,17 @@
                 </select>
             </div>
             <div class="field-group">
-                <label>PROBLEM_LOG_DESC</label>
-                <textarea name="Messaggio" rows="3" placeholder="INPUT RAW DATA..." required></textarea>
+                <label>PROBLEM LOG DESC - PROBLEMATICA</label>
+                <textarea name="Messaggio" rows="3" placeholder="Inserisci la descrizione dettagliata del problema da risolvere. Enter the detailed description of the problem to be solved." required></textarea>
             </div>
             <div class="field-group" style="border-bottom: none;">
-                <label>RESOURCE_COMMITMENT</label>
+                <label>RESOURCE COMMITMENT - BUDGET STIMATO</label>
                 <div class="budget-row">
                     <span>€</span>
                     <input type="number" name="Budget" placeholder="€ 0.00" required>
                 </div>
             </div>
-            <button type="submit" class="btn-execute">EXECUTE_SUBMIT</button>
+            <button type="submit" class="btn-execute">EXECUTE SUBMIT</br>INVIA FORM</button>
         </form>
     </main>
 
@@ -191,8 +199,3 @@
 
 </body>
 </html>
-
-
-
-
-
