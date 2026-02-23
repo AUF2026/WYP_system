@@ -10,11 +10,10 @@
   <code>SYSTEM STATUS: ONLINE // ENTROPY LEVEL: O(1)</code>
 </p>
 
-
 ### 🛡️ INTELLECTUAL PROPERTY & DETERMINISTIC LOGIC
 Sono il Lead Architect di **WYP? SYSTEM**. Mi occupo di collassare l'entropia di problemi complessi attraverso architetture SaaS deterministiche. Il codice ospitato in questo spazio non è "Open Source" nel senso tradizionale; è un asset protetto.
 
-- ⚡ **Core Technology:** Risoluzione deterministica in tempo costante O(1).
+- ⚡ **Core Technology:** Risoluzione deterministica in tempo costante **O(1)**.
 - 🔐 **Security:** Protocolli di cifratura end-to-end e bypass di sistemi complessi.
 - 🏛️ **Legal Frame:** Ogni riga di codice è soggetta alla **Licenza Proprietaria AUF2026**.
 
@@ -31,7 +30,7 @@ L'accesso ai repository di questo profilo costituisce accettazione dei termini d
 ### 📨 UPLINK CHANNELS
 Se hai un problema complesso che richiede una soluzione reale, applicabile e deterministica, usa i canali criptati qui sotto:
 
-*   **Official System:** [ACCEDI AL KERNEL WYP]([https://AUF2026.github.io](https://auf2026.github.io/WYP_system/)
+*   **Official System:** [ACCEDI AL KERNEL WYP](https://auf2026.github.io/WYP_system/)
 *   **Secure Email:** [AUF2026@protonmail.com](mailto:AUF2026@protonmail.com)
 *   **Location:** Genova, IT / Zurich, CH / Global Uplink
 
@@ -40,4 +39,3 @@ Se hai un problema complesso che richiede una soluzione reale, applicabile e det
 <p align="right">
   <code>Q.E.D. // AUF2026 SYSTEM</code>
 </p>
-
