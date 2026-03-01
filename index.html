@@ -51,9 +51,6 @@
         select { cursor: pointer; -webkit-appearance: none; }
         option { background: #000; color: var(--electric-blue); }
 
-        .budget-row { display: flex; align-items: center; }
-        .budget-row span { color: var(--electric-blue); font-size: 1.6rem; margin-right: 20px; font-weight: 900; }
-
         .btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; }
         .btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45, 218, 255, 0.5); }
 
@@ -129,13 +126,6 @@
                 <label>PROBLEM LOG DESC - PROBLEMATICA</label>
                 <textarea name="Messaggio" rows="3" placeholder="Inserisci la descrizione dettagliata del problema da risolvere. Enter the detailed description of the problem to be solved." required></textarea>
             </div>
-            <div class="field-group" style="border-bottom: none;">
-                <label>RESOURCE COMMITMENT - BUDGET STIMATO</label>
-                <div class="budget-row">
-                    <span>€</span>
-                    <input type="number" name="Budget" placeholder="€ 0.00" required>
-                </div>
-            </div>
             <button type="submit" class="btn-execute">EXECUTE SUBMIT</br>INVIA FORM</button>
         </form>
     </main>
@@ -199,3 +189,4 @@
 
 </body>
 </html>
+
