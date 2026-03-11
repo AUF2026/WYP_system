@@ -16,36 +16,59 @@
     --font-mono: 'JetBrains Mono', monospace;
     --col-width: 650px;
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg); color: #fff; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
 body::after {
     content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%), linear-gradient(90deg, rgba(255,0,0,0.02), rgba(0,255,0,0.01), rgba(0,0,255,0.02));
     z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
 }
+
 .wrapper { width: 100%; max-width: var(--col-width); padding: 80px 20px 120px; display: flex; flex-direction: column; }
 header { width: 100%; text-align: center; margin-bottom: 60px; }
-.logo-box { width: 100%; filter: drop-shadow(0 0 25px var(--electric-blue)); animation: boot 1.5s ease-out; }
-.logo-box svg { width: 100%; height: auto; display: block; }
+
+.logo-box {
+    display: inline-block;          /* centratura */
+    filter: drop-shadow(0 0 25px var(--electric-blue));
+    animation: boot 1.5s ease-out;
+    max-width: 280px;               /* mantieni dimensione grande */
+    width: 100%;
+    margin: 0 auto;
+}
+.logo-box svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 @keyframes boot { 0% { opacity: 0; transform: scale(0.98); filter: brightness(3); } 100% { opacity: 1; transform: scale(1); } }
+
 .tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: #1A85F8; text-shadow: 0 0 15px rgba(45,218,255,0.6); line-height: 1.1; }
 .sub-claim { font-size: 0.75rem; color: #2DDAFF; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
+
 .intro-description { margin-bottom: 40px; font-size: 1rem; line-height: 1.6; color: #999; }
 .terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); margin-bottom: 40px; }
 .field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
 .field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
+
 label { display: block; font-size: 0.65rem; color: var(--electric-blue); margin-bottom: 18px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
 input, textarea, select { width: 100%; background: transparent; border: none; color: var(--electric-blue) !important; font-size: 1.1rem; outline: none; font-family: var(--font-mono); text-transform: uppercase; font-weight: 600; }
 ::placeholder { color: rgba(45,218,255,0.4) !important; }
 textarea { resize: none; text-transform: none; line-height: 1.6; }
 select { cursor: pointer; -webkit-appearance: none; }
 option { background: #000; color: var(--electric-blue); }
+
 .btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; }
 .btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45,218,255,0.5); }
+
 #kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
 .status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 3px; text-align: center; font-family: var(--font-mono); white-space: pre-wrap; overflow-y: auto; max-height: 90vh; }
+
 .cursor { display: inline-block; width: 10px; background: var(--electric-blue); margin-left: 2px; animation: blink 1s infinite; }
 @keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+
 footer { color: #999; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
 footer a { color: #00f2ff; text-decoration: none; }
 footer a:hover { color: #ffffff; text-decoration: underline; }
@@ -53,75 +76,76 @@ footer a:hover { color: #ffffff; text-decoration: underline; }
 </head>
 <body>
 <div class="wrapper">
-<header>
-    <div class="logo-box">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 85">
-            <!-- LOGO PATHS -->
-            <g transform="scale(0.85)">
-                <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"/>
-                <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"/>
-                <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"/>
-            </g>
-        </svg>
+    <header>
+        <div class="logo-box">
+            <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+                <g transform="scale(0.85)">
+                    <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
+                    <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
+                    <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
+        <div class="sub-claim">Deterministic Resolution O(1)</div>
+    </header>
+
+    <div class="intro-description">
+        <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
+        Il nostro ecosistema utilizza la logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, progettata per eliminare l'incertezza e risolvere i "buchi neri" operativi più critici. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con precisione infinitesimale, fino a <strong>110 decimali su 120</strong>, usando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Questo approccio ha già permesso di progettare soluzioni deterministiche per sistemi aerospaziali NASA e SpaceX e ottimizzare complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo conseguito la risoluzione dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti dei modelli probabilistici per fornire soluzioni definitive a sfide considerate "impossibili": chiunque sfidi questa architettura incontrerà il rigore del determinismo.
+        </p>
     </div>
-    <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
-    <div class="sub-claim">Deterministic Resolution O(1)</div>
-</header>
 
-<div class="intro-description">
-    <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
-    Il nostro ecosistema utilizza la logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, progettata per eliminare l'incertezza e risolvere i "buchi neri" operativi più critici. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con precisione infinitesimale, fino a <strong>110 decimali su 120</strong>, usando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Questo approccio ha già permesso di progettare soluzioni deterministiche per sistemi aerospaziali NASA e SpaceX e ottimizzare complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo conseguito la risoluzione dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti dei modelli probabilistici per fornire soluzioni definitive a sfide considerate "impossibili": chiunque sfidi questa architettura incontrerà il rigore del determinismo.
-    </p>
-</div>
+    <!-- FORM CLIENTI -->
+    <main class="terminal-container">
+        <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
+            <div class="field-group">
+                <label>IDENT - ASSET - AZIENDA</label>
+                <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
+            </div>
+            <div class="field-group">
+                <label>SECURE COMM - CHANNEL</label>
+                <input type="email" name="Email" placeholder="Inserisci la tua email qui es: PUB_KEY@EMAIL.COM" required>
+            </div>
+            <div class="field-group">
+                <label>ANALYSIS - DOMAIN - SETTORE</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SET DOMAIN...</option>
+                    <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
+                    <option value="Bypass-Logic">PROCESS BYPASSING</option>
+                    <option value="AI-Ops">AI INTEGRATION</option>
+                    <option value="Security">CYBER SECURITY</option>
+                    <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
+                    <option value="Automation">INDUSTRIAL AUTOMATION</option>
+                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
+                    <option value="DevOps">DEVOPS & CI/CD</option>
+                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
+                    <option value="Edge-Computing">EDGE COMPUTING</option>
+                    <option value="API-Integration">API INTEGRATION</option>
+                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
+                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
+                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
+                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
+                    <option value="Other">OTHER / ALTRO</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>PROBLEM LOG DESC - PROBLEMATICA</label>
+                <textarea name="Messaggio" rows="3" placeholder="Inserisci la descrizione dettagliata del problema da risolvere." required></textarea>
+            </div>
+            <button type="submit" class="btn-execute">EXECUTE SUBMIT<br>INVIA FORM</button>
+        </form>
+    </main>
 
-<main class="terminal-container">
-    <form id="my-form" action="https://formspree.io/f/mojnwnwg" method="POST">
-        <div class="field-group">
-            <label>IDENT - ASSET - AZIENDA</label>
-            <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
-        </div>
-        <div class="field-group">
-            <label>SECURE COMM - CHANNEL</label>
-            <input type="email" name="Email" placeholder="Inserisci la tua email qui es: PUB_KEY@EMAIL.COM" required>
-        </div>
-        <div class="field-group">
-            <label>ANALYSIS - DOMAIN - SETTORE</label>
-            <select name="Settore" required>
-                <option value="" disabled selected>SET DOMAIN...</option>
-                <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
-                <option value="Bypass-Logic">PROCESS BYPASSING</option>
-                <option value="AI-Ops">AI INTEGRATION</option>
-                <option value="Security">CYBER SECURITY</option>
-                <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
-                <option value="Automation">INDUSTRIAL AUTOMATION</option>
-                <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
-                <option value="DevOps">DEVOPS & CI/CD</option>
-                <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
-                <option value="Edge-Computing">EDGE COMPUTING</option>
-                <option value="API-Integration">API INTEGRATION</option>
-                <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
-                <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
-                <option value="IoT-Solutions">IOT SOLUTIONS</option>
-                <option value="Serverless">SERVERLESS ARCHITECTURE</option>
-                <option value="Other">OTHER / ALTRO</option>
-            </select>
-        </div>
-        <div class="field-group">
-            <label>PROBLEM LOG DESC - PROBLEMATICA</label>
-            <textarea name="Messaggio" rows="3" placeholder="Inserisci la descrizione dettagliata del problema da risolvere." required></textarea>
-        </div>
-        <button type="submit" class="btn-execute">EXECUTE SUBMIT<br>INVIA FORM</button>
-    </form>
-</main>
+    <!-- DEMO AOS -->
+    <main class="terminal-container">
+        <h2 style="color: var(--electric-blue); text-align:center; margin-bottom:20px;">Demo AOS - Risoluzione Problema</h2>
+        <textarea id="demoProblem" rows="3" placeholder="Inserisci un problema di esempio..." style="width:100%; padding:10px; font-family:var(--font-mono); color:var(--electric-blue); background:#050505; border:1px solid #151515; border-radius:5px;"></textarea>
+        <button id="demoSubmit" class="btn-execute" style="margin-top:10px;">GENERATE SOLUTION</button>
+        <pre id="demoOutput" style="background:#050505; color: var(--electric-blue); padding:15px; margin-top:20px; border-radius:5px; white-space:pre-wrap; overflow-y:auto; max-height:400px;"></pre>
+    </main>
 
-<main class="terminal-container">
-    <h2 style="color: var(--electric-blue); text-align:center; margin-bottom:20px;">Demo AOS - Risoluzione Problema</h2>
-    <textarea id="demoProblem" rows="3" placeholder="Inserisci un problema di esempio..." style="width:100%; padding:10px; font-family:var(--font-mono); color:var(--electric-blue); background:#050505; border:1px solid #151515; border-radius:5px;"></textarea>
-    <button id="demoSubmit" class="btn-execute" style="margin-top:10px;">GENERATE SOLUTION</button>
-    <pre id="demoOutput" style="background:#050505; color: var(--electric-blue); padding:15px; margin-top:20px; border-radius:5px; white-space:pre-wrap; overflow-y:auto; max-height:400px;"></pre>
-</main>
-
-<footer>ALAIN FAURE AUF2026&copy; <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | WYP? SYSTEM | Q.E.D</footer>
+    <footer>ALAIN FAURE AUF2026&copy; <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | WYP? SYSTEM | Q.E.D</footer>
 </div>
 
 <div id="kernel-status">
@@ -162,11 +186,13 @@ form.addEventListener("submit", async function(e){
     }
 });
 
+// DEMO AOS
 const demoSubmit = document.getElementById("demoSubmit");
 const demoOutput = document.getElementById("demoOutput");
 
 function simpleHash(str){let hash=0; for(let i=0;i<str.length;i++) hash+=str.charCodeAt(i)*(i+1); return hash;}
 function detectSector(text){text=text.toLowerCase(); if(text.includes("energia")) return "Energia / Industria"; if(text.includes("chimica")) return "Chimica / Materiali"; if(text.includes("dna")||text.includes("proteina")) return "Biologia / Genetica"; if(text.includes("finanza")) return "Finanza / Algorithmica"; if(text.includes("logistica")) return "Logistica / Supply Chain"; if(text.includes("hpc")) return "HPC / High Performance Computing"; if(text.includes("crypto")||text.includes("rsa")) return "Crypto / Sicurezza"; return "Generale";}
+
 function generateSolution(text){
     const hash=simpleHash(text);
     const sector=detectSector(text);
@@ -181,6 +207,7 @@ function generateSolution(text){
     const finalNarrative=`Narrativa finale dettagliata:\n- Tutti i 5 Teoremi Faure applicati.\n- Risparmi stimati: energia ${energySaving} M kWh/anno, materiali ${materialSaving} %.\n- ROI stimato: ${ROI} %.\n- Impatto: ottimizzazione e precisione simulata nel settore ${sector}.`;
     return `AOS deterministic response for: "${text}"\n\nSettore: ${sector}\n\nRisultato:\n- Velocità: ${velocity} m/s\n- Massa: ${mass} kg\n- Tempo: ${time} s\n- Accelerazione stimata: ${acceleration} m/s^2\n\nSpiegazione audit-style:\n${auditNarrative}\n\n${finalNarrative}`;
 }
+
 demoSubmit.addEventListener("click", ()=>{
     const text=document.getElementById("demoProblem").value.trim();
     if(!text){demoOutput.textContent="Inserisci un problema di esempio."; return;}
