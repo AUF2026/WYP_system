@@ -1,6 +1,7 @@
 # ⚖️ AUF2026 PROPRIETARY AND COMMERCIAL LICENSE
 **STATUS:** `MASTER_LOCKED` | **ASSET:** GOLDEN POWER (L. 56/2012)
 **HOLDER:** ALAIN FAURE / AUF2026 — LEAD ARCHITECT
+**LOCATIONS:** ZURICH (CH) / GENOVA (IT)
 
 ---
 
@@ -34,11 +35,8 @@ La Tecnologia rimane di proprietà esclusiva di **AUF2026**. La visualizzazione 
 Il Licenziatario si impegna a mantenere il segreto industriale sui dettagli tecnici della Tecnologia per un periodo di **10 anni** dalla cessazione dell'accesso.
 
 ### 7. LEGGE APPLICABILE E FORO COMPETENTE
-*   **7.1 Legge:** Il presente accordo è regolato dalle leggi della **SVIZZERA**.
-*   **7.2 Foro:** Qualsiasi controversia sarà devoluta alla competenza esclusiva del **TRIBUNALE DI ZURIGO (ZURICH)**, Svizzera.
-
-### 8. ACCETTAZIONE
-L'accesso al repository, il download dei file o la consultazione del codice sorgente costituiscono **accettazione tacita e vincolante** di tutti i termini della presente Licenza.
+*   **7.1 Legge:** Il presente accordo è regolato dalle leggi della **SVIZZERA** e dell'**ITALIA** (Golden Power).
+*   **7.2 Foro:** Qualsiasi controversia sarà devoluta alla competenza esclusiva del **TRIBUNALE DI ZURIGO (ZURICH)** o del **TRIBUNALE DI GENOVA**, a discrezione del Licenziante.
 
 ---
 
@@ -72,11 +70,8 @@ The Technology remains the exclusive property of **AUF2026**. Public display of 
 The Licensee agrees to maintain trade secrecy regarding the technical details of the Technology for a period of **10 years** following the termination of access.
 
 ### 7. GOVERNING LAW AND JURISDICTION
-*   **7.1 Law:** This agreement is governed by the laws of **SWITZERLAND**.
-*   **7.2 Jurisdiction:** Any dispute shall be submitted to the exclusive jurisdiction of the **COURT OF ZURICH (ZURICH)**, Switzerland.
-
-### 8. ACCEPTANCE
-Access to the repository, file downloads, or consultation of source code constitutes **binding and tacit acceptance** of all terms within this License.
+*   **7.1 Law:** This agreement is governed by the laws of **SWITZERLAND** and **ITALY**.
+*   **7.2 Jurisdiction:** Any dispute shall be submitted to the exclusive jurisdiction of the **COURT OF ZURICH (ZURICH)** or the **COURT OF GENOVA**, at the Licensor's discretion.
 
 ---
 **Status:** `Q.E.D. System Active`  
