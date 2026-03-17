@@ -1,7 +1,7 @@
 <div align="center">
   <h1>█ AOS MASTER ORACLE // FAURE_CORE_2026 █</h1>
   <p>
-    <img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" alt="WYP LOGO" width="300" style="margin: 20px auto; display: block;">
+    <img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" alt="WYP LOGO" width="50px" style="margin: 20px auto; display: block;">
   </p>
   <code>SYSTEM STATUS: MASTER_LOCKED // PRECISION: 600-DEC // ENTROPY: O(1)</code>
   <br>
