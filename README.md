@@ -5,8 +5,6 @@
   </p>
   <code>SYSTEM STATUS: MASTER_LOCKED // PRECISION: 600-DEC // ENTROPY: O(1)</code>
   <br>
-  <img src="https://img.shields.io" alt="Jurisdiction">
-  <img src="https://img.shields.io" alt="Security">
 </div>
 
 ---
