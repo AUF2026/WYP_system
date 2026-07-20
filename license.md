@@ -1,7 +1,7 @@
 # ⚖️ AUF2026 PROPRIETARY AND COMMERCIAL LICENSE
 **STATUS:** `MASTER_LOCKED` | **ASSET:** GOLDEN POWER (L. 56/2012)
 **HOLDER:** ALAIN FAURE / AUF2026 — LEAD ARCHITECT
-**LOCATIONS:** ZURICH (CH) / GENOVA (IT)
+**LOCATIONS:** ZURICH (CH) / VADUZ (LI) / GENOVA (IT)
 
 ---
 
@@ -35,8 +35,8 @@ La Tecnologia rimane di proprietà esclusiva di **AUF2026**. La visualizzazione 
 Il Licenziatario si impegna a mantenere il segreto industriale sui dettagli tecnici della Tecnologia per un periodo di **10 anni** dalla cessazione dell'accesso.
 
 ### 7. LEGGE APPLICABILE E FORO COMPETENTE
-*   **7.1 Legge:** Il presente accordo è regolato dalle leggi della **SVIZZERA** e dell'**ITALIA** (Golden Power).
-*   **7.2 Foro:** Qualsiasi controversia sarà devoluta alla competenza esclusiva del **TRIBUNALE DI ZURIGO (ZURICH)** o del **TRIBUNALE DI GENOVA**, a discrezione del Licenziante.
+*   **7.1 Legge:** Il presente accordo è regolato dalle leggi della **SVIZZERA**, del **LIECHTENSTEIN** e dell'**ITALIA** (Golden Power).
+*   **7.2 Foro:** Qualsiasi controversia sarà devoluta alla competenza esclusiva del **TRIBUNALE DI ZURIGO (ZURICH)**, del **TRIBUNALE DI VADUZ (LIECHTENSTEIN)** o del **TRIBUNALE DI GENOVA**, a discrezione del Licenziante.
 
 ---
 
