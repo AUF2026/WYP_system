@@ -85,7 +85,139 @@ footer a:hover { color: #ffffff; text-decoration: underline; }
 
     <div class="intro-description">
         <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
-        Il nostro ecosistema è governato dalla logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con una precisione infinitesimale di <strong>110 decimali su 120</strong>, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Il nostro approccio ha già permesso la progettazione di soluzioni deterministiche per sistemi e valvole aerospaziali utilizzate da <strong>NASA</strong> e <strong>SpaceX</strong>, oltre all'ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo ottenuto la risoluzione certificata dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali: chiunque tenti di sfidare questa architettura troverà nell'inevitabile rigore del determinismo la propria definitiva sconfitta.
+        L' ecosistema è governato dalla logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con una precisione infinitesimale di <strong>110 decimali su 120</strong>, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Il nostro approccio ha già permesso la progettazione di soluzioni deterministiche per sistemi e valvole aerospaziali utilizzate da <strong>NASA</strong> e <strong>SpaceX</strong>, oltre all'ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo ottenuto la risoluzione certificata dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali: chiunque tenti di sfidare questa architettura troverà nell'inevitabile rigore del determinismo la propria definitiva sconfitta.
+        </p>
+    </div>
+
+    <!-- SEZIONE FORM INVIO -->
+    <main class="terminal-container">
+        <form id="my-form" action="https://formspree.io" method="POST">
+            <div class="field-group">
+                <label>IDENT - ASSET - AZIENDA</label>
+                <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
+            </div>
+            <div class="field-group">
+                <label>ENCRYPTED E-MAIL CHANNEL</label>
+                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
+            </div>
+            <div class="field-group">
+                <label>ANALYSIS - DOMAIN - SETTORE</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SET DOMAIN...</option>
+                    <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
+                    <option value="Bypass-Logic">PROCESS BYPASSING</option>
+                    <option value="AI-Ops">AI INTEGRATION</option>
+                    <option value="Security">CYBER SECURITY</option>
+                    <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
+                    <option value="Automation">INDUSTRIAL AUTOMATION</option>
+                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
+                    <option value="DevOps">DEVOPS & CI/CD</option>
+                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
+                    <option value="Edge-Computing">EDGE COMPUTING</option>
+                    <option value="API-Integration">API INTEGRATION</option>
+                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
+                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
+                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
+                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
+                    <option value="Other">OTHER / ALTRO</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>PROBLEM LOG DESC - PROBLEMATICA</label>
+                <textarea name="Messaggio" rows="3" placeholder="Descrizione dettagliata del problema da risolvere." required></textarea>
+            </div>
+            <button type="submit" class="btn-execute">EXECUTE SUBMIT<br>INVIA FORM</button>
+        </form>
+    </main>
+
+ <!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WYP">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WYP | OPERATIONAL TERMINAL</title>
+<style>
+:root {
+    --neon: #00f2ff;
+    --electric-blue: #2ddaff;
+    --bg: #000;
+    --surface: #050505;
+    --font-mono: 'JetBrains Mono', monospace;
+    --col-width: 650px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: #fff; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
+body::after {
+    content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%), linear-gradient(90deg, rgba(255,0,0,0.02), rgba(0,255,0,0.01), rgba(0,0,255,0.02));
+    z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
+}
+
+.wrapper { width: 100%; max-width: var(--col-width); padding: 80px 20px 120px; display: flex; flex-direction: column; }
+header { width: 100%; text-align: center; margin-bottom: 60px; }
+
+.logo-box { width: 100%; filter: drop-shadow(0 0 25px var(--electric-blue)); animation: boot 1.5s ease-out; }
+.logo-box svg { width: 100%; height: auto; display: block; }
+
+@keyframes boot { 0% { opacity: 0; transform: scale(0.98); filter: brightness(3); } 100% { opacity: 1; transform: scale(1); } }
+
+.tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: #1A85F8; text-shadow: 0 0 15px rgba(45,218,255,0.6); line-height: 1.1; }
+.sub-claim { font-size: 0.75rem; color: #2DDAFF; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
+
+.intro-description { margin-bottom: 40px; font-size: 1rem; line-height: 1.6; color: #999; }
+.terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); margin-bottom: 40px; }
+.field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
+.field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
+
+label { display: block; font-size: 0.65rem; color: var(--electric-blue); margin-bottom: 18px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
+input, textarea, select { width: 100%; background: transparent; border: none; color: var(--electric-blue) !important; font-size: 1.1rem; outline: none; font-family: var(--font-mono); text-transform: uppercase; font-weight: 600; }
+::placeholder { color: rgba(45,218,255,0.4) !important; }
+textarea { resize: none; text-transform: none; line-height: 1.6; }
+select { cursor: pointer; -webkit-appearance: none; border-bottom: 1px solid #222; }
+option { background: #000; color: var(--electric-blue); }
+
+.btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; text-align: center; }
+.btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45,218,255,0.5); }
+
+#kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
+.status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 2px; text-align: center; font-family: var(--font-mono); white-space: pre-wrap; overflow-y: auto; max-height: 90vh; width: 100%; max-width: 600px; }
+
+.cursor { display: inline-block; width: 10px; background: var(--electric-blue); margin-left: 2px; animation: blink 1s infinite; }
+@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+
+footer { color: #999; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+footer a { color: #00f2ff; text-decoration: none; }
+footer a:hover { color: #ffffff; text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <div class="logo-box">
+            <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+                <g transform="scale(0.85)">
+                    <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
+                    <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
+                    <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
+                </g>
+                <g transform="translate(72, 58)">
+                    <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z" fill="#ffffff"></path>
+                    <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#2ddaff"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
+        <div class="sub-claim">Deterministic Resolution O(1)</div>
+    </header>
+
+    <div class="intro-description">
+        <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
+        L' ecosistema è governato dalla logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie all’integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con una precisione infinitesimale di <strong>110 decimali su 120</strong>, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Il nostro approccio ha già permesso la progettazione di soluzioni deterministiche per sistemi e valvole aerospaziali utilizzate da <strong>NASA</strong> e <strong>SpaceX</strong>, oltre all'ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo ottenuto la risoluzione certificata dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali: chiunque tenti di sfidare questa architettura troverà nell'inevitabile rigore del determinismo la propria definitiva sconfitta.
         </p>
     </div>
 
@@ -132,7 +264,7 @@ footer a:hover { color: #ffffff; text-decoration: underline; }
 
     <!-- SEZIONE DEMO AOS V1.0 -->
     <main class="terminal-container">
-        <h2 style="color: var(--electric-blue); text-align:center; margin-top:30px; text-transform:uppercase; letter-spacing:3px;">Demo AOS V1.0 - Risoluzione</h2>
+        <h2 style="color: var(--electric-blue); text-align:center; margin-top:30px; text-transform:uppercase; letter-spacing:3px;">Demo AOS V3.0 - Risoluzione</h2>
         <div class="field-group">
             <label>EXAMPLE PARAMETERS</label>
             <textarea id="demoProblem" rows="3" placeholder="ES: Motore diesel 1900cc, Risparmio energetico, Ottimizzazione flusso..."></textarea>
@@ -158,7 +290,7 @@ form.addEventListener("submit", async function(e){
     e.preventDefault();
     kernel.style.display = "flex";
     log.innerHTML = "";
-    const sequences = ["> INITIALIZING AOS KERNEL V1.0...", "> ACCESSING FAURE_CORE_2026...", "> SUCCESS: DISPATCHED TO ARCHITECT."];
+    const sequences = ["> INITIALIZING AOS KERNEL V3.0...", "> ACCESSING FAURE_CORE_2026...", "> SUCCESS: DISPATCHED TO ARCHITECT."];
     for(const step of sequences){
         log.innerHTML += step + "<br>";
         await new Promise(r => setTimeout(r, 600));
@@ -205,7 +337,7 @@ Narrativa finale dettagliata:
 PRECISIONE CALCOLO AOS DEC-120:
 ${dec120}
 
-> STATO: ASSEVERATO (DEMO_MODE)
+> STATO: ASSEVERATO (DEMO MODE - I CALCOLI SONO ESEMPIO PLACEHOLDER)
 > NOTA PER IL TECNICO: Gli accorgimenti necessari includono l'allineamento dei parametri asseverati ai protocolli AUF2026 inviati via mail.
 -----------------------------------------
 ALAIN FAURE AUF2026 - Q.E.D.`;
@@ -232,5 +364,3 @@ demoSubmit.addEventListener("click", async () => {
 </script>
 </body>
 </html>
-
-
