@@ -1,9 +1,9 @@
 <div align="center">
-  <h1>█ AOS MASTER ORACLE // FAURE_CORE_2026 █</h1>
+  <h1>AOS MASTER ORACLE // FAURE_CORE_2026</h1>
   <p>
     <img src="https://raw.githubusercontent.com/AUF2026/WYP_system/main/logo.png" alt="WYP LOGO" width="50px" style="margin: 20px auto; display: block;">
   </p>
-  <code>SYSTEM STATUS: MASTER_LOCKED // PRECISION: 600-DEC // ENTROPY: O(1)</code>
+  <code>SYSTEM STATUS: MASTER_LOCKED // PRECISION: HDFP // ENTROPY: O(1)</code>
   <br>
 </div>
 
@@ -11,11 +11,11 @@
 
 ### 🛡️ SOVEREIGN INTELLECTUAL PROPERTY & DETERMINISTIC LOGIC
 
-In qualità di **Lead Architect** del sistema **AOS (Alain Faure Operating System)**, questo repository ospita asset strategici e materiale tecnico strettamente controllato. Il progetto è basato su un'architettura deterministica proprietaria denominata **FAURE_CORE_2026** e su un insieme di risultati formali (i cosiddetti *Teoremi Faure*).
+In qualità di **Lead Architect** del sistema **AOS (Alain Faure Operating System)**, questo repository ospita asset strategici e materiale tecnico strettamente controllato. Il progetto è basato su un'architettura deterministica proprietaria denominata **FAURE_CORE_2026** e su un insieme di risultati formali (i *Teoremi Faure - FDM - TUPLA Universale*).
 
 **Punti chiave**
-- **Core Technology:** risoluzione deterministica in tempo costante **O(1)** tramite i Teoremi Faure I–V.  
-- **Precisione numerica:** supporto per calcoli ad alta precisione (fino a **600 decimali**; contesti DEC‑120/DEC‑600 disponibili nei moduli sperimentali).  
+- **Core Technology:** risoluzione deterministica in tempo costante **O(1)** tramite i Teoremi Faure I–XII.  
+- **Precisione numerica:** supporto per calcoli ad alta precisione (FRAMEWORK HDFP - High Decimal Fixed-Point; contesti DEC‑80-90-100-110-120-130/DEC‑660 disponibili nei moduli sperimentali).  
 - **Security:** protocolli crittografici avanzati e misure di protezione per asset sensibili.  
 - **Frame legale:** asset protetti da licenze proprietarie **AUF2026** e misure di tutela strategica.
 
@@ -28,7 +28,7 @@ L'accesso, la consultazione o il download del materiale contenuto in questo repo
 **Condizioni essenziali**
 1. **PROPRIETARY & CONFIDENTIAL** — Il materiale è proprietario. È vietato il reverse engineering, l'estrazione automatizzata non autorizzata (crawling) e qualsiasi uso non esplicitamente consentito.  
 2. **SANZIONI COMMERCIALI** — Le violazioni della proprietà intellettuale saranno perseguite secondo le clausole contrattuali e legali applicabili.  
-3. **GIURISDIZIONE** — Foro competente indicato dal detentore dei diritti: **Zurigo (Zürich), Svizzera** o **Genova, Italia**, come specificato nei documenti contrattuali.
+3. **GIURISDIZIONE** — Foro competente indicato dal detentore dei diritti: **Genova, Italia**, in alternativa come specificato nei documenti contrattuali.
 
 > **Nota operativa:** per richieste commerciali, di partnership o per accesso controllato al codice sorgente, contattare i canali ufficiali indicati nella sezione *Uplink Channels*.
 
@@ -95,14 +95,14 @@ Per comunicazioni ufficiali, richieste di accesso, o per attivare procedure di v
 
 ### 📜 Licenza e note finali
 
-**Licenza:** Proprietaria — **AUF2026**. L'uso, la copia o la distribuzione non autorizzata sono vietati. Per accordi commerciali o di ricerca, contattare il detentore dei diritti.
+**Licenza:** Proprietaria — **CORE AUF2026-AOS144-TUPLA Faure-FDM-AOS ORACLE AI LLM**. L'uso, la copia o la distribuzione non autorizzata sono vietati. Per accordi commerciali o di ricerca, contattare il detentore dei diritti.
 
 **Disclaimer tecnico:** le affermazioni tecniche e i risultati formali pubblicati in questo repository sono soggetti a verifica formale e peer review. Le sezioni sperimentali contengono script e dati di test che devono essere eseguiti in ambienti controllati con la configurazione numerica dichiarata.
 
 ---
 
 <div align="center">
-  **AUF2026 — AOS MASTER ORACLE**  
-  Owner: **Alain Faure** — Lead Architect  
+  AUF2026 — AOS MASTER ORACLE  
+  Owner: Alain Faure — Lead Architect  
   Contact: AUF2026@protonmail.com
 </div>
