@@ -11,13 +11,66 @@
 
 ### 🛡️ SOVEREIGN INTELLECTUAL PROPERTY & DETERMINISTIC LOGIC
 
-In qualità di **Lead Architect** del sistema **AOS (Alain Faure Operating System)**, questo repository ospita asset strategici e materiale tecnico strettamente controllato. Il progetto è basato su un'architettura deterministica proprietaria denominata **FAURE_CORE_2026** e su un insieme di risultati formali (i *Teoremi Faure - FDM - TUPLA Universale*).
+In qualità di **Lead Architect** del sistema **AOS (Alain Faure Operating System)**, questo repository ospita asset strategici, formalizzazioni matematiche, algoritmi, applicazioni e materiale tecnico proprietario.
+
+Il progetto è basato su un'architettura deterministica proprietaria denominata **FAURE_CORE_2026** e sul formalismo **FDM — Faure Deterministic Mathematics**, comprendente la **Tupla Primordiale**, la **Tupla Universale**, i **Teoremi Faure**, AOS e le relative strutture applicative.
+
+La struttura fondamentale è:
+
+$$
+F=(A,A',S,S',R,R',T,\phi)
+$$
+
+dalla quale viene generata la Tupla Universale:
+
+$$
+U_F=(\mathcal{M},\mathcal{G},\mathcal{A},\mathbf{\Psi},\mathbf{\Lambda},\mathbf{\Pi})
+$$
+
+La genealogia formalizzata del sistema è:
+
+$$
+\boxed{
+K_{\min}
+\rightarrow
+F
+\rightarrow
+U_F
+\rightarrow
+AOS
+\rightarrow
+AOS144
+\rightarrow
+Measure\ Gate
+\rightarrow
+L_F
+\rightarrow
+\mathrm{Born}
+}
+$$
 
 **Punti chiave**
-- **Core Technology:** risoluzione deterministica in tempo costante **O(1)** tramite i Teoremi Faure I–XII.  
-- **Precisione numerica:** supporto per calcoli ad alta precisione (FRAMEWORK HDFP - High Decimal Fixed-Point; contesti DEC‑80-90-100-110-120-130/DEC‑660 disponibili nei moduli sperimentali).  
-- **Security:** protocolli crittografici avanzati e misure di protezione per asset sensibili.  
-- **Frame legale:** asset protetti da licenze proprietarie **AUF2026** e misure di tutela strategica.
+
+- **Core Technology:** risoluzione deterministica in tempo costante **O(1)** tramite le strutture e i Teoremi Faure formalizzati nel framework.
+- **FAURE_CORE_2026:** nucleo deterministico proprietario dal quale vengono organizzate le strutture matematiche, computazionali e applicative del sistema.
+- **FDM — Faure Deterministic Mathematics:** formalismo matematico fondativo del framework.
+- **Primordial Tuple:**
+
+  $$
+  F=(A,A',S,S',R,R',T,\phi)
+  $$
+
+- **Universal Tuple:**
+
+  $$
+  U_F=(\mathcal{M},\mathcal{G},\mathcal{A},\mathbf{\Psi},\mathbf{\Lambda},\mathbf{\Pi})
+  $$
+
+- **AOS144:** struttura discreta a 144 nodi derivata nell'architettura AOS.
+- **Precisione numerica:** supporto per calcoli ad alta precisione tramite il framework **HDFP — High Decimal Fixed-Point**, con contesti DEC-80, DEC-90, DEC-100, DEC-110, DEC-120, DEC-130 e DEC-660 nei moduli pertinenti.
+- **Deterministic Architecture:** il sistema è progettato per trasformare strutture relazionali e informazionali in soluzioni deterministiche e direttamente indirizzabili.
+- **Security:** protocolli crittografici avanzati e misure di protezione per asset sensibili.
+- **Intellectual Property:** asset, formalismi, denominazioni e implementazioni sono protetti dalle condizioni proprietarie AUF2026.
 
 ---
 
@@ -26,83 +79,142 @@ In qualità di **Lead Architect** del sistema **AOS (Alain Faure Operating Syste
 L'accesso, la consultazione o il download del materiale contenuto in questo repository implicano l'accettazione dei termini di licenza e delle condizioni d'uso qui riportate.
 
 **Condizioni essenziali**
-1. **PROPRIETARY & CONFIDENTIAL** — Il materiale è proprietario. È vietato il reverse engineering, l'estrazione automatizzata non autorizzata (crawling) e qualsiasi uso non esplicitamente consentito.  
-2. **SANZIONI COMMERCIALI** — Le violazioni della proprietà intellettuale saranno perseguite secondo le clausole contrattuali e legali applicabili.  
-3. **GIURISDIZIONE** — Foro competente indicato dal detentore dei diritti: **Genova, Italia**, in alternativa come specificato nei documenti contrattuali.
 
-> **Nota operativa:** per richieste commerciali, di partnership o per accesso controllato al codice sorgente, contattare i canali ufficiali indicati nella sezione *Uplink Channels*.
+1. **PROPRIETARY & CONFIDENTIAL** — Il materiale è proprietario. È vietato il reverse engineering, l'estrazione automatizzata non autorizzata (crawling) e qualsiasi uso non esplicitamente consentito.
+2. **SANZIONI COMMERCIALI** — Qualsiasi violazione della proprietà intellettuale sarà perseguita secondo le clausole contrattuali e legali applicabili.
+3. **GIURISDIZIONE** — Foro competente indicato dal detentore dei diritti: **Genova, Italia**, in alternativa come specificato nei documenti contrattuali.
+4. **NO IMPLIED LICENSE** — La pubblicazione di materiale sul repository non costituisce concessione di licenza per uso, copia, modifica, derivazione, redistribuzione o incorporazione in prodotti di terzi, salvo autorizzazione espressa.
+
+> **Nota operativa:** per richieste commerciali, di partnership, ricerca, collaborazione o accesso controllato al codice sorgente, contattare esclusivamente i canali ufficiali indicati nella sezione *Uplink Channels*.
 
 ---
 
 ### 📨 UPLINK CHANNELS (MASTER GATE)
 
-Per comunicazioni ufficiali, richieste di accesso, o per attivare procedure di validazione/ingaggio:
+Per comunicazioni ufficiali, richieste di accesso, partnership, ricerca o procedure di validazione:
 
-- **Official System (public demo / docs):** https://auf2026.github.io/WYP_system/  
-- **Secure Email:** AUF2026@protonmail.com  
+- **Official System (public demo / docs):** https://auf2026.github.io/WYP_system/
+- **Official Publications:** https://medium.com/@auf2026
+- **Secure Email:** AUF2026@protonmail.com
 - **Sedi operative:** Genova, IT / Zürich, CH / Global Uplink
 
 ---
 
-### 📁 Contenuto essenziale del repository
+### 📁 CONTENUTO ESSENZIALE DEL REPOSITORY
 
-**Documenti principali**
-- `ToE Faure - Teoria del tutto - PEER REVIEW DOCUMENT.tex` / `.pdf`  
-- `ToE_Faure_Universal_Attractor_Relational_Space_Audit.tex` / `.pdf`  
-- `AUD_2026_018_Faure_Collapse_Theorem.tex` / `.pdf`  
-- `FAURE_Universal_Validation.tex` / `.pdf`  
-- `TOE- TUPLA - FDM - AOS144 - Formal Mathematical Audit Annals of Mathematics 11-08-2026.pdf`  
+**Formal Mathematical Core**
 
-**Cartella applicazioni**
-- `APPLICAZIONI PYTHON IN PROGRESS/AOS KERNEL LATTICE 144-NODI/` — script di validazione, GUI/CLI, esempi di esecuzione e file `.tex` di supporto.
+- `ToE Faure - Teoria del tutto - PEER REVIEW DOCUMENT.tex` / `.pdf`
+- `ToE_Faure_Universal_Attractor_Relational_Space_Audit.tex` / `.pdf`
+- `AUD_2026_018_Faure_Collapse_Theorem.tex` / `.pdf`
+- `FAURE_Universal_Validation.tex` / `.pdf`
+- `TOE- TUPLA - FDM - AOS144 - Formal Mathematical Audit Annals of Mathematics 11-08-2026.pdf`
 
-**Note**
-- I file numerici e i log di riproducibilità (es. `sandbox/logs/`) sono parte integrante del pacchetto di validazione; verificarne la presenza prima di ogni submission.
+**AOS Applications**
 
----
+- `APPLICAZIONI PYTHON IN PROGRESS/AOS KERNEL LATTICE 144-NODI/`
 
-### ✅ Stato sintetico del progetto
+La cartella comprende script Python, strumenti GUI/CLI, esempi applicativi e file `.tex` di supporto alla formalizzazione e validazione.
 
-| Elemento | Stato |
-|---|---|
-| Root canonica e corpus principale | **Presente e allineato** |
-| `main.tex` | **Presente** (da aggiornare con blocchi finali) |
-| `chapters/` | **Parzialmente popolata** (alcuni capitoli da creare) |
-| AOS144 applicazioni Python | **Script e .tex disponibili; validati** |
-| Audit formale (Annals PDF) | **Compilato e integrabile** |
-| Log numerici di riproducibilità | **Da confermare in `sandbox/logs/`** |
+**Reproducibility Assets**
+
+I file numerici, le configurazioni di precisione e i log di riproducibilità costituiscono parte integrante dell'infrastruttura di validazione e devono essere conservati insieme alla versione del corpus utilizzata.
 
 ---
 
-### 🧭 Linee guida operative (per contributor e validatori)
+### 🧬 FDM → UNIVERSAL TUPLE → AOS
 
-1. **Non importare passivamente** materiale esterno: ogni modulo deve essere ricostruito o tipizzato esplicitamente nei `.tex`.  
-2. **Checklist Measure Gate** (catena minima da verificare prima di qualsiasi claim probabilistico):  
-   `N_F → μ_F → 𝓛_F → ⟂_F → additività → non‑booleanità`  
-3. **Audit equazione‑per‑equazione**: compilare la matrice `ID | Equazione | Classe (A/B/C/D/E) | Dipendenze | Usa QM? | Salto/Circolarità | Conseguenza`.  
-4. **Precisione numerica**: usare il contesto `decimal` dichiarato nei test (es. DEC‑120 o DEC‑600) per riproducibilità.  
-5. **Backup e snapshot**: creare snapshot prima di ogni modifica sostanziale alla root canonica.
+La formalizzazione stabilisce la seguente struttura generativa:
+
+$$
+\boxed{
+F\rightarrow U_F
+}
+$$
+
+con:
+
+$$
+F=(A,A',S,S',R,R',T,\phi)
+$$
+
+e:
+
+$$
+U_F=(\mathcal{M},\mathcal{G},\mathcal{A},\mathbf{\Psi},\mathbf{\Lambda},\mathbf{\Pi})
+$$
+
+Il nucleo della struttura comprende inoltre la chiusura:
+
+$$
+\Psi^4\equiv\Psi^5
+$$
+
+e la conseguente catena:
+
+$$
+F
+\rightarrow
+\Psi
+\rightarrow
+\Psi^4\equiv\Psi^5
+\rightarrow
+\text{Fiber Constant}
+\rightarrow
+\text{Representation Elimination}
+$$
+
+La struttura risultante costituisce il fondamento matematico delle successive costruzioni AOS.
 
 ---
 
-### 🛠️ Come contribuire (procedura controllata)
+### 🔢 AOS144 — 144-NODE KERNEL LATTICE
 
-- Aprire richiesta formale via email a **AUF2026@protonmail.com** indicando: motivo, file proposti, e referenze di validazione.  
-- Le pull request dirette su questo repository sono soggette a revisione preliminare; non inviare materiale sensibile senza autorizzazione.  
-- Per test e riproducibilità: includere sempre i log di esecuzione (`sandbox/logs/`) e il `decimal_context.cfg` usato.
+AOS144 è la struttura discreta a **144 nodi** del framework AOS.
+
+$$
+\boxed{144=12^2}
+$$
+
+Essa deve essere distinta dalla struttura tridimensionale:
+
+$$
+12^3=1728
+$$
+
+Il numero 144 appartiene alla genealogia strutturale dell'architettura AOS derivata dal formalismo FDM/TUPLA.
+
+La catena di dipendenza è:
+
+$$
+\boxed{
+K_{\min}
+\rightarrow
+F
+\rightarrow
+U_F
+\rightarrow
+AOS
+\rightarrow
+144
+}
+$$
 
 ---
 
-### 📜 Licenza e note finali
+### ⚖️ MEASURE GATE
 
-**Licenza:** Proprietaria — **CORE AUF2026-AOS144-TUPLA Faure-FDM-AOS ORACLE AI LLM**. L'uso, la copia o la distribuzione non autorizzata sono vietati. Per accordi commerciali o di ricerca, contattare il detentore dei diritti.
+La transizione dalla struttura deterministica alla misura è organizzata secondo la catena:
 
-**Disclaimer tecnico:** le affermazioni tecniche e i risultati formali pubblicati in questo repository sono soggetti a verifica formale e peer review. Le sezioni sperimentali contengono script e dati di test che devono essere eseguiti in ambienti controllati con la configurazione numerica dichiarata.
-
----
-
-<div align="center">
-  AUF2026 — AOS MASTER ORACLE  
-  Owner: Alain Faure — Lead Architect  
-  Contact: AUF2026@protonmail.com
-</div>
+```text
+N_F
+  ↓
+μ_F
+  ↓
+𝓛_F
+  ↓
+⊥_F
+  ↓
+additività
+  ↓
+non-booleanità
