@@ -8,11 +8,12 @@ Public application interface for the WYP deterministic engine.
 """
 
 from .engine import DeterministicEngine
-from .api import solve
+from .api import solve, solve_text
 
 __all__ = [
     "DeterministicEngine",
     "solve",
+    "solve_text",
 ]
 
 __version__ = "1.0.0"
