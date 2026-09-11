@@ -20,15 +20,36 @@ from .api import solve
 HOST = "127.0.0.1"
 PORT = 8000
 
+# Frontend development server
+CORS_ORIGIN = "http://127.0.0.1:8080"
+
 
 class WYPRequestHandler(BaseHTTPRequestHandler):
     """HTTP interface for the WYP solver."""
+
+    def _send_cors_headers(self) -> None:
+        """Send CORS headers for the web frontend."""
+
+        self.send_header(
+            "Access-Control-Allow-Origin",
+            CORS_ORIGIN,
+        )
+        self.send_header(
+            "Access-Control-Allow-Methods",
+            "GET, POST, OPTIONS",
+        )
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type",
+        )
 
     def _send_json(
         self,
         status: int,
         payload: dict[str, Any],
     ) -> None:
+        """Send a JSON HTTP response."""
+
         body = json.dumps(
             payload,
             ensure_ascii=False,
@@ -36,28 +57,30 @@ class WYPRequestHandler(BaseHTTPRequestHandler):
         ).encode("utf-8")
 
         self.send_response(status)
+
         self.send_header(
             "Content-Type",
             "application/json; charset=utf-8",
         )
+
         self.send_header(
             "Content-Length",
             str(len(body)),
         )
-	self.send_header(
-    "Access-Control-Allow-Origin",
-    "http://127.0.0.1:8080",
-)
-self.send_header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS",
-)
-self.send_header(
-    "Access-Control-Allow-Headers",
-    "Content-Type",
-)
+
+        self._send_cors_headers()
+
         self.end_headers()
         self.wfile.write(body)
+
+    def do_OPTIONS(self) -> None:
+        """Handle CORS preflight requests."""
+
+        self.send_response(204)
+
+        self._send_cors_headers()
+
+        self.end_headers()
 
     def do_GET(self) -> None:
         """Return API status information."""
@@ -77,28 +100,13 @@ self.send_header(
             {
                 "status": "ONLINE",
                 "service": "WYP",
-                "system": "What's Your Problem? It's Deterministically Solved!",
+                "system": (
+                    "What's Your Problem? "
+                    "It's Deterministically Solved!"
+                ),
                 "engine": "FAURE_CORE_2026",
             },
         )
-
-	def do_OPTIONS(self) -> None:
-    """Handle CORS preflight requests."""
-
-    self.send_response(204)
-    self.send_header(
-        "Access-Control-Allow-Origin",
-        "http://127.0.0.1:8080",
-    )
-    self.send_header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, OPTIONS",
-    )
-    self.send_header(
-        "Access-Control-Allow-Headers",
-        "Content-Type",
-    )
-    self.end_headers()
 
     def do_POST(self) -> None:
         """Solve a WYP problem submitted as JSON."""
@@ -115,7 +123,10 @@ self.send_header(
 
         try:
             content_length = int(
-                self.headers.get("Content-Length", "0")
+                self.headers.get(
+                    "Content-Length",
+                    "0",
+                )
             )
 
             if content_length <= 0:
@@ -123,7 +134,9 @@ self.send_header(
                     "Request body is empty."
                 )
 
-            raw_body = self.rfile.read(content_length)
+            raw_body = self.rfile.read(
+                content_length
+            )
 
             payload = json.loads(
                 raw_body.decode("utf-8")
@@ -151,7 +164,11 @@ self.send_header(
                 },
             )
 
-        except (ValueError, TypeError, json.JSONDecodeError) as exc:
+        except (
+            ValueError,
+            TypeError,
+            json.JSONDecodeError,
+        ) as exc:
             self._send_json(
                 400,
                 {
@@ -200,17 +217,26 @@ def main() -> None:
     server = create_server()
 
     print(
-        f"WYP API ONLINE — http://{HOST}:{PORT}"
+        f"WYP API ONLINE — "
+        f"http://{HOST}:{PORT}"
     )
+
     print(
         f"WYP SOLVE ENDPOINT — "
         f"http://{HOST}:{PORT}/solve"
     )
 
+    print(
+        f"WYP CORS ORIGIN — "
+        f"{CORS_ORIGIN}"
+    )
+
     try:
         server.serve_forever()
+
     except KeyboardInterrupt:
         print("\nWYP API SHUTDOWN")
+
     finally:
         server.server_close()
 
