@@ -88,38 +88,38 @@ class DeterministicEngine:
         }
 
     def quantities(
-    self,
-    constraints: Mapping[str, Any],
-    problem: Mapping[str, Any],
-) -> Mapping[str, Any]:
-    """
-    Produce exact quantitative values.
+        self,
+        constraints: Mapping[str, Any],
+        problem: Mapping[str, Any],
+    ) -> Mapping[str, Any]:
+        """
+        Produce exact quantitative values.
 
-    Numerical inputs must enter through Decimal-compatible
-    representations.
-    """
-    if not constraints["valid"]:
-        raise ValueError(
-            "Problem violates deterministic kernel constraints."
-        )
-
-    quantities: dict[str, Any] = {}
-
-    for key, value in problem.items():
-        if isinstance(value, float):
-            raise TypeError(
-                f"Binary floating-point values are forbidden: {key!r}"
+        Numerical inputs must enter through Decimal-compatible
+        representations.
+        """
+        if not constraints["valid"]:
+            raise ValueError(
+                "Problem violates deterministic kernel constraints."
             )
 
-        if isinstance(value, (str, int)):
-            try:
-                quantities[key] = decimal(value)
-            except TypeError:
-                quantities[key] = value
-        else:
-            quantities[key] = value
+        quantities: dict[str, Any] = {}
 
-    return quantities
+        for key, value in problem.items():
+            if isinstance(value, float):
+                raise TypeError(
+                    f"Binary floating-point values are forbidden: {key!r}"
+                )
+
+            if isinstance(value, (str, int)):
+                try:
+                    quantities[key] = decimal(value)
+                except (TypeError, ValueError):
+                    quantities[key] = value
+            else:
+                quantities[key] = value
+
+        return quantities
 
     def manifestation(
         self,
