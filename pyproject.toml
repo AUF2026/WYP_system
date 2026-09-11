@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "wyp-system"
+version = "1.0.0"
+description = "WYP? What's Your Problem? It's Deterministically Solved!"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [
+    { name = "Alain Faure" }
+]
+license = { file = "license.md" }
+keywords = [
+    "WYP",
+    "AUF2026",
+    "FAURE_CORE_2026",
+    "FDM",
+    "deterministic",
+    "mathematics",
+    "formal-verification"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+]
+
+
+[project.scripts]
+wyp = "wyp.cli.main:main"
+
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
