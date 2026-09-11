@@ -197,11 +197,12 @@ form.addEventListener("submit", async function(e){
     .catch(() => form.submit());
 });
 
-// --- WYP WEB INTERFACE ---
-// --- REAL CONNECTION TO WYP HTTP API ---
+// --- WYP ENGINE — REAL API CONNECTION ---
 
 const demoSubmit = document.getElementById("demoSubmit");
 const demoOutput = document.getElementById("demoOutput");
+
+const WYP_API = "http://127.0.0.1:8000/solve";
 
 demoSubmit.addEventListener("click", async () => {
 
@@ -216,35 +217,41 @@ demoSubmit.addEventListener("click", async () => {
         return;
     }
 
-    demoSubmit.disabled = true;
-
     demoOutput.textContent =
         "> WYP ENGINE INITIALIZING...\n" +
         "> CONNECTING TO FAURE_CORE_2026...\n" +
-        "> SUBMITTING PROBLEM...\n";
+        "> DISPATCHING PROBLEM...\n";
 
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/solve",
+            WYP_API,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json"
                 },
+
                 body: JSON.stringify({
                     problem: {
-                        description: text
+                        problem: text
                     }
                 })
             }
         );
 
-        const data = await response.json();
-
         if (!response.ok) {
             throw new Error(
-                data.error || "WYP API ERROR"
+                `HTTP ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "SUCCESS") {
+            throw new Error(
+                data.error || "WYP ENGINE ERROR"
             );
         }
 
@@ -256,18 +263,18 @@ demoSubmit.addEventListener("click", async () => {
             "> CONSTRAINT ANALYSIS: COMPLETE\n" +
             "> QUANTITY ANALYSIS: COMPLETE\n" +
             "> MANIFESTATION: COMPLETE\n\n" +
-            JSON.stringify(data, null, 2);
+            "> STATUS: DETERMINISTIC\n\n" +
+            JSON.stringify(
+                data.result,
+                null,
+                2
+            );
 
     } catch (error) {
 
         demoOutput.textContent =
             "> WYP ENGINE CONNECTION ERROR\n\n" +
             "> " + error.message;
-
-    } finally {
-
-        demoSubmit.disabled = false;
-
     }
 });
 
