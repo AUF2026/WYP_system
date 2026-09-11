@@ -44,6 +44,18 @@ class WYPRequestHandler(BaseHTTPRequestHandler):
             "Content-Length",
             str(len(body)),
         )
+	self.send_header(
+    "Access-Control-Allow-Origin",
+    "http://127.0.0.1:8080",
+)
+self.send_header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS",
+)
+self.send_header(
+    "Access-Control-Allow-Headers",
+    "Content-Type",
+)
         self.end_headers()
         self.wfile.write(body)
 
@@ -69,6 +81,24 @@ class WYPRequestHandler(BaseHTTPRequestHandler):
                 "engine": "FAURE_CORE_2026",
             },
         )
+
+	def do_OPTIONS(self) -> None:
+    """Handle CORS preflight requests."""
+
+    self.send_response(204)
+    self.send_header(
+        "Access-Control-Allow-Origin",
+        "http://127.0.0.1:8080",
+    )
+    self.send_header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, OPTIONS",
+    )
+    self.send_header(
+        "Access-Control-Allow-Headers",
+        "Content-Type",
+    )
+    self.end_headers()
 
     def do_POST(self) -> None:
         """Solve a WYP problem submitted as JSON."""
