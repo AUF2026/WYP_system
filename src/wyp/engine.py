@@ -106,13 +106,18 @@ class DeterministicEngine:
         quantities: dict[str, Any] = {}
 
         for key, value in problem.items():
-            if isinstance(value, (str, int)):
-                try:
-                    quantities[key] = decimal(value)
-                except TypeError:
-                    quantities[key] = value
-            else:
-                quantities[key] = value
+    if isinstance(value, float):
+        raise TypeError(
+            f"Binary floating-point values are forbidden: {key!r}"
+        )
+
+    if isinstance(value, (str, int)):
+        try:
+            quantities[key] = decimal(value)
+        except TypeError:
+            quantities[key] = value
+    else:
+        quantities[key] = value
 
         return quantities
 
