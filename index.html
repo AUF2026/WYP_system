@@ -197,8 +197,8 @@ form.addEventListener("submit", async function(e){
     .catch(() => form.submit());
 });
 
-// --- AOS DETERMINISTIC ENGINE V1.0 + NARRATIVE ---
 // --- WYP WEB INTERFACE ---
+// --- REAL CONNECTION TO WYP HTTP API ---
 
 const demoSubmit = document.getElementById("demoSubmit");
 const demoOutput = document.getElementById("demoOutput");
@@ -216,15 +216,59 @@ demoSubmit.addEventListener("click", async () => {
         return;
     }
 
+    demoSubmit.disabled = true;
+
     demoOutput.textContent =
         "> WYP ENGINE INITIALIZING...\n" +
-        "> PROBLEM RECEIVED\n" +
-        "> STRUCTURE ANALYSIS PENDING\n" +
-        "> INVARIANT ANALYSIS PENDING\n" +
-        "> CONSTRAINT ANALYSIS PENDING\n" +
-        "> QUANTITY ANALYSIS PENDING\n" +
-        "> MANIFESTATION PENDING\n\n" +
-        "> STATUS: READY FOR ENGINE CONNECTION";
+        "> CONNECTING TO FAURE_CORE_2026...\n" +
+        "> SUBMITTING PROBLEM...\n";
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/solve",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    problem: {
+                        description: text
+                    }
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "WYP API ERROR"
+            );
+        }
+
+        demoOutput.textContent =
+            "> WYP ENGINE ONLINE\n" +
+            "> PROBLEM RECEIVED\n" +
+            "> STRUCTURE ANALYSIS: COMPLETE\n" +
+            "> INVARIANT ANALYSIS: COMPLETE\n" +
+            "> CONSTRAINT ANALYSIS: COMPLETE\n" +
+            "> QUANTITY ANALYSIS: COMPLETE\n" +
+            "> MANIFESTATION: COMPLETE\n\n" +
+            JSON.stringify(data, null, 2);
+
+    } catch (error) {
+
+        demoOutput.textContent =
+            "> WYP ENGINE CONNECTION ERROR\n\n" +
+            "> " + error.message;
+
+    } finally {
+
+        demoSubmit.disabled = false;
+
+    }
 });
 
 </script>
