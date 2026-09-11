@@ -1,30 +1,3 @@
-Perfetto. **Prossimo passo unico: creiamo `docs/` e il primo documento tecnico.**
-
- Alla radice:
-
-```
-WYP_system/
-├── docs/
-│   └── architecture.md    ← ADESSO
-├── src/
-├── examples/
-├── tests/
-├── pyproject.toml
-├── VERSION
-├── CHANGELOG.md
-├── README.md
-├── license.md
-└── COMMERCIAL_LICENSE.md
-```
-
- Crea la cartella `docs/`, poi il file:
-
-```
-docs/architecture.md
-```
-
- Incolla **esattamente questo**:
-
 ````
 # WYP System — Architecture
 
