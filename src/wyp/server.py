@@ -11,17 +11,21 @@ No binary floating-point arithmetic.
 from __future__ import annotations
 
 import json
+import os
+
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
 
 from .api import solve
 
 
-HOST = "127.0.0.1"
-PORT = 8000
+HOST = os.getenv("WYP_HOST", "127.0.0.1")
+PORT = int(os.getenv("PORT", os.getenv("WYP_PORT", "8000")))
 
-# Frontend development server
-CORS_ORIGIN = "http://127.0.0.1:8080"
+CORS_ORIGIN = os.getenv(
+    "WYP_CORS_ORIGIN",
+    "http://127.0.0.1:8080",
+)
 
 
 class WYPRequestHandler(BaseHTTPRequestHandler):
@@ -104,7 +108,6 @@ class WYPRequestHandler(BaseHTTPRequestHandler):
                     "What's Your Problem? "
                     "It's Deterministically Solved!"
                 ),
-                "engine": "FAURE_CORE_2026",
             },
         )
 
@@ -177,12 +180,12 @@ class WYPRequestHandler(BaseHTTPRequestHandler):
                 },
             )
 
-        except Exception as exc:
+        except Exception:
             self._send_json(
                 500,
                 {
                     "status": "ENGINE_ERROR",
-                    "error": str(exc),
+                    "error": "Solver execution failed.",
                 },
             )
 
