@@ -13,6 +13,7 @@
 <title>WYP | OPERATIONAL TERMINAL</title>
 
 <style>
+
 :root {
     --neon: #00f2ff;
     --electric-blue: #2ddaff;
@@ -32,17 +33,21 @@ body {
     background: var(--bg);
     color: #fff;
     font-family: var(--font-mono);
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     overflow-x: hidden;
 }
 
 body::after {
     content: "";
+
     position: fixed;
     top: 0;
     left: 0;
+
     width: 100%;
     height: 100%;
 
@@ -59,13 +64,18 @@ body::after {
         );
 
     z-index: 999;
-    background-size: 100% 3px, 3px 100%;
+
+    background-size:
+        100% 3px,
+        3px 100%;
+
     pointer-events: none;
 }
 
 .wrapper {
     width: 100%;
     max-width: var(--col-width);
+
     padding: 80px 20px 120px;
 
     display: flex;
@@ -74,30 +84,39 @@ body::after {
 
 header {
     width: 100%;
+
     text-align: center;
+
     margin-bottom: 60px;
 }
 
 .logo-box {
     width: 100%;
-    filter: drop-shadow(
-        0 0 25px var(--electric-blue)
-    );
 
-    animation: boot 1.5s ease-out;
+    filter:
+        drop-shadow(
+            0 0 25px var(--electric-blue)
+        );
+
+    animation:
+        boot 1.5s ease-out;
 }
 
 .logo-box svg {
     width: 100%;
     height: auto;
+
     display: block;
 }
 
 @keyframes boot {
+
     0% {
         opacity: 0;
         transform: scale(0.98);
-        filter: brightness(3);
+
+        filter:
+            brightness(3);
     }
 
     100% {
@@ -108,8 +127,11 @@ header {
 
 .tagline {
     font-size: 1.6rem;
+
     font-weight: 900;
+
     letter-spacing: 2px;
+
     text-transform: uppercase;
 
     margin-top: 40px;
@@ -117,56 +139,73 @@ header {
     color: #1A85F8;
 
     text-shadow:
-        0 0 15px rgba(45,218,255,0.6);
+        0 0 15px
+        rgba(45,218,255,0.6);
 
     line-height: 1.1;
 }
 
 .sub-claim {
     font-size: 0.75rem;
+
     color: #2DDAFF;
+
     letter-spacing: 4px;
+
     margin-top: 15px;
+
     text-transform: uppercase;
 }
 
 .intro-description {
     margin-bottom: 40px;
+
     font-size: 1rem;
+
     line-height: 1.6;
+
     color: #999;
 }
 
 .terminal-container {
     background: var(--surface);
+
     border: 1px solid #151515;
 
     box-shadow:
-        0 0 60px rgba(0,0,0,1);
+        0 0 60px
+        rgba(0,0,0,1);
 
     margin-bottom: 40px;
 }
 
 .field-group {
     padding: 30px;
+
     border-bottom: 1px solid #111;
+
     transition: 0.3s;
 }
 
 .field-group:focus-within {
     background: #080808;
-    border-left: 3px solid var(--electric-blue);
+
+    border-left:
+        3px solid
+        var(--electric-blue);
 }
 
 label {
     display: block;
 
     font-size: 0.65rem;
+
     color: var(--electric-blue);
 
     margin-bottom: 18px;
 
     letter-spacing: 3px;
+
     text-transform: uppercase;
 
     opacity: 0.8;
@@ -178,14 +217,17 @@ select {
     width: 100%;
 
     background: transparent;
+
     border: none;
 
     color: var(--electric-blue) !important;
 
     font-size: 1.1rem;
+
     outline: none;
 
     font-family: var(--font-mono);
+
     font-weight: 600;
 }
 
@@ -196,22 +238,30 @@ select {
 
 textarea {
     resize: none;
+
     text-transform: none;
+
     line-height: 1.6;
 }
 
 ::placeholder {
-    color: rgba(45,218,255,0.4) !important;
+    color:
+        rgba(45,218,255,0.4)
+        !important;
 }
 
 select {
     cursor: pointer;
+
     -webkit-appearance: none;
-    border-bottom: 1px solid #222;
+
+    border-bottom:
+        1px solid #222;
 }
 
 option {
     background: #000;
+
     color: var(--electric-blue);
 }
 
@@ -220,13 +270,16 @@ option {
 
     background: transparent;
 
-    border: 1px solid var(--electric-blue);
+    border:
+        1px solid
+        var(--electric-blue);
 
     color: var(--electric-blue);
 
     padding: 40px;
 
     font-family: var(--font-mono);
+
     font-weight: 900;
 
     font-size: 1.8rem;
@@ -245,15 +298,19 @@ option {
 }
 
 .btn-execute:hover {
-    background: var(--electric-blue);
+    background:
+        var(--electric-blue);
+
     color: #000;
 
     box-shadow:
-        0 0 50px rgba(45,218,255,0.5);
+        0 0 50px
+        rgba(45,218,255,0.5);
 }
 
 .btn-execute:disabled {
     opacity: 0.5;
+
     cursor: wait;
 }
 
@@ -275,6 +332,7 @@ option {
     flex-direction: column;
 
     justify-content: center;
+
     align-items: center;
 
     padding: 40px;
@@ -300,6 +358,7 @@ option {
     max-height: 90vh;
 
     width: 100%;
+
     max-width: 600px;
 }
 
@@ -321,37 +380,185 @@ footer {
 
 footer a {
     color: #00f2ff;
+
     text-decoration: none;
 }
 
 footer a:hover {
     color: #ffffff;
+
     text-decoration: underline;
 }
 
-#demoOutput {
-    background: #050505;
+
+/* =========================================================
+   HUMAN RESULT INTERFACE
+   ========================================================= */
+
+.engine-state {
+    margin: 0 30px 20px;
+
+    min-height: 20px;
+
+    color: #555;
+
+    font-size: 0.65rem;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.result-panel {
+    margin: 0 30px 30px;
+
+    padding: 32px;
+
+    display: none;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0,242,255,0.035),
+            rgba(0,0,0,0.85)
+        );
+
+    border: 1px solid #151515;
+
+    box-shadow:
+        inset 0 0 30px
+        rgba(0,242,255,0.015);
+}
+
+.result-panel.visible {
+    display: block;
+}
+
+.result-status {
+    color: #666;
+
+    font-size: 0.65rem;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 14px;
+}
+
+.result-title {
+    color: #fff;
+
+    font-size: 1.45rem;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+
+    margin-bottom: 18px;
+}
+
+.result-answer {
     color: var(--electric-blue);
 
-    padding: 20px;
+    font-size: 2.4rem;
 
-    border: 1px solid #111;
+    line-height: 1.25;
 
-    font-family: var(--font-mono);
+    font-weight: 900;
+
+    margin-bottom: 20px;
+
+    text-shadow:
+        0 0 20px
+        rgba(45,218,255,0.25);
+}
+
+.result-explanation {
+    color: #aaa;
+
+    font-family:
+        'Segoe UI',
+        Roboto,
+        sans-serif;
+
+    font-size: 0.95rem;
+
+    line-height: 1.7;
+}
+
+.result-equation {
+    margin-top: 22px;
+
+    padding: 15px 18px;
+
+    border-left:
+        2px solid
+        var(--electric-blue);
+
+    background:
+        rgba(45,218,255,0.025);
+
+    color: #ddd;
+
+    font-size: 0.9rem;
+}
+
+.result-missing {
+    color: #999;
+
+    font-family:
+        'Segoe UI',
+        Roboto,
+        sans-serif;
 
     font-size: 0.85rem;
 
+    line-height: 1.7;
+
+    margin-top: 18px;
+}
+
+.result-warning {
+    color: #ffb84d;
+}
+
+.result-technical {
+    margin-top: 28px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid #151515;
+}
+
+.result-technical summary {
+    cursor: pointer;
+
+    color: #555;
+
+    font-size: 0.65rem;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.result-technical summary:hover {
+    color: #888;
+}
+
+.result-technical pre {
+    margin-top: 16px;
+
+    color: #555;
+
+    font-size: 0.68rem;
+
+    line-height: 1.5;
+
     white-space: pre-wrap;
 
-    overflow-y: auto;
-
-    max-height: 600px;
-
-    min-height: 100px;
-
-    border-radius: 5px;
-
-    line-height: 1.6;
+    overflow-x: auto;
 }
 
 .api-online {
@@ -361,6 +568,7 @@ footer a:hover {
 .api-error {
     color: #ff4455 !important;
 }
+
 </style>
 </head>
 
@@ -451,8 +659,9 @@ L'approccio è destinato alla progettazione e analisi di sistemi complessi e det
 </p>
 
 </div>
-
-<!-- FORM -->
+<!-- =====================================================
+     CONTACT / SUBMISSION FORM
+     ===================================================== -->
 
 <main class="terminal-container">
 
@@ -606,18 +815,21 @@ INVIA FORM
 
 </main>
 
-<!-- WYP ENGINE -->
+
+<!-- =====================================================
+     WYP SOLVER
+     ===================================================== -->
 
 <main class="terminal-container">
 
 <h2
 style="
 color: var(--electric-blue);
-text-align:center;
-margin-top:30px;
-padding:0 20px;
-text-transform:uppercase;
-letter-spacing:3px;
+text-align: center;
+margin-top: 30px;
+padding: 0 20px;
+text-transform: uppercase;
+letter-spacing: 3px;
 "
 >
 AOS144-HDFP ENGINE -
@@ -647,16 +859,82 @@ EXECUTE WYP? SOLVER<br>
 ANALYZE PROBLEM
 </button>
 
-<div style="padding:30px;">
 
-<pre id="demoOutput">
-> WYP ENGINE READY
-> AWAITING PROBLEM INPUT...
-</pre>
+<!-- =====================================================
+     HUMAN-FACING ENGINE STATUS
+     ===================================================== -->
+
+<div
+    id="engineState"
+    class="engine-state"
+>
+ENGINE READY — AWAITING PROBLEM
+</div>
+
+
+<!-- =====================================================
+     HUMAN RESULT
+     ===================================================== -->
+
+<div
+    id="resultPanel"
+    class="result-panel"
+>
+
+<div
+    id="resultStatus"
+    class="result-status"
+></div>
+
+<div
+    id="resultTitle"
+    class="result-title"
+></div>
+
+<div
+    id="resultAnswer"
+    class="result-answer"
+></div>
+
+<div
+    id="resultExplanation"
+    class="result-explanation"
+></div>
+
+<div
+    id="resultEquation"
+    class="result-equation"
+></div>
+
+<div
+    id="resultMissing"
+    class="result-missing"
+></div>
+
+
+<!-- =================================================
+     OPTIONAL TECHNICAL OUTPUT
+     ================================================= -->
+
+<details class="result-technical">
+
+<summary>
+DETTAGLI TECNICI
+</summary>
+
+<pre id="technicalOutput"></pre>
+
+</details>
 
 </div>
 
 </main>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
 <footer>
 
 ALAIN FAURE AUF2026&copy;
@@ -677,7 +955,10 @@ Q.E.D
 
 </div>
 
-<!-- FULLSCREEN STATUS -->
+
+<!-- =====================================================
+     FULLSCREEN STATUS
+     ===================================================== -->
 
 <div id="kernel-status">
 
@@ -687,53 +968,77 @@ Q.E.D
 ></div>
 
 </div>
-
 <script>
 
 /* =========================================================
    WYP PUBLIC WEB TERMINAL
    =========================================================
 
-   Backend:
+   FRONTEND
+   --------
+   GitHub Pages / WYP public repository
+
+   BACKEND
+   -------
    Render -> AOS PRIVATE CORE
 
-   Endpoint:
-   https://aos-private-core.onrender.com/solve
+   SECURITY
+   --------
+   Nessuna chiave privata viene inserita
+   nel browser.
 
-   Il browser NON contiene:
-   - private key
-   - license key
-   - verification key
+   Il browser invia esclusivamente il problema
+   al backend privato.
 
-   La licenza viene verificata esclusivamente
-   dal backend privato.
+   Il backend esegue:
+   - interpretazione
+   - validazione
+   - risoluzione deterministica
+   - verifica licenza
+   - generazione risultato
    ========================================================= */
-
-const WYP_API =
-    "https://wyp.auf2026.workers.dev/solve";
 
 
 /* =========================================================
-   FORM SUBMISSION
+   API
+   ========================================================= */
+
+const WYP_API =
+    "https://aos-private-core.onrender.com/solve";
+
+
+/* =========================================================
+   CONTACT FORM
    ========================================================= */
 
 const form =
-    document.getElementById("my-form");
+    document.getElementById(
+        "my-form"
+    );
 
 const kernel =
-    document.getElementById("kernel-status");
+    document.getElementById(
+        "kernel-status"
+    );
 
 const log =
-    document.getElementById("status-log");
+    document.getElementById(
+        "status-log"
+    );
 
+
+/* =========================================================
+   CONTACT FORM SUBMISSION
+   ========================================================= */
 
 form.addEventListener(
     "submit",
-    async function (event) {
+    async function(event) {
 
         event.preventDefault();
 
-        kernel.style.display = "flex";
+        kernel.style.display =
+            "flex";
 
         log.innerHTML = "";
 
@@ -752,14 +1057,20 @@ form.addEventListener(
         ];
 
 
-        for (const step of sequences) {
+        for (
+            const step
+            of sequences
+        ) {
 
             log.innerHTML +=
                 step + "<br>";
 
             await new Promise(
                 resolve =>
-                    setTimeout(resolve, 500)
+                    setTimeout(
+                        resolve,
+                        500
+                    )
             );
         }
 
@@ -775,6 +1086,7 @@ form.addEventListener(
                     form.action,
                     {
                         method: "POST",
+
                         body: formData,
 
                         headers: {
@@ -806,13 +1118,12 @@ form.addEventListener(
             );
 
 
-        } catch (error) {
+        } catch(error) {
 
             log.innerHTML +=
                 "<br>> FORM SUBMISSION ERROR.<br>" +
                 "> " +
                 error.message;
-
         }
 
     }
@@ -820,7 +1131,7 @@ form.addEventListener(
 
 
 /* =========================================================
-   WYP SOLVER
+   SOLVER ELEMENTS
    ========================================================= */
 
 const demoSubmit =
@@ -828,41 +1139,354 @@ const demoSubmit =
         "demoSubmit"
     );
 
-const demoOutput =
-    document.getElementById(
-        "demoOutput"
-    );
-
 const demoProblem =
     document.getElementById(
         "demoProblem"
     );
 
+const engineState =
+    document.getElementById(
+        "engineState"
+    );
+
+const resultPanel =
+    document.getElementById(
+        "resultPanel"
+    );
+
+const resultStatus =
+    document.getElementById(
+        "resultStatus"
+    );
+
+const resultTitle =
+    document.getElementById(
+        "resultTitle"
+    );
+
+const resultAnswer =
+    document.getElementById(
+        "resultAnswer"
+    );
+
+const resultExplanation =
+    document.getElementById(
+        "resultExplanation"
+    );
+
+const resultEquation =
+    document.getElementById(
+        "resultEquation"
+    );
+
+const resultMissing =
+    document.getElementById(
+        "resultMissing"
+    );
+
+const technicalOutput =
+    document.getElementById(
+        "technicalOutput"
+    );
+
 
 /* =========================================================
-   STATUS OUTPUT
+   ESCAPE HTML
    ========================================================= */
 
-function setOutput(
-    text,
-    className = ""
-) {
+function escapeHTML(value) {
 
-    demoOutput.className =
-        className;
-
-    demoOutput.textContent =
-        text;
+    return String(value)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }
 
 
+/* =========================================================
+   RESET RESULT
+   ========================================================= */
+
+function clearResult() {
+
+    resultPanel.classList.remove(
+        "visible"
+    );
+
+    resultStatus.textContent =
+        "";
+
+    resultTitle.textContent =
+        "";
+
+    resultAnswer.textContent =
+        "";
+
+    resultExplanation.textContent =
+        "";
+
+    resultEquation.textContent =
+        "";
+
+    resultMissing.textContent =
+        "";
+
+    technicalOutput.textContent =
+        "";
+
+    resultEquation.style.display =
+        "block";
+
+    resultMissing.style.display =
+        "block";
+}
+
+
+/* =========================================================
+   PROCESSING
+   ========================================================= */
+
+function showProcessing() {
+
+    clearResult();
+
+    engineState.textContent =
+        "ANALYZING PROBLEM...";
+}
+
+
+/* =========================================================
+   DETERMINISTIC SUCCESS
+   ========================================================= */
+
+function showResolvedResult(data) {
+
+    clearResult();
+
+    resultPanel.classList.add(
+        "visible"
+    );
+
+    engineState.textContent =
+        "ANALYSIS COMPLETE";
+
+
+    resultStatus.textContent =
+        "DETERMINISTIC RESULT";
+
+
+    resultTitle.textContent =
+        "Problema risolto.";
+
+
+    const resolution =
+        data.result || {};
+
+
+    const values =
+        resolution.values || {};
+
+
+    const keys =
+        Object.keys(values);
+
+
+    if (keys.length > 0) {
+
+        const value =
+            values[keys[0]];
+
+        resultAnswer.textContent =
+            value;
+
+    } else {
+
+        resultAnswer.textContent =
+            "Risultato determinato";
+    }
+
+
+    resultExplanation.textContent =
+        "Il risultato è stato determinato utilizzando i dati e la relazione presenti nel problema.";
+
+
+    if (resolution.relation) {
+
+        resultEquation.textContent =
+            "Calcolo: " +
+            resolution.relation;
+
+    } else {
+
+        resultEquation.style.display =
+            "none";
+    }
+
+
+    technicalOutput.textContent =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+}
+
+
+/* =========================================================
+   UNDERDETERMINED
+   ========================================================= */
+
+function showUnderdeterminedResult(data) {
+
+    clearResult();
+
+    resultPanel.classList.add(
+        "visible"
+    );
+
+    engineState.textContent =
+        "ANALYSIS COMPLETE";
+
+
+    resultStatus.textContent =
+        "PARAMETRI INSUFFICIENTI";
+
+
+    resultTitle.textContent =
+        "Il risultato non può essere determinato.";
+
+
+    resultAnswer.textContent =
+        "";
+
+
+    resultExplanation.textContent =
+        "Il problema non contiene informazioni sufficienti per ottenere una soluzione deterministica.";
+
+
+    const resolution =
+        data.result || {};
+
+
+    const reason =
+        resolution.reason || "";
+
+
+    if (reason) {
+
+        /*
+         * Il messaggio tecnico del backend
+         * viene tradotto in una frase più
+         * leggibile per l'utente.
+         */
+
+        let humanReason =
+            reason;
+
+
+        if (
+            reason.includes(
+                "No explicit deterministic mathematical relation"
+            )
+        ) {
+
+            humanReason =
+                "Manca una relazione o un'informazione che permetta di calcolare il risultato.";
+        }
+
+
+        if (
+            reason.includes(
+                "Required problem information is missing"
+            )
+        ) {
+
+            humanReason =
+                "Alcuni dati necessari per determinare il risultato non sono stati forniti.";
+        }
+
+
+        resultMissing.textContent =
+            humanReason;
+    }
+
+
+    resultEquation.style.display =
+        "none";
+
+
+    technicalOutput.textContent =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+}
+
+
+/* =========================================================
+   ENGINE ERROR
+   ========================================================= */
+
+function showEngineError(message) {
+
+    clearResult();
+
+    resultPanel.classList.add(
+        "visible"
+    );
+
+    engineState.textContent =
+        "ENGINE ERROR";
+
+
+    resultStatus.textContent =
+        "ANALYSIS ERROR";
+
+
+    resultTitle.textContent =
+        "L'analisi non è stata completata.";
+
+
+    resultExplanation.textContent =
+        message;
+
+
+    resultAnswer.textContent =
+        "";
+
+
+    resultEquation.style.display =
+        "none";
+
+
+    technicalOutput.textContent =
+        message;
+}
 /* =========================================================
    SOLVER REQUEST
    ========================================================= */
 
 demoSubmit.addEventListener(
     "click",
-    async function () {
+    async function() {
 
         const text =
             demoProblem.value.trim();
@@ -874,10 +1498,43 @@ demoSubmit.addEventListener(
 
         if (!text) {
 
-            setOutput(
-                "> ERROR: PROBLEM INPUT REQUIRED",
-                "api-error"
+            clearResult();
+
+            resultPanel.classList.add(
+                "visible"
             );
+
+            engineState.textContent =
+                "INPUT REQUIRED";
+
+
+            resultStatus.textContent =
+                "PROBLEM INPUT";
+
+
+            resultTitle.textContent =
+                "Inserisci un problema da analizzare.";
+
+
+            resultExplanation.textContent =
+                "Descrivi il problema nel campo qui sopra e avvia nuovamente l'analisi.";
+
+
+            resultAnswer.textContent =
+                "";
+
+
+            resultEquation.style.display =
+                "none";
+
+
+            resultMissing.style.display =
+                "none";
+
+
+            technicalOutput.textContent =
+                "";
+
 
             demoProblem.focus();
 
@@ -889,16 +1546,11 @@ demoSubmit.addEventListener(
            LOCK UI
            ----------------------------------------- */
 
-        demoSubmit.disabled = true;
+        demoSubmit.disabled =
+            true;
 
 
-        setOutput(
-            "> WYP ENGINE INITIALIZING...\n" +
-            "> CONNECTING TO FAURE_CORE_2026...\n" +
-            "> DISPATCHING PROBLEM...\n" +
-            "> GENERATING TACTICS...\n" +
-            "> SOLVING PROBLEM...\n"
-        );
+        showProcessing();
 
 
         try {
@@ -913,7 +1565,9 @@ demoSubmit.addEventListener(
 
             const timeout =
                 setTimeout(
-                    () => controller.abort(),
+                    () => {
+                        controller.abort();
+                    },
                     30000
                 );
 
@@ -936,11 +1590,10 @@ demoSubmit.addEventListener(
                                 "application/json"
                         },
 
-                        body: JSON.stringify(
-                            {
+                        body:
+                            JSON.stringify({
                                 problem: text
-                            }
-                        ),
+                            }),
 
                         signal:
                             controller.signal
@@ -977,8 +1630,13 @@ demoSubmit.addEventListener(
                             errorData.error;
                     }
 
-                } catch (_) {
-                    /* response not JSON */
+                } catch(_) {
+
+                    /*
+                     * Il server potrebbe aver
+                     * restituito una risposta
+                     * non JSON.
+                     */
                 }
 
 
@@ -989,7 +1647,7 @@ demoSubmit.addEventListener(
 
 
             /* -------------------------------------
-               JSON
+               JSON RESPONSE
                ------------------------------------- */
 
             const data =
@@ -997,56 +1655,57 @@ demoSubmit.addEventListener(
 
 
             /* -------------------------------------
-               API ERROR
+               RESPONSE VALIDATION
                ------------------------------------- */
 
             if (
                 !data ||
-                data.status !== "SUCCESS"
+                !data.result
             ) {
 
                 throw new Error(
-                    data &&
-                    data.error
-                        ? data.error
-                        : "WYP ENGINE ERROR"
+                    "Risposta non valida dal WYP engine."
                 );
             }
 
 
             /* -------------------------------------
-               SUCCESS
+               RESULT DISPATCH
                ------------------------------------- */
 
-            setOutput(
+            if (
+                data.result.status ===
+                "DETERMINISTIC"
+            ) {
 
-                "> WYP ENGINE ONLINE\n" +
+                showResolvedResult(
+                    data
+                );
 
-                "> PROBLEM RECEIVED\n" +
+            }
 
-                "> STRUCTURE ANALYSIS: COMPLETE\n" +
+            else if (
+                data.result.status ===
+                "UNDERDETERMINED"
+            ) {
 
-                "> INVARIANT ANALYSIS: COMPLETE\n" +
+                showUnderdeterminedResult(
+                    data
+                );
 
-                "> CONSTRAINT ANALYSIS: COMPLETE\n" +
+            }
 
-                "> QUANTITY ANALYSIS: COMPLETE\n" +
+            else {
 
-                "> MANIFESTATION: COMPLETE\n\n" +
+                showEngineError(
 
-                "> STATUS: DETERMINISTICALLY SOLVED\n\n" +
-
-                JSON.stringify(
-                    data.result,
-                    null,
-                    2
-                ),
-
-                "api-online"
-            );
+                    data.result.reason ||
+                    "Il motore non ha prodotto una risoluzione valida."
+                );
+            }
 
 
-        } catch (error) {
+        } catch(error) {
 
             /* -------------------------------------
                CONNECTION / API ERROR
@@ -1054,7 +1713,7 @@ demoSubmit.addEventListener(
 
             let message =
                 error.message ||
-                "UNKNOWN ERROR";
+                "Errore sconosciuto.";
 
 
             if (
@@ -1063,19 +1722,14 @@ demoSubmit.addEventListener(
             ) {
 
                 message =
-                    "REQUEST TIMEOUT";
+                    "La richiesta ha superato il tempo massimo di attesa.";
             }
 
 
-            setOutput(
-
-                "> WYP ENGINE CONNECTION ERROR\n\n" +
-
-                "> " +
-                message,
-
-                "api-error"
+            showEngineError(
+                message
             );
+
 
         } finally {
 
@@ -1092,16 +1746,17 @@ demoSubmit.addEventListener(
 
 
 /* =========================================================
-   ENTER KEY SUPPORT
+   CTRL / CMD + ENTER
    ========================================================= */
 
 demoProblem.addEventListener(
     "keydown",
-    function (event) {
+    function(event) {
 
         if (
             event.key === "Enter" &&
-            (event.ctrlKey || event.metaKey)
+            (event.ctrlKey ||
+             event.metaKey)
         ) {
 
             event.preventDefault();
@@ -1111,6 +1766,16 @@ demoProblem.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   INITIAL STATE
+   ========================================================= */
+
+clearResult();
+
+engineState.textContent =
+    "ENGINE READY — AWAITING PROBLEM";
 
 </script>
 
