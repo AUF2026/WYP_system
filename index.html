@@ -984,6 +984,61 @@ function escapeHtml(value) {
 
 
 /* =========================================================
+   NORMALIZE API ENVELOPE
+   =========================================================
+
+   Il backend attuale restituisce:
+
+       {
+           "status": "SUCCESS",
+           "result": {
+               ...
+               "resolution": {
+                   ...
+               }
+           }
+       }
+
+   Il terminale lavora quindi sul contenuto di `result`
+   quando l'envelope API è presente.
+
+   Sono mantenuti anche i formati precedenti/alternativi.
+   ========================================================= */
+
+function unwrapApiResponse(data) {
+
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
+        return data;
+    }
+
+
+    /* -----------------------------------------
+       CURRENT WYP API ENVELOPE
+
+       {
+           status: "SUCCESS",
+           result: {...}
+       }
+       ----------------------------------------- */
+
+    if (
+        data.result &&
+        typeof data.result === "object" &&
+        !Array.isArray(data.result)
+    ) {
+
+        return data.result;
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
    EXTRACT STATUS
    ========================================================= */
 
@@ -997,17 +1052,18 @@ function extractStatus(data) {
     }
 
 
+    const result =
+        data.result &&
+        typeof data.result === "object" &&
+        !Array.isArray(data.result)
+            ? data.result
+            : null;
+
+
     const resolution =
         data.resolution &&
         typeof data.resolution === "object"
             ? data.resolution
-            : null;
-
-
-    const result =
-        data.result &&
-        typeof data.result === "object"
-            ? data.result
             : null;
 
 
@@ -1018,13 +1074,50 @@ function extractStatus(data) {
             : null;
 
 
-    return String(
-        data.status ||
+    /*
+     * IMPORTANT:
+     *
+     * Il valore SUCCESS dell'envelope HTTP/API
+     * non è lo stato matematico della soluzione.
+     *
+     * Priorità:
+     *
+     * resolution.status
+     * result.resolution.status
+     * result.status
+     * solution.status
+     * data.status
+     *
+     * Solo dopo viene considerato SUCCESS.
+     */
+
+    const nestedResolution =
+        result &&
+        result.resolution &&
+        typeof result.resolution === "object"
+            ? result.resolution
+            : null;
+
+
+    const nestedSolution =
+        result &&
+        result.solution &&
+        typeof result.solution === "object"
+            ? result.solution
+            : null;
+
+
+    const status =
         (resolution && resolution.status) ||
+        (nestedResolution && nestedResolution.status) ||
         (result && result.status) ||
         (solution && solution.status) ||
-        ""
-    )
+        (nestedSolution && nestedSolution.status) ||
+        data.status ||
+        "";
+
+
+    return String(status)
         .trim()
         .toUpperCase();
 }
@@ -1044,6 +1137,10 @@ function extractResolution(data) {
     }
 
 
+    /* -----------------------------------------
+       DIRECT RESOLUTION
+       ----------------------------------------- */
+
     if (
         data.resolution &&
         typeof data.resolution === "object"
@@ -1051,6 +1148,45 @@ function extractResolution(data) {
         return data.resolution;
     }
 
+
+    /* -----------------------------------------
+       NESTED API RESULT
+       ----------------------------------------- */
+
+    if (
+        data.result &&
+        typeof data.result === "object"
+    ) {
+
+        const result =
+            data.result;
+
+
+        if (
+            result.resolution &&
+            typeof result.resolution === "object"
+        ) {
+
+            return result.resolution;
+        }
+
+
+        if (
+            result.solution &&
+            typeof result.solution === "object"
+        ) {
+
+            return result.solution;
+        }
+
+
+        return result;
+    }
+
+
+    /* -----------------------------------------
+       DIRECT SOLUTION
+       ----------------------------------------- */
 
     if (
         data.solution &&
@@ -1060,20 +1196,35 @@ function extractResolution(data) {
     }
 
 
-    if (
-        data.result &&
-        typeof data.result === "object"
-    ) {
-        return data.result;
-    }
-
-
     return data;
 }
 
 
 /* =========================================================
    EXTRACT RESULT VALUE
+   =========================================================
+
+   Supporta esplicitamente il formato attuale:
+
+       resolution.values.result
+
+   e inoltre:
+
+       resolution.values
+       resolution.value
+       resolution.result
+       resolution.answer
+       resolution.solution
+
+   Viene data priorità al valore matematico effettivo
+   contenuto in `values.result`, evitando di stampare
+   inutilmente:
+
+       result: 500
+
+   quando il valore finale è semplicemente:
+
+       500
    ========================================================= */
 
 function extractResultValue(
@@ -1081,19 +1232,109 @@ function extractResultValue(
     resolution
 ) {
 
+    /* -----------------------------------------
+       CURRENT WYP FORMAT
+
+       resolution.values.result
+       ----------------------------------------- */
+
+    if (
+        resolution &&
+        resolution.values &&
+        typeof resolution.values === "object" &&
+        !Array.isArray(resolution.values)
+    ) {
+
+        const values =
+            resolution.values;
+
+
+        if (
+            Object.prototype.hasOwnProperty.call(
+                values,
+                "result"
+            )
+        ) {
+
+            return values.result;
+        }
+
+
+        /*
+         * Se esiste un solo valore nel mapping,
+         * possiamo mostrarlo direttamente.
+         */
+
+        const valueKeys =
+            Object.keys(values);
+
+
+        if (
+            valueKeys.length === 1
+        ) {
+
+            return values[
+                valueKeys[0]
+            ];
+        }
+    }
+
+
+    /* -----------------------------------------
+       PRESENTATION ANSWER
+
+       resolution.presentation.answer
+       ----------------------------------------- */
+
+    if (
+        resolution &&
+        resolution.presentation &&
+        typeof resolution.presentation === "object"
+    ) {
+
+        if (
+            resolution.presentation.answer !==
+            null &&
+            resolution.presentation.answer !==
+            undefined
+        ) {
+
+            return (
+                resolution.presentation.answer
+            );
+        }
+    }
+
+
+    /* -----------------------------------------
+       STANDARD CANDIDATES
+       ----------------------------------------- */
+
     const candidates = [
 
-        resolution.values,
-        resolution.value,
-        resolution.result,
-        resolution.answer,
-        resolution.solution,
+        resolution &&
+            resolution.value,
 
-        data.values,
-        data.value,
-        data.answer,
-        data.result,
-        data.solution
+        resolution &&
+            resolution.result,
+
+        resolution &&
+            resolution.answer,
+
+        resolution &&
+            resolution.solution,
+
+        data &&
+            data.values,
+
+        data &&
+            data.value,
+
+        data &&
+            data.answer,
+
+        data &&
+            data.solution
 
     ];
 
@@ -1158,6 +1399,49 @@ function extractResultValue(
             return formatResultValue(
                 candidate
             );
+        }
+    }
+
+
+    /* -----------------------------------------
+       NESTED RESULT ENVELOPE
+       ----------------------------------------- */
+
+    if (
+        data &&
+        data.result &&
+        typeof data.result === "object" &&
+        data.result !== resolution
+    ) {
+
+        const nested =
+            data.result;
+
+
+        if (
+            nested.values &&
+            typeof nested.values === "object" &&
+            !Array.isArray(nested.values)
+        ) {
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    nested.values,
+                    "result"
+                )
+            ) {
+
+                return nested.values.result;
+            }
+        }
+
+
+        if (
+            nested.answer !== null &&
+            nested.answer !== undefined
+        ) {
+
+            return nested.answer;
         }
     }
 
@@ -1259,12 +1543,41 @@ function renderHumanResult(data) {
     }
 
 
+    /*
+     * IMPORTANT:
+     *
+     * Normalizziamo l'envelope prima di leggere
+     * status, resolution e risultato.
+     *
+     * Il backend restituisce:
+     *
+     * {
+     *     status: "SUCCESS",
+     *     result: {
+     *         resolution: {
+     *             status: "DETERMINISTIC",
+     *             values: {
+     *                 result: "500"
+     *             }
+     *         }
+     *     }
+     * }
+     */
+
+    const normalized =
+        unwrapApiResponse(data);
+
+
     const resolution =
-        extractResolution(data);
+        extractResolution(
+            normalized
+        );
 
 
     const status =
-        extractStatus(data);
+        extractStatus(
+            normalized
+        );
 
 
     /* -----------------------------------------
@@ -1280,27 +1593,81 @@ function renderHumanResult(data) {
 
         const resultValue =
             extractResultValue(
-                data,
+                normalized,
                 resolution
             );
 
+
+        /*
+         * Preferiamo la relation proveniente
+         * dalla resolution.
+         */
 
         const relation =
             resolution.relation ||
             resolution.operation ||
             resolution.formula ||
-            data.relation ||
-            data.operation ||
-            data.formula ||
+            (
+                normalized &&
+                normalized.relation
+            ) ||
+            (
+                normalized &&
+                normalized.operation
+            ) ||
+            (
+                normalized &&
+                normalized.formula
+            ) ||
             "";
 
 
+        /*
+         * Il formato attuale usa:
+
+             resolution.presentation.explanation
+
+         * quindi viene considerato prima delle
+         * vecchie forme.
+         */
+
+        const presentation =
+            resolution.presentation &&
+            typeof resolution.presentation === "object"
+                ? resolution.presentation
+                : null;
+
+
         const explanation =
+            (
+                presentation &&
+                presentation.explanation
+            ) ||
             resolution.explanation ||
             resolution.message ||
-            data.explanation ||
-            data.message ||
-            "Il problema contiene informazioni sufficienti per determinare il risultato.";
+            normalized.explanation ||
+            normalized.message ||
+            "Il risultato è determinato dai dati forniti e dalla relazione matematica identificata.";
+
+
+        /*
+         * Calcolo leggibile.
+         *
+         * Il backend attuale fornisce:
+
+             presentation.calculation
+
+         * quindi viene preferito alla relation.
+         */
+
+        const calculation =
+            (
+                presentation &&
+                presentation.calculation
+            ) ||
+            resolution.calculation ||
+            relation ||
+            "";
 
 
         return `
@@ -1313,10 +1680,10 @@ function renderHumanResult(data) {
             </div>
 
             ${
-                relation
+                calculation
                     ? `
                         <div class="result-operation">
-                            ${escapeHtml(relation)}
+                            ${escapeHtml(calculation)}
                         </div>
                     `
                     : ""
@@ -1327,7 +1694,11 @@ function renderHumanResult(data) {
                     ? `
                         <div class="result-answer">
                             RISULTATO:
-                            ${escapeHtml(resultValue)}
+                            ${escapeHtml(
+                                formatResultValue(
+                                    resultValue
+                                )
+                            )}
                         </div>
                     `
                     : `
@@ -1357,9 +1728,9 @@ function renderHumanResult(data) {
             resolution.reason ||
             resolution.explanation ||
             resolution.message ||
-            data.reason ||
-            data.explanation ||
-            data.message ||
+            normalized.reason ||
+            normalized.explanation ||
+            normalized.message ||
             "Le informazioni disponibili non sono sufficienti per determinare un risultato univoco.";
 
 
@@ -1393,9 +1764,9 @@ function renderHumanResult(data) {
             resolution.reason ||
             resolution.explanation ||
             resolution.message ||
-            data.reason ||
-            data.explanation ||
-            data.message ||
+            normalized.reason ||
+            normalized.explanation ||
+            normalized.message ||
             "Il problema non può essere risolto con i dati forniti.";
 
 
@@ -1416,15 +1787,15 @@ function renderHumanResult(data) {
        ----------------------------------------- */
 
     if (
-        data.error ||
-        data.detail ||
-        data.exception
+        normalized.error ||
+        normalized.detail ||
+        normalized.exception
     ) {
 
         const error =
-            data.error ||
-            data.detail ||
-            data.exception;
+            normalized.error ||
+            normalized.detail ||
+            normalized.exception;
 
 
         return `
@@ -1444,8 +1815,8 @@ function renderHumanResult(data) {
        ----------------------------------------- */
 
     if (
-        typeof data.message === "string" &&
-        data.message.trim()
+        typeof normalized.message === "string" &&
+        normalized.message.trim()
     ) {
 
         return `
@@ -1454,7 +1825,54 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-message">
-                ${escapeHtml(data.message)}
+                ${escapeHtml(
+                    normalized.message
+                )}
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       API SUCCESS ENVELOPE WITHOUT
+       RECOGNIZED INNER STATUS
+       ----------------------------------------- */
+
+    if (
+        data.status &&
+        String(data.status)
+            .trim()
+            .toUpperCase() === "SUCCESS"
+    ) {
+
+        return `
+            <div class="result-title">
+                RISPOSTA RICEVUTA
+            </div>
+
+            <div class="result-message">
+                Il backend ha restituito una risposta
+                valida, ma lo stato interno della
+                risoluzione non è riconosciuto dal terminale.
+            </div>
+
+            <div
+                class="result-operation"
+                style="
+                    text-align:left;
+                    font-size:0.8rem;
+                    overflow-x:auto;
+                    white-space:pre-wrap;
+                    color:#888;
+                "
+            >
+                ${escapeHtml(
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    )
+                )}
             </div>
         `;
     }
