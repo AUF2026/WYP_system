@@ -841,21 +841,14 @@ form.addEventListener(
         event.preventDefault();
 
         kernel.style.display = "flex";
-
         log.innerHTML = "";
 
         const sequences = [
-
             "> INITIALIZING AOS KERNEL ...",
-
             "> ACCESSING FAURE_CORE_2026...",
-
             "> PREPARING REQUEST...",
-
             "> VALIDATING SUBMISSION...",
-
             "> SUCCESS: DISPATCHED TO ARCHITECT."
-
         ];
 
 
@@ -918,7 +911,12 @@ form.addEventListener(
             log.innerHTML +=
                 "<br>> FORM SUBMISSION ERROR.<br>" +
                 "> " +
-                error.message;
+                (
+                    error &&
+                    error.message
+                        ? error.message
+                        : "Errore sconosciuto."
+                );
 
         }
 
@@ -969,9 +967,10 @@ function setOutput(
 
 function escapeHtml(value) {
 
-    if (value === null ||
-        value === undefined) {
-
+    if (
+        value === null ||
+        value === undefined
+    ) {
         return "";
     }
 
@@ -990,9 +989,10 @@ function escapeHtml(value) {
 
 function extractStatus(data) {
 
-    if (!data ||
-        typeof data !== "object") {
-
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
         return "";
     }
 
@@ -1025,8 +1025,8 @@ function extractStatus(data) {
         (solution && solution.status) ||
         ""
     )
-    .trim()
-    .toUpperCase();
+        .trim()
+        .toUpperCase();
 }
 
 
@@ -1036,9 +1036,10 @@ function extractStatus(data) {
 
 function extractResolution(data) {
 
-    if (!data ||
-        typeof data !== "object") {
-
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
         return {};
     }
 
@@ -1047,7 +1048,6 @@ function extractResolution(data) {
         data.resolution &&
         typeof data.resolution === "object"
     ) {
-
         return data.resolution;
     }
 
@@ -1056,7 +1056,6 @@ function extractResolution(data) {
         data.solution &&
         typeof data.solution === "object"
     ) {
-
         return data.solution;
     }
 
@@ -1065,7 +1064,6 @@ function extractResolution(data) {
         data.result &&
         typeof data.result === "object"
     ) {
-
         return data.result;
     }
 
@@ -1073,6 +1071,10 @@ function extractResolution(data) {
     return data;
 }
 
+
+/* =========================================================
+   EXTRACT RESULT VALUE
+   ========================================================= */
 
 function extractResultValue(
     data,
@@ -1082,23 +1084,15 @@ function extractResultValue(
     const candidates = [
 
         resolution.values,
-
         resolution.value,
-
         resolution.result,
-
         resolution.answer,
-
         resolution.solution,
 
         data.values,
-
         data.value,
-
         data.answer,
-
         data.result,
-
         data.solution
 
     ];
@@ -1113,7 +1107,6 @@ function extractResultValue(
             candidate === null ||
             candidate === undefined
         ) {
-
             continue;
         }
 
@@ -1136,9 +1129,13 @@ function extractResultValue(
            ARRAY
            ----------------------------------------- */
 
-        if (Array.isArray(candidate)) {
+        if (
+            Array.isArray(candidate)
+        ) {
 
-            if (candidate.length === 0) {
+            if (
+                candidate.length === 0
+            ) {
                 continue;
             }
 
@@ -1179,7 +1176,6 @@ function formatResultValue(value) {
         value === null ||
         value === undefined
     ) {
-
         return "";
     }
 
@@ -1202,7 +1198,9 @@ function formatResultValue(value) {
        ARRAY
        ----------------------------------------- */
 
-    if (Array.isArray(value)) {
+    if (
+        Array.isArray(value)
+    ) {
 
         return value
             .map(item =>
@@ -1219,19 +1217,6 @@ function formatResultValue(value) {
     if (
         typeof value === "object"
     ) {
-
-        /*
-         * Se il backend restituisce un oggetto
-         * del tipo:
-         *
-         * {
-         *   "litri": 125
-         * }
-         *
-         * visualizziamo:
-         *
-         * litri: 125
-         */
 
         return Object.entries(value)
             .map(
@@ -1290,7 +1275,6 @@ function renderHumanResult(data) {
         status === "DETERMINISTIC" ||
         status === "DETERMINED" ||
         status === "SOLVED" ||
-        status === "SUCCESS" ||
         status === "RESOLVED"
     ) {
 
@@ -1428,7 +1412,7 @@ function renderHumanResult(data) {
 
 
     /* -----------------------------------------
-       ERROR RETURNED BY API
+       API ERROR
        ----------------------------------------- */
 
     if (
@@ -1478,14 +1462,6 @@ function renderHumanResult(data) {
 
     /* -----------------------------------------
        UNKNOWN FORMAT
-       -----------------------------------------
-
-       IMPORTANTISSIMO:
-
-       Non mostriamo più il falso messaggio
-       "non è stato possibile produrre..."
-       perché non sappiamo ancora se il problema
-       è la soluzione o il formato JSON.
        ----------------------------------------- */
 
     return `
@@ -1517,6 +1493,129 @@ function renderHumanResult(data) {
                 )
             )}
         </div>
+    `;
+}
+
+
+/* =========================================================
+   HTTP ERROR RENDERER
+   ========================================================= */
+
+function renderHttpError(
+    status,
+    data,
+    rawText
+) {
+
+    let message =
+        "Errore HTTP " +
+        status;
+
+
+    if (
+        data &&
+        typeof data === "object"
+    ) {
+
+        message =
+            data.error ||
+            data.detail ||
+            data.message ||
+            message;
+    }
+
+
+    /* -----------------------------------------
+       LICENSE
+       ----------------------------------------- */
+
+    if (status === 403) {
+
+        return `
+            <div class="result-title">
+                ACCESSO NEGATO
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(message)}
+                <br><br>
+                Il backend è raggiungibile,
+                ma la richiesta non è autorizzata.
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       BAD REQUEST
+       ----------------------------------------- */
+
+    if (status === 400) {
+
+        return `
+            <div class="result-title">
+                RICHIESTA NON VALIDA
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(message)}
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       SERVER ERROR
+       ----------------------------------------- */
+
+    if (status >= 500) {
+
+        return `
+            <div class="result-title">
+                ERRORE DEL CORE
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(message)}
+                <br><br>
+                Il server WYP è raggiungibile,
+                ma il core ha restituito un errore.
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       OTHER HTTP STATUS
+       ----------------------------------------- */
+
+    return `
+        <div class="result-title">
+            RISPOSTA HTTP
+        </div>
+
+        <div class="result-error">
+            ${escapeHtml(message)}
+        </div>
+
+        ${
+            rawText
+                ? `
+                    <div
+                        class="result-operation"
+                        style="
+                            text-align:left;
+                            font-size:0.8rem;
+                            overflow-x:auto;
+                            white-space:pre-wrap;
+                            color:#888;
+                        "
+                    >
+                        ${escapeHtml(rawText)}
+                    </div>
+                `
+                : ""
+        }
     `;
 }
 
@@ -1609,29 +1708,85 @@ demoSubmit.addEventListener(
                API REQUEST
                ------------------------------------- */
 
-            const response =
-                await fetch(
-                    WYP_API,
-                    {
-                        method: "POST",
+            let response;
 
-                        headers: {
-                            "Content-Type":
-                                "application/json",
 
-                            "Accept":
-                                "application/json"
-                        },
+            try {
 
-                        body:
-                            JSON.stringify({
-                                problem: text
-                            }),
+                response =
+                    await fetch(
+                        WYP_API,
+                        {
+                            method: "POST",
 
-                        signal:
-                            controller.signal
-                    }
-                );
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    problem: text
+                                }),
+
+                            signal:
+                                controller.signal
+                        }
+                    );
+
+            } catch (networkError) {
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Un TypeError di fetch NON significa
+                 * necessariamente che Render sia offline.
+                 *
+                 * Dal browser può significare:
+                 *
+                 * - CORS;
+                 * - DNS;
+                 * - TLS;
+                 * - connessione rifiutata;
+                 * - policy browser;
+                 * - endpoint non raggiungibile.
+                 *
+                 * Non fingiamo quindi che il backend
+                 * abbia restituito "ENGINE_ERROR".
+                 */
+
+                if (
+                    networkError &&
+                    networkError.name === "AbortError"
+                ) {
+
+                    throw networkError;
+                }
+
+
+                const networkMessage =
+                    networkError &&
+                    networkError.message
+                        ? networkError.message
+                        : "Network request failed.";
+
+
+                const error =
+                    new Error(
+                        "FETCH_ERROR: " +
+                        networkMessage
+                    );
+
+
+                error.name =
+                    "WYPNetworkError";
+
+
+                throw error;
+            }
 
 
             /* -------------------------------------
@@ -1651,54 +1806,47 @@ demoSubmit.addEventListener(
 
 
             /* -------------------------------------
+               PARSE JSON IF POSSIBLE
+               ------------------------------------- */
+
+            let data = null;
+
+
+            if (
+                rawText &&
+                rawText.trim()
+            ) {
+
+                try {
+
+                    data =
+                        JSON.parse(
+                            rawText
+                        );
+
+                } catch (_) {
+
+                    data = null;
+                }
+            }
+
+
+            /* -------------------------------------
                HTTP ERROR
                ------------------------------------- */
 
             if (!response.ok) {
 
-                let errorMessage =
-                    "Errore HTTP " +
-                    response.status;
-
-
-                if (rawText) {
-
-                    try {
-
-                        const errorData =
-                            JSON.parse(
-                                rawText
-                            );
-
-
-                        if (
-                            errorData &&
-                            typeof errorData === "object"
-                        ) {
-
-                            errorMessage =
-                                errorData.error ||
-                                errorData.detail ||
-                                errorData.message ||
-                                errorMessage;
-                        }
-
-                    } catch (_) {
-
-                        /*
-                         * La risposta non è JSON.
-                         * Usiamo il testo ricevuto.
-                         */
-
-                        errorMessage =
-                            rawText;
-                    }
-                }
-
-
-                throw new Error(
-                    errorMessage
+                setOutput(
+                    renderHttpError(
+                        response.status,
+                        data,
+                        rawText
+                    ),
+                    "api-error"
                 );
+
+                return;
             }
 
 
@@ -1706,49 +1854,46 @@ demoSubmit.addEventListener(
                EMPTY RESPONSE
                ------------------------------------- */
 
-            if (!rawText.trim()) {
+            if (
+                !rawText ||
+                !rawText.trim()
+            ) {
 
-                throw new Error(
-                    "Risposta vuota dal motore WYP."
+                setOutput(
+                    `
+                    <div class="result-title">
+                        RISPOSTA VUOTA
+                    </div>
+
+                    <div class="result-error">
+                        Il backend ha risposto con HTTP
+                        ${response.status}, ma non ha
+                        restituito alcun contenuto.
+                    </div>
+                    `,
+                    "api-error"
                 );
+
+                return;
             }
 
 
             /* -------------------------------------
-               PARSE JSON
+               NON JSON
                ------------------------------------- */
 
-            let data;
-
-
-            try {
-
-                data =
-                    JSON.parse(
-                        rawText
-                    );
-
-            } catch (_) {
-
-                /*
-                 * Backend HTTP 200 ma risposta
-                 * non JSON.
-                 *
-                 * La mostriamo senza dichiarare
-                 * erroneamente un errore
-                 * deterministico.
-                 */
+            if (!data) {
 
                 setOutput(
-
                     `
                     <div class="result-title">
                         RISPOSTA DEL MOTORE
                     </div>
 
                     <div class="result-message">
-                        Il server ha risposto,
-                        ma la risposta non è in formato JSON.
+                        Il server ha risposto con HTTP
+                        ${response.status}, ma la risposta
+                        non è in formato JSON.
                     </div>
 
                     <div
@@ -1764,7 +1909,6 @@ demoSubmit.addEventListener(
                         ${escapeHtml(rawText)}
                     </div>
                     `,
-
                     "api-online"
                 );
 
@@ -1788,61 +1932,117 @@ demoSubmit.addEventListener(
                TIMEOUT
                ------------------------------------- */
 
-            let message =
-                error &&
-                error.message
-                    ? error.message
-                    : "Errore sconosciuto.";
-
-
             if (
                 error &&
                 error.name ===
                 "AbortError"
             ) {
 
-                message =
-                    "La richiesta ha superato il tempo massimo di attesa.";
+                setOutput(
+                    `
+                    <div class="result-title">
+                        TIMEOUT DELLA RICHIESTA
+                    </div>
+
+                    <div class="result-error">
+                        Il browser ha atteso 30 secondi
+                        senza ricevere una risposta dal
+                        backend WYP.
+                        <br><br>
+                        Questo non significa automaticamente
+                        che il deploy Render sia fallito.
+                    </div>
+                    `,
+                    "api-error"
+                );
+
+                return;
             }
 
 
             /* -------------------------------------
-               FETCH / NETWORK ERROR
+               FETCH / NETWORK / CORS
                ------------------------------------- */
 
             if (
                 error &&
                 error.name ===
-                "TypeError"
+                "WYPNetworkError"
             ) {
 
-                message =
-                    "Impossibile raggiungere il motore WYP. Verificare che il backend sia online e che l'endpoint /solve sia raggiungibile dal browser.";
+                setOutput(
+                    `
+                    <div class="result-title">
+                        CONNESSIONE AL BACKEND FALLITA
+                    </div>
+
+                    <div class="result-error">
+                        Il browser non ha ricevuto una
+                        risposta HTTP dal backend WYP.
+                        <br><br>
+
+                        Endpoint:
+                        <br>
+                        <code>
+                        ${escapeHtml(WYP_API)}
+                        </code>
+
+                        <br><br>
+
+                        Dettaglio browser:
+                        <br>
+                        ${escapeHtml(
+                            error.message
+                        )}
+
+                        <br><br>
+
+                        Se il servizio Render è ONLINE,
+                        verificare soprattutto CORS e
+                        raggiungibilità dell'endpoint
+                        dal browser.
+                    </div>
+                    `,
+                    "api-error"
+                );
+
+                return;
             }
 
 
-            setOutput(
+            /* -------------------------------------
+               GENERIC CLIENT ERROR
+               ------------------------------------- */
 
+            const message =
+                error &&
+                error.message
+                    ? error.message
+                    : "Errore sconosciuto.";
+
+
+            setOutput(
                 `
                 <div class="result-title">
-                    MOTORE NON RAGGIUNGIBILE
+                    ERRORE CLIENT
                 </div>
 
                 <div class="result-error">
                     ${escapeHtml(message)}
-                    <br><br>
-                    Riprova tra qualche secondo.
                 </div>
                 `,
-
                 "api-error"
             );
 
         } finally {
 
-            if (timeout !== null) {
+            if (
+                timeout !== null
+            ) {
 
-                clearTimeout(timeout);
+                clearTimeout(
+                    timeout
+                );
             }
 
 
