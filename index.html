@@ -1,12 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WYP">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>WYP | OPERATIONAL TERMINAL</title>
+
 <style>
 :root {
     --neon: #00f2ff;
@@ -17,269 +22,1097 @@
     --col-width: 650px;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: #fff; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
-
-body::after {
-    content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%), linear-gradient(90deg, rgba(255,0,0,0.02), rgba(0,255,0,0.01), rgba(0,0,255,0.02));
-    z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.wrapper { width: 100%; max-width: var(--col-width); padding: 80px 20px 120px; display: flex; flex-direction: column; }
-header { width: 100%; text-align: center; margin-bottom: 60px; }
+body {
+    background: var(--bg);
+    color: #fff;
+    font-family: var(--font-mono);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
 
-.logo-box { width: 100%; filter: drop-shadow(0 0 25px var(--electric-blue)); animation: boot 1.5s ease-out; }
-.logo-box svg { width: 100%; height: auto; display: block; }
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-@keyframes boot { 0% { opacity: 0; transform: scale(0.98); filter: brightness(3); } 100% { opacity: 1; transform: scale(1); } }
-
-.tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: #1A85F8; text-shadow: 0 0 15px rgba(45,218,255,0.6); line-height: 1.1; }
-.sub-claim { font-size: 0.75rem; color: #2DDAFF; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
-
-.intro-description { margin-bottom: 40px; font-size: 1rem; line-height: 1.6; color: #999; }
-.terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); margin-bottom: 40px; }
-.field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
-.field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
-
-label { display: block; font-size: 0.65rem; color: var(--electric-blue); margin-bottom: 18px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
-input, textarea, select { width: 100%; background: transparent; border: none; color: var(--electric-blue) !important; font-size: 1.1rem; outline: none; font-family: var(--font-mono); text-transform: uppercase; font-weight: 600; }
-::placeholder { color: rgba(45,218,255,0.4) !important; }
-textarea { resize: none; text-transform: none; line-height: 1.6; }
-select { cursor: pointer; -webkit-appearance: none; border-bottom: 1px solid #222; }
-option { background: #000; color: var(--electric-blue); }
-
-.btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; text-align: center; }
-.btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45,218,255,0.5); }
-
-#kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
-.status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 2px; text-align: center; font-family: var(--font-mono); white-space: pre-wrap; overflow-y: auto; max-height: 90vh; width: 100%; max-width: 600px; }
-
-.cursor { display: inline-block; width: 10px; background: var(--electric-blue); margin-left: 2px; animation: blink 1s infinite; }
-@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
-
-footer { color: #999; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-footer a { color: #00f2ff; text-decoration: none; }
-footer a:hover { color: #ffffff; text-decoration: underline; }
-</style>
-</head>
-<body>
-<div class="wrapper">
-    <header>
-        <div class="logo-box">
-            <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
-                <g transform="scale(0.85)">
-                    <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
-                    <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
-                    <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
-                </g>
-                <g transform="translate(72, 58)">
-                    <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z" fill="#ffffff"></path>
-                    <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#2ddaff"></path>
-                </g>
-            </svg>
-        </div>
-        <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
-        <div class="sub-claim">Deterministic Resolution O(1)</div>
-    </header>
-
-    <div class="intro-description">
-        <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;"> Il Framework AUF2026-AOS144-HDFP e la sua parte fruibile on line WYP? è governato dalla logica deterministica proprietaria FDM <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, AOS-HDFP opera in maniera automatica sia in flota classic mode, sia nel dominio proprietario Faure della <strong>Certezza Nominale Deterministica</strong>. Grazie all'integrazione del sistema <strong>AOS/AOS144-HDFP</strong>, si esegue analisi con una precisione infinitesimale di <strong>X decimali su Y</strong> a seconda delle esigente di progetto, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. L'approccio ha già permesso la progettazione di soluzioni deterministiche per sistemi <strong>COMPLESSI</strong> e <strong>DETERMINISTICI</strong>, è possibile simulare>progettare>realizzare ed ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici oltre a soluzioni "futuristiche" ma ingegnerizzabili al 100% secondo i più rigorosi standard classici. Supportati da teoremi avanzati, si è proposta la prova di validazione certificata ed inconfutabile matematicamente e formalmente dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superare i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali.</p>
-    </div>
-
-    <!-- SEZIONE FORM INVIO -->
-    <main class="terminal-container">
-        <form id="my-form" action="https://formspree.io" method="POST">
-            <div class="field-group">
-                <label>IDENT - ASSET - AZIENDA</label>
-                <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
-            </div>
-            <div class="field-group">
-                <label>E-MAIL SUBMISSION</label>
-                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
-            </div>
-            <div class="field-group">
-                <label>ANALYSIS - DOMAIN - SETTORE</label>
-                <select name="Settore" required>
-                    <option value="" disabled selected>SET DOMAIN...</option>
-                    <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
-                    <option value="Bypass-Logic">PROCESS BYPASSING</option>
-                    <option value="AI-Ops">AI INTEGRATION</option>
-                    <option value="Security">CYBER SECURITY</option>
-                    <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
-                    <option value="Automation">INDUSTRIAL AUTOMATION</option>
-                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
-                    <option value="DevOps">DEVOPS & CI/CD</option>
-                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
-                    <option value="Edge-Computing">EDGE COMPUTING</option>
-                    <option value="API-Integration">API INTEGRATION</option>
-                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
-                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
-                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
-                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
-                    <option value="Other">OTHER / ALTRO</option>
-                </select>
-            </div>
-            <div class="field-group">
-                <label>PROBLEM LOG DESC - PROBLEMATICA</label>
-                <textarea name="Messaggio" rows="3" placeholder="Descrizione dettagliata del problema da risolvere." required></textarea>
-            </div>
-            <button type="submit" class="btn-execute">EXECUTE SUBMIT<br>INVIA FORM</button>
-        </form>
-    </main>
-
-    <!-- SEZIONE DEMO AOS V1.0 -->
-    <!-- SEZIONE WYP ENGINE -->
-<main class="terminal-container">
-    <h2 style="color: var(--electric-blue); text-align:center; margin-top:30px; text-transform:uppercase; letter-spacing:3px;">
-        AOS144-HDFP ENGINE - FDM DETERMINISTIC SOLVER
-    </h2>
-
-    <div class="field-group">
-        <label>PROBLEM INPUT</label>
-        <textarea
-            id="demoProblem"
-            rows="5"
-            placeholder="DESCRIBE THE PROBLEM TO ANALYZE..."
-            placeholder="DESCRIVI IL PROBLEMA DA ANALIZZARE..."
-        ></textarea>
-    </div>
-
-    <button id="demoSubmit" class="btn-execute">
-        EXECUTE WYP? SOLVER<br>
-        ANALYZE PROBLEM
-    </button>
-
-    <div style="padding:30px;">
-        <pre
-            id="demoOutput"
-            style="
-                background:#050505;
-                color:var(--electric-blue);
-                padding:20px;
-                border:1px solid #111;
-                font-family:var(--font-mono);
-                font-size:0.85rem;
-                white-space:pre-wrap;
-                overflow-y:auto;
-                max-height:600px;
-                min-height:100px;
-                border-radius:5px;
-            "
-        ></pre>
-    </div>
-</main>
-
-    <footer>ALAIN FAURE AUF2026&copy; <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | WYP? SYSTEM | Q.E.D</footer>
-</div>
-
-<div id="kernel-status"><div class="status-text" id="status-log"></div></div>
-
-<script>
-// --- LOGICA FORM ---
-const form = document.getElementById("my-form");
-const kernel = document.getElementById("kernel-status");
-const log = document.getElementById("status-log");
-
-form.addEventListener("submit", async function(e){
-    e.preventDefault();
-    kernel.style.display = "flex";
-    log.innerHTML = "";
-    const sequences = ["> INITIALIZING AOS KERNEL ...", "> ACCESSING FAURE_CORE_2026...", "> SUCCESS: DISPATCHED TO ARCHITECT."];
-    for(const step of sequences){
-        log.innerHTML += step + "<br>";
-        await new Promise(r => setTimeout(r, 600));
-    }
-    const formData = new FormData(form);
-    fetch(form.action, { method:'POST', body:formData, headers:{'Accept':'application/json'}})
-    .then(() => { setTimeout(()=>window.location.reload(), 1500); })
-    .catch(() => form.submit());
-});
-
-// --- WYP ENGINE â€” REAL API CONNECTION ---
-
-const demoSubmit = document.getElementById("demoSubmit");
-const demoOutput = document.getElementById("demoOutput");
-
-const WYP_API = "https://wyp.auf2026.workers.dev/solve";
-
-demoSubmit.addEventListener("click", async () => {
-
-    const text = document
-        .getElementById("demoProblem")
-        .value
-        .trim();
-
-    if (!text) {
-        demoOutput.textContent =
-            "> ERROR: PROBLEM INPUT REQUIRED";
-        return;
-    }
-
-    demoOutput.textContent =
-        "> WYP? ENGINE INITIALIZING...\n" +
-        "> CONNECTING TO FAURE_CORE_2026...\n" +
-        "> DISPATCHING PROBLEM...\n"; +
-        "> GENERATING TACTICS...\n"; +
-        "> SOLVING PROBLEM...\n"; +
-        "> DETERMINISTICALLY SOLVED!\n";
-
-    try {
-
-        const response = await fetch(
-            WYP_API,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    problem: {
-                        problem: text
-                    }
-                })
-            }
+    background:
+        linear-gradient(
+            rgba(18,16,16,0) 50%,
+            rgba(0,0,0,0.2) 50%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,0,0,0.02),
+            rgba(0,255,0,0.01),
+            rgba(0,0,255,0.02)
         );
 
-        if (!response.ok) {
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-        }
+    z-index: 999;
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+}
 
-        const data = await response.json();
+.wrapper {
+    width: 100%;
+    max-width: var(--col-width);
+    padding: 80px 20px 120px;
 
-        if (data.status !== "SUCCESS") {
-            throw new Error(
-                data.error || "WYP ENGINE ERROR"
-            );
-        }
+    display: flex;
+    flex-direction: column;
+}
 
-        demoOutput.textContent =
-            "> WYP ENGINE ONLINE\n" +
-            "> PROBLEM RECEIVED\n" +
-            "> STRUCTURE ANALYSIS: COMPLETE\n" +
-            "> INVARIANT ANALYSIS: COMPLETE\n" +
-            "> CONSTRAINT ANALYSIS: COMPLETE\n" +
-            "> QUANTITY ANALYSIS: COMPLETE\n" +
-            "> MANIFESTATION: COMPLETE\n\n" +
-            "> STATUS: DETERMINISTICALLY SOLVED\n\n" +
-            JSON.stringify(
-                data.result,
-                null,
-                2
-            );
+header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 60px;
+}
 
-    } catch (error) {
+.logo-box {
+    width: 100%;
+    filter: drop-shadow(
+        0 0 25px var(--electric-blue)
+    );
 
-        demoOutput.textContent =
-            "> WYP ENGINE CONNECTION ERROR\n\n" +
-            "> " + error.message;
+    animation: boot 1.5s ease-out;
+}
+
+.logo-box svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes boot {
+    0% {
+        opacity: 0;
+        transform: scale(0.98);
+        filter: brightness(3);
     }
-});
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tagline {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    margin-top: 40px;
+
+    color: #1A85F8;
+
+    text-shadow:
+        0 0 15px rgba(45,218,255,0.6);
+
+    line-height: 1.1;
+}
+
+.sub-claim {
+    font-size: 0.75rem;
+    color: #2DDAFF;
+    letter-spacing: 4px;
+    margin-top: 15px;
+    text-transform: uppercase;
+}
+
+.intro-description {
+    margin-bottom: 40px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #999;
+}
+
+.terminal-container {
+    background: var(--surface);
+    border: 1px solid #151515;
+
+    box-shadow:
+        0 0 60px rgba(0,0,0,1);
+
+    margin-bottom: 40px;
+}
+
+.field-group {
+    padding: 30px;
+    border-bottom: 1px solid #111;
+    transition: 0.3s;
+}
+
+.field-group:focus-within {
+    background: #080808;
+    border-left: 3px solid var(--electric-blue);
+}
+
+label {
+    display: block;
+
+    font-size: 0.65rem;
+    color: var(--electric-blue);
+
+    margin-bottom: 18px;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    opacity: 0.8;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+
+    background: transparent;
+    border: none;
+
+    color: var(--electric-blue) !important;
+
+    font-size: 1.1rem;
+    outline: none;
+
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+input,
+select {
+    text-transform: uppercase;
+}
+
+textarea {
+    resize: none;
+    text-transform: none;
+    line-height: 1.6;
+}
+
+::placeholder {
+    color: rgba(45,218,255,0.4) !important;
+}
+
+select {
+    cursor: pointer;
+    -webkit-appearance: none;
+    border-bottom: 1px solid #222;
+}
+
+option {
+    background: #000;
+    color: var(--electric-blue);
+}
+
+.btn-execute {
+    width: 100%;
+
+    background: transparent;
+
+    border: 1px solid var(--electric-blue);
+
+    color: var(--electric-blue);
+
+    padding: 40px;
+
+    font-family: var(--font-mono);
+    font-weight: 900;
+
+    font-size: 1.8rem;
+
+    letter-spacing: 10px;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    margin-top: -1px;
+
+    text-align: center;
+}
+
+.btn-execute:hover {
+    background: var(--electric-blue);
+    color: #000;
+
+    box-shadow:
+        0 0 50px rgba(45,218,255,0.5);
+}
+
+.btn-execute:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+#kernel-status {
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #000;
+
+    z-index: 10000;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px;
+}
+
+.status-text {
+    color: var(--electric-blue);
+
+    font-size: 1rem;
+
+    line-height: 2.5;
+
+    letter-spacing: 2px;
+
+    text-align: center;
+
+    font-family: var(--font-mono);
+
+    white-space: pre-wrap;
+
+    overflow-y: auto;
+
+    max-height: 90vh;
+
+    width: 100%;
+    max-width: 600px;
+}
+
+footer {
+    color: #999;
+
+    background-color: transparent;
+
+    font-size: 0.7rem;
+
+    padding: 40px 0 20px;
+
+    text-align: center;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+}
+
+footer a {
+    color: #00f2ff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+#demoOutput {
+    background: #050505;
+    color: var(--electric-blue);
+
+    padding: 20px;
+
+    border: 1px solid #111;
+
+    font-family: var(--font-mono);
+
+    font-size: 0.85rem;
+
+    white-space: pre-wrap;
+
+    overflow-y: auto;
+
+    max-height: 600px;
+
+    min-height: 100px;
+
+    border-radius: 5px;
+
+    line-height: 1.6;
+}
+
+.api-online {
+    color: #00ff88 !important;
+}
+
+.api-error {
+    color: #ff4455 !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<header>
+
+<div class="logo-box">
+
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 280 85"
+>
+
+<g transform="scale(0.85)">
+
+<path
+    d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z"
+    fill="#2ddaff">
+</path>
+
+<path
+    d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z"
+    fill="#1a85f8">
+</path>
+
+<path
+    d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z"
+    fill="#2ddaff"
+    opacity=".8">
+</path>
+
+</g>
+
+<g transform="translate(72, 58)">
+
+<path
+    d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z"
+    fill="#ffffff">
+</path>
+
+<path
+    d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z"
+    fill="#2ddaff">
+</path>
+
+</g>
+
+</svg>
+
+</div>
+
+<div class="tagline">
+WHAT'S YOUR PROBLEM? IT'S SOLVED.
+</div>
+
+<div class="sub-claim">
+Deterministic Resolution O(1)
+</div>
+
+</header>
+
+<div class="intro-description">
+
+<p
+style="
+text-align: justify;
+line-height: 1.6;
+font-family: 'Segoe UI', Roboto, sans-serif;
+">
+
+Il Framework AUF2026-AOS144-HDFP e la sua parte fruibile on line WYP? è governato dalla logica deterministica proprietaria FDM
+<strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale.
+
+Laddove i sistemi tradizionali si affidano a stime probabilistiche, AOS-HDFP opera in maniera automatica sia in flota classic mode, sia nel dominio proprietario Faure della
+<strong>Certezza Nominale Deterministica</strong>.
+
+Grazie all'integrazione del sistema
+<strong>AOS/AOS144-HDFP</strong>,
+si esegue analisi con una precisione infinitesimale di
+<strong>X decimali su Y</strong>
+a seconda delle esigenze di progetto.
+
+L'approccio è destinato alla progettazione e analisi di sistemi complessi e deterministici, inclusi impianti energetici, termici e idrici e altre architetture ingegneristiche.
+
+</p>
+
+</div>
+
+<!-- FORM -->
+
+<main class="terminal-container">
+
+<form
+    id="my-form"
+    action="https://formspree.io"
+    method="POST"
+>
+
+<div class="field-group">
+
+<label>
+IDENT - ASSET - AZIENDA
+</label>
+
+<input
+    type="text"
+    name="Azienda"
+    placeholder="ID AZIENDA / BRAND"
+    required
+>
+
+</div>
+
+<div class="field-group">
+
+<label>
+E-MAIL SUBMISSION
+</label>
+
+<input
+    type="email"
+    name="Email"
+    placeholder="INSERISCI EMAIL"
+    required
+>
+
+</div>
+
+<div class="field-group">
+
+<label>
+ANALYSIS - DOMAIN - SETTORE
+</label>
+
+<select
+    name="Settore"
+    required
+>
+
+<option
+    value=""
+    disabled
+    selected
+>
+SET DOMAIN...
+</option>
+
+<option value="SaaS-Arch">
+SaaS ARCHITECTURE
+</option>
+
+<option value="Bypass-Logic">
+PROCESS BYPASSING
+</option>
+
+<option value="AI-Ops">
+AI INTEGRATION
+</option>
+
+<option value="Security">
+CYBER SECURITY
+</option>
+
+<option value="Cloud-Infra">
+CLOUD INFRASTRUCTURE
+</option>
+
+<option value="Automation">
+INDUSTRIAL AUTOMATION
+</option>
+
+<option value="Data-Analysis">
+DATA ANALYSIS & DATABASES
+</option>
+
+<option value="DevOps">
+DEVOPS & CI/CD
+</option>
+
+<option value="Blockchain">
+BLOCKCHAIN SOLUTIONS
+</option>
+
+<option value="Edge-Computing">
+EDGE COMPUTING
+</option>
+
+<option value="API-Integration">
+API INTEGRATION
+</option>
+
+<option value="Enterprise-IT">
+ENTERPRISE IT SYSTEMS
+</option>
+
+<option value="Data-Protection">
+DATA PROTECTION & COMPLIANCE
+</option>
+
+<option value="IoT-Solutions">
+IOT SOLUTIONS
+</option>
+
+<option value="Serverless">
+SERVERLESS ARCHITECTURE
+</option>
+
+<option value="Other">
+OTHER / ALTRO
+</option>
+
+</select>
+
+</div>
+
+<div class="field-group">
+
+<label>
+PROBLEM LOG DESC - PROBLEMATICA
+</label>
+
+<textarea
+    name="Messaggio"
+    rows="3"
+    placeholder="Descrizione dettagliata del problema da risolvere."
+    required
+></textarea>
+
+</div>
+
+<button
+    type="submit"
+    class="btn-execute"
+>
+EXECUTE SUBMIT<br>
+INVIA FORM
+</button>
+
+</form>
+
+</main>
+
+<!-- WYP ENGINE -->
+
+<main class="terminal-container">
+
+<h2
+style="
+color: var(--electric-blue);
+text-align:center;
+margin-top:30px;
+padding:0 20px;
+text-transform:uppercase;
+letter-spacing:3px;
+"
+>
+AOS144-HDFP ENGINE -
+FDM DETERMINISTIC SOLVER
+</h2>
+
+<div class="field-group">
+
+<label>
+PROBLEM INPUT
+</label>
+
+<textarea
+    id="demoProblem"
+    rows="5"
+    placeholder="DESCRIVI IL PROBLEMA DA ANALIZZARE..."
+></textarea>
+
+</div>
+
+<button
+    id="demoSubmit"
+    class="btn-execute"
+    type="button"
+>
+EXECUTE WYP? SOLVER<br>
+ANALYZE PROBLEM
+</button>
+
+<div style="padding:30px;">
+
+<pre id="demoOutput">
+> WYP ENGINE READY
+> AWAITING PROBLEM INPUT...
+</pre>
+
+</div>
+
+</main>
+<footer>
+
+ALAIN FAURE AUF2026&copy;
+
+<a href="mailto:AUF2026@protonmail.com">
+AUF2026@protonmail.com
+</a>
+
+|
+
+WYP? SYSTEM
+
+|
+
+Q.E.D
+
+</footer>
+
+</div>
+
+<!-- FULLSCREEN STATUS -->
+
+<div id="kernel-status">
+
+<div
+    class="status-text"
+    id="status-log"
+></div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   WYP PUBLIC WEB TERMINAL
+   =========================================================
+
+   Backend:
+   Render -> AOS PRIVATE CORE
+
+   Endpoint:
+   https://aos-private-core.onrender.com/solve
+
+   Il browser NON contiene:
+   - private key
+   - license key
+   - verification key
+
+   La licenza viene verificata esclusivamente
+   dal backend privato.
+   ========================================================= */
+
+const WYP_API =
+    "https://aos-private-core.onrender.com/solve";
+
+
+/* =========================================================
+   FORM SUBMISSION
+   ========================================================= */
+
+const form =
+    document.getElementById("my-form");
+
+const kernel =
+    document.getElementById("kernel-status");
+
+const log =
+    document.getElementById("status-log");
+
+
+form.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        kernel.style.display = "flex";
+
+        log.innerHTML = "";
+
+        const sequences = [
+
+            "> INITIALIZING AOS KERNEL ...",
+
+            "> ACCESSING FAURE_CORE_2026...",
+
+            "> PREPARING REQUEST...",
+
+            "> VALIDATING SUBMISSION...",
+
+            "> SUCCESS: DISPATCHED TO ARCHITECT."
+
+        ];
+
+
+        for (const step of sequences) {
+
+            log.innerHTML +=
+                step + "<br>";
+
+            await new Promise(
+                resolve =>
+                    setTimeout(resolve, 500)
+            );
+        }
+
+
+        const formData =
+            new FormData(form);
+
+
+        try {
+
+            const response =
+                await fetch(
+                    form.action,
+                    {
+                        method: "POST",
+                        body: formData,
+
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "FORM HTTP " +
+                    response.status
+                );
+            }
+
+
+            log.innerHTML +=
+                "<br>> FORM SUBMISSION COMPLETE.";
+
+
+            setTimeout(
+                () => {
+                    window.location.reload();
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            log.innerHTML +=
+                "<br>> FORM SUBMISSION ERROR.<br>" +
+                "> " +
+                error.message;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   WYP SOLVER
+   ========================================================= */
+
+const demoSubmit =
+    document.getElementById(
+        "demoSubmit"
+    );
+
+const demoOutput =
+    document.getElementById(
+        "demoOutput"
+    );
+
+const demoProblem =
+    document.getElementById(
+        "demoProblem"
+    );
+
+
+/* =========================================================
+   STATUS OUTPUT
+   ========================================================= */
+
+function setOutput(
+    text,
+    className = ""
+) {
+
+    demoOutput.className =
+        className;
+
+    demoOutput.textContent =
+        text;
+}
+
+
+/* =========================================================
+   SOLVER REQUEST
+   ========================================================= */
+
+demoSubmit.addEventListener(
+    "click",
+    async function () {
+
+        const text =
+            demoProblem.value.trim();
+
+
+        /* -----------------------------------------
+           INPUT VALIDATION
+           ----------------------------------------- */
+
+        if (!text) {
+
+            setOutput(
+                "> ERROR: PROBLEM INPUT REQUIRED",
+                "api-error"
+            );
+
+            demoProblem.focus();
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           LOCK UI
+           ----------------------------------------- */
+
+        demoSubmit.disabled = true;
+
+
+        setOutput(
+            "> WYP ENGINE INITIALIZING...\n" +
+            "> CONNECTING TO FAURE_CORE_2026...\n" +
+            "> DISPATCHING PROBLEM...\n" +
+            "> GENERATING TACTICS...\n" +
+            "> SOLVING PROBLEM...\n"
+        );
+
+
+        try {
+
+            /* -------------------------------------
+               ABORT CONTROLLER
+               ------------------------------------- */
+
+            const controller =
+                new AbortController();
+
+
+            const timeout =
+                setTimeout(
+                    () => controller.abort(),
+                    30000
+                );
+
+
+            /* -------------------------------------
+               API REQUEST
+               ------------------------------------- */
+
+            const response =
+                await fetch(
+                    WYP_API,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Accept":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify(
+                            {
+                                problem: text
+                            }
+                        ),
+
+                        signal:
+                            controller.signal
+                    }
+                );
+
+
+            clearTimeout(timeout);
+
+
+            /* -------------------------------------
+               HTTP ERROR
+               ------------------------------------- */
+
+            if (!response.ok) {
+
+                let errorMessage =
+                    "HTTP " +
+                    response.status;
+
+
+                try {
+
+                    const errorData =
+                        await response.json();
+
+
+                    if (
+                        errorData &&
+                        errorData.error
+                    ) {
+
+                        errorMessage =
+                            errorData.error;
+                    }
+
+                } catch (_) {
+                    /* response not JSON */
+                }
+
+
+                throw new Error(
+                    errorMessage
+                );
+            }
+
+
+            /* -------------------------------------
+               JSON
+               ------------------------------------- */
+
+            const data =
+                await response.json();
+
+
+            /* -------------------------------------
+               API ERROR
+               ------------------------------------- */
+
+            if (
+                !data ||
+                data.status !== "SUCCESS"
+            ) {
+
+                throw new Error(
+                    data &&
+                    data.error
+                        ? data.error
+                        : "WYP ENGINE ERROR"
+                );
+            }
+
+
+            /* -------------------------------------
+               SUCCESS
+               ------------------------------------- */
+
+            setOutput(
+
+                "> WYP ENGINE ONLINE\n" +
+
+                "> PROBLEM RECEIVED\n" +
+
+                "> STRUCTURE ANALYSIS: COMPLETE\n" +
+
+                "> INVARIANT ANALYSIS: COMPLETE\n" +
+
+                "> CONSTRAINT ANALYSIS: COMPLETE\n" +
+
+                "> QUANTITY ANALYSIS: COMPLETE\n" +
+
+                "> MANIFESTATION: COMPLETE\n\n" +
+
+                "> STATUS: DETERMINISTICALLY SOLVED\n\n" +
+
+                JSON.stringify(
+                    data.result,
+                    null,
+                    2
+                ),
+
+                "api-online"
+            );
+
+
+        } catch (error) {
+
+            /* -------------------------------------
+               CONNECTION / API ERROR
+               ------------------------------------- */
+
+            let message =
+                error.message ||
+                "UNKNOWN ERROR";
+
+
+            if (
+                error.name ===
+                "AbortError"
+            ) {
+
+                message =
+                    "REQUEST TIMEOUT";
+            }
+
+
+            setOutput(
+
+                "> WYP ENGINE CONNECTION ERROR\n\n" +
+
+                "> " +
+                message,
+
+                "api-error"
+            );
+
+        } finally {
+
+            /* -------------------------------------
+               UNLOCK UI
+               ------------------------------------- */
+
+            demoSubmit.disabled =
+                false;
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ENTER KEY SUPPORT
+   ========================================================= */
+
+demoProblem.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" &&
+            (event.ctrlKey || event.metaKey)
+        ) {
+
+            event.preventDefault();
+
+            demoSubmit.click();
+        }
+
+    }
+);
 
 </script>
+
 </body>
 </html>
