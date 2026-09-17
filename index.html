@@ -1074,10 +1074,6 @@ function extractResolution(data) {
 }
 
 
-/* =========================================================
-   EXTRACT RESULT VALUE
-   ========================================================= */
-
 function extractResultValue(
     data,
     resolution
@@ -1122,6 +1118,10 @@ function extractResultValue(
         }
 
 
+        /* -----------------------------------------
+           VALORE PRIMITIVO
+           ----------------------------------------- */
+
         if (
             typeof candidate === "string" ||
             typeof candidate === "number" ||
@@ -1132,26 +1132,117 @@ function extractResultValue(
         }
 
 
+        /* -----------------------------------------
+           ARRAY
+           ----------------------------------------- */
+
+        if (Array.isArray(candidate)) {
+
+            if (candidate.length === 0) {
+                continue;
+            }
+
+            return candidate
+                .map(item =>
+                    formatResultValue(item)
+                )
+                .join("\n");
+        }
+
+
+        /* -----------------------------------------
+           OGGETTO
+           ----------------------------------------- */
+
         if (
-            typeof candidate === "object" &&
-            !Array.isArray(candidate)
+            typeof candidate === "object"
         ) {
 
-            const keys =
-                Object.keys(candidate);
-
-
-            if (keys.length > 0) {
-
-                return candidate[
-                    keys[0]
-                ];
-            }
+            return formatResultValue(
+                candidate
+            );
         }
     }
 
 
     return null;
+}
+
+
+/* =========================================================
+   FORMAT RESULT VALUE
+   ========================================================= */
+
+function formatResultValue(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+    }
+
+
+    /* -----------------------------------------
+       PRIMITIVI
+       ----------------------------------------- */
+
+    if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+    ) {
+
+        return String(value);
+    }
+
+
+    /* -----------------------------------------
+       ARRAY
+       ----------------------------------------- */
+
+    if (Array.isArray(value)) {
+
+        return value
+            .map(item =>
+                formatResultValue(item)
+            )
+            .join(" | ");
+    }
+
+
+    /* -----------------------------------------
+       OGGETTO
+       ----------------------------------------- */
+
+    if (
+        typeof value === "object"
+    ) {
+
+        /*
+         * Se il backend restituisce un oggetto
+         * del tipo:
+         *
+         * {
+         *   "litri": 125
+         * }
+         *
+         * visualizziamo:
+         *
+         * litri: 125
+         */
+
+        return Object.entries(value)
+            .map(
+                ([key, val]) =>
+                    `${key}: ${formatResultValue(val)}`
+            )
+            .join(" | ");
+    }
+
+
+    return String(value);
 }
 
 
