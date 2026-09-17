@@ -465,6 +465,7 @@ footer a:hover {
 }
 </style>
 </head>
+
 <body>
 
 <div class="wrapper">
@@ -761,6 +762,7 @@ sono sufficienti per arrivare a una soluzione.
 </div>
 
 </main>
+
 <footer>
 
 ALAIN FAURE AUF2026&copy;
@@ -791,6 +793,7 @@ Q.E.D
 ></div>
 
 </div>
+
 
 <script>
 
@@ -944,7 +947,7 @@ const demoProblem =
 
 
 /* =========================================================
-   HUMAN-READABLE OUTPUT
+   OUTPUT
    ========================================================= */
 
 function setOutput(
@@ -966,6 +969,12 @@ function setOutput(
 
 function escapeHtml(value) {
 
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+    }
+
     return String(value)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
@@ -976,20 +985,198 @@ function escapeHtml(value) {
 
 
 /* =========================================================
-   HUMAN RESULT FORMATTER
+   EXTRACT STATUS
+   ========================================================= */
+
+function extractStatus(data) {
+
+    if (!data ||
+        typeof data !== "object") {
+
+        return "";
+    }
+
+
+    const resolution =
+        data.resolution &&
+        typeof data.resolution === "object"
+            ? data.resolution
+            : null;
+
+
+    const result =
+        data.result &&
+        typeof data.result === "object"
+            ? data.result
+            : null;
+
+
+    const solution =
+        data.solution &&
+        typeof data.solution === "object"
+            ? data.solution
+            : null;
+
+
+    return String(
+        data.status ||
+        (resolution && resolution.status) ||
+        (result && result.status) ||
+        (solution && solution.status) ||
+        ""
+    )
+    .trim()
+    .toUpperCase();
+}
+
+
+/* =========================================================
+   EXTRACT RESOLUTION OBJECT
+   ========================================================= */
+
+function extractResolution(data) {
+
+    if (!data ||
+        typeof data !== "object") {
+
+        return {};
+    }
+
+
+    if (
+        data.resolution &&
+        typeof data.resolution === "object"
+    ) {
+
+        return data.resolution;
+    }
+
+
+    if (
+        data.solution &&
+        typeof data.solution === "object"
+    ) {
+
+        return data.solution;
+    }
+
+
+    if (
+        data.result &&
+        typeof data.result === "object"
+    ) {
+
+        return data.result;
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   EXTRACT RESULT VALUE
+   ========================================================= */
+
+function extractResultValue(
+    data,
+    resolution
+) {
+
+    const candidates = [
+
+        resolution.values,
+
+        resolution.value,
+
+        resolution.result,
+
+        resolution.answer,
+
+        resolution.solution,
+
+        data.values,
+
+        data.value,
+
+        data.answer,
+
+        data.result,
+
+        data.solution
+
+    ];
+
+
+    for (
+        const candidate
+        of candidates
+    ) {
+
+        if (
+            candidate === null ||
+            candidate === undefined
+        ) {
+
+            continue;
+        }
+
+
+        if (
+            typeof candidate === "string" ||
+            typeof candidate === "number" ||
+            typeof candidate === "boolean"
+        ) {
+
+            return candidate;
+        }
+
+
+        if (
+            typeof candidate === "object" &&
+            !Array.isArray(candidate)
+        ) {
+
+            const keys =
+                Object.keys(candidate);
+
+
+            if (keys.length > 0) {
+
+                return candidate[
+                    keys[0]
+                ];
+            }
+        }
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   HUMAN-READABLE OUTPUT
    ========================================================= */
 
 function renderHumanResult(data) {
 
-    if (!data || typeof data !== "object") {
+    /* -----------------------------------------
+       INVALID RESPONSE
+       ----------------------------------------- */
+
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
 
         return `
             <div class="result-title">
-                RISULTATO
+                RISPOSTA NON VALIDA
             </div>
 
             <div class="result-error">
-                Il sistema ha restituito una risposta
+                Il motore ha restituito una risposta
                 non interpretabile.
             </div>
         `;
@@ -997,40 +1184,48 @@ function renderHumanResult(data) {
 
 
     const resolution =
-        data.resolution || {};
+        extractResolution(data);
+
 
     const status =
-        String(
-            resolution.status || ""
-        ).toUpperCase();
+        extractStatus(data);
 
 
     /* -----------------------------------------
-       DETERMINISTIC RESULT
+       DETERMINISTIC
        ----------------------------------------- */
 
-    if (status === "DETERMINISTIC") {
+    if (
+        status === "DETERMINISTIC" ||
+        status === "DETERMINED" ||
+        status === "SOLVED" ||
+        status === "SUCCESS" ||
+        status === "RESOLVED"
+    ) {
 
-        const values =
-            resolution.values || {};
-
-        const keys =
-            Object.keys(values);
-
-        let resultValue = null;
-
-        if (keys.length > 0) {
-            resultValue =
-                values[keys[0]];
-        }
+        const resultValue =
+            extractResultValue(
+                data,
+                resolution
+            );
 
 
         const relation =
-            resolution.relation
-                ? escapeHtml(
-                    resolution.relation
-                )
-                : "";
+            resolution.relation ||
+            resolution.operation ||
+            resolution.formula ||
+            data.relation ||
+            data.operation ||
+            data.formula ||
+            "";
+
+
+        const explanation =
+            resolution.explanation ||
+            resolution.message ||
+            data.explanation ||
+            data.message ||
+            "Il problema contiene informazioni sufficienti per determinare il risultato.";
 
 
         return `
@@ -1039,17 +1234,16 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-message">
-                Il problema contiene informazioni
-                sufficienti per determinare il risultato.
+                ${escapeHtml(explanation)}
             </div>
 
             ${
                 relation
                     ? `
                         <div class="result-operation">
-                            ${relation}
+                            ${escapeHtml(relation)}
                         </div>
-                      `
+                    `
                     : ""
             }
 
@@ -1057,10 +1251,17 @@ function renderHumanResult(data) {
                 resultValue !== null
                     ? `
                         <div class="result-answer">
-                            RISULTATO: ${escapeHtml(resultValue)}
+                            RISULTATO:
+                            ${escapeHtml(resultValue)}
                         </div>
-                      `
-                    : ""
+                    `
+                    : `
+                        <div class="result-message">
+                            La soluzione è stata determinata,
+                            ma il valore finale non è presente
+                            nel campo previsto.
+                        </div>
+                    `
             }
         `;
     }
@@ -1070,7 +1271,22 @@ function renderHumanResult(data) {
        UNDERDETERMINED
        ----------------------------------------- */
 
-    if (status === "UNDERDETERMINED") {
+    if (
+        status === "UNDERDETERMINED" ||
+        status === "INSUFFICIENT" ||
+        status === "INSUFFICIENT_DATA" ||
+        status === "INSUFFICIENT-DATA"
+    ) {
+
+        const reason =
+            resolution.reason ||
+            resolution.explanation ||
+            resolution.message ||
+            data.reason ||
+            data.explanation ||
+            data.message ||
+            "Le informazioni disponibili non sono sufficienti per determinare un risultato univoco.";
+
 
         return `
             <div class="result-title">
@@ -1078,9 +1294,7 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-insufficient">
-                Le informazioni disponibili non sono
-                sufficienti per determinare un risultato
-                univoco.
+                ${escapeHtml(reason)}
                 <br><br>
                 Servono ulteriori dati o una relazione
                 che colleghi le informazioni fornite
@@ -1094,14 +1308,20 @@ function renderHumanResult(data) {
        UNRESOLVED
        ----------------------------------------- */
 
-    if (status === "UNRESOLVED") {
+    if (
+        status === "UNRESOLVED" ||
+        status === "FAILED" ||
+        status === "FAILURE"
+    ) {
 
         const reason =
-            resolution.reason
-                ? escapeHtml(
-                    resolution.reason
-                )
-                : "Il problema non può essere risolto con i dati forniti.";
+            resolution.reason ||
+            resolution.explanation ||
+            resolution.message ||
+            data.reason ||
+            data.explanation ||
+            data.message ||
+            "Il problema non può essere risolto con i dati forniti.";
 
 
         return `
@@ -1110,25 +1330,101 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-insufficient">
-                ${reason}
+                ${escapeHtml(reason)}
             </div>
         `;
     }
 
 
     /* -----------------------------------------
-       UNKNOWN / API ERROR
+       ERROR RETURNED BY API
+       ----------------------------------------- */
+
+    if (
+        data.error ||
+        data.detail ||
+        data.exception
+    ) {
+
+        const error =
+            data.error ||
+            data.detail ||
+            data.exception;
+
+
+        return `
+            <div class="result-title">
+                ERRORE DEL MOTORE
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(error)}
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       GENERIC TEXT RESPONSE
+       ----------------------------------------- */
+
+    if (
+        typeof data.message === "string" &&
+        data.message.trim()
+    ) {
+
+        return `
+            <div class="result-title">
+                RISPOSTA DEL MOTORE
+            </div>
+
+            <div class="result-message">
+                ${escapeHtml(data.message)}
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       UNKNOWN FORMAT
+       -----------------------------------------
+
+       IMPORTANTISSIMO:
+
+       Non mostriamo più il falso messaggio
+       "non è stato possibile produrre..."
+       perché non sappiamo ancora se il problema
+       è la soluzione o il formato JSON.
        ----------------------------------------- */
 
     return `
         <div class="result-title">
-            ANALISI COMPLETATA
+            RISPOSTA RICEVUTA
         </div>
 
         <div class="result-message">
-            Il sistema ha analizzato il problema,
-            ma non è stato possibile produrre una
-            soluzione deterministica.
+            Il backend ha risposto correttamente,
+            ma il formato restituito non corrisponde
+            a uno dei formati riconosciuti dal terminale.
+        </div>
+
+        <div
+            class="result-operation"
+            style="
+                text-align:left;
+                font-size:0.8rem;
+                overflow-x:auto;
+                white-space:pre-wrap;
+                color:#888;
+            "
+        >
+            ${escapeHtml(
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            )}
         </div>
     `;
 }
@@ -1176,7 +1472,8 @@ demoSubmit.addEventListener(
            LOCK UI
            ----------------------------------------- */
 
-        demoSubmit.disabled = true;
+        demoSubmit.disabled =
+            true;
 
 
         setOutput(
@@ -1195,6 +1492,9 @@ demoSubmit.addEventListener(
         );
 
 
+        let timeout = null;
+
+
         try {
 
             /* -------------------------------------
@@ -1205,9 +1505,11 @@ demoSubmit.addEventListener(
                 new AbortController();
 
 
-            const timeout =
+            timeout =
                 setTimeout(
-                    () => controller.abort(),
+                    () => {
+                        controller.abort();
+                    },
                     30000
                 );
 
@@ -1230,11 +1532,10 @@ demoSubmit.addEventListener(
                                 "application/json"
                         },
 
-                        body: JSON.stringify(
-                            {
+                        body:
+                            JSON.stringify({
                                 problem: text
-                            }
-                        ),
+                            }),
 
                         signal:
                             controller.signal
@@ -1242,7 +1543,20 @@ demoSubmit.addEventListener(
                 );
 
 
+            /* -------------------------------------
+               CLEAR TIMEOUT
+               ------------------------------------- */
+
             clearTimeout(timeout);
+            timeout = null;
+
+
+            /* -------------------------------------
+               READ RAW RESPONSE FIRST
+               ------------------------------------- */
+
+            const rawText =
+                await response.text();
 
 
             /* -------------------------------------
@@ -1256,25 +1570,38 @@ demoSubmit.addEventListener(
                     response.status;
 
 
-                try {
+                if (rawText) {
 
-                    const errorData =
-                        await response.json();
+                    try {
+
+                        const errorData =
+                            JSON.parse(
+                                rawText
+                            );
 
 
-                    if (
-                        errorData &&
-                        errorData.error
-                    ) {
+                        if (
+                            errorData &&
+                            typeof errorData === "object"
+                        ) {
+
+                            errorMessage =
+                                errorData.error ||
+                                errorData.detail ||
+                                errorData.message ||
+                                errorMessage;
+                        }
+
+                    } catch (_) {
+
+                        /*
+                         * La risposta non è JSON.
+                         * Usiamo il testo ricevuto.
+                         */
 
                         errorMessage =
-                            errorData.error;
+                            rawText;
                     }
-
-                } catch (_) {
-
-                    /* risposta non JSON */
-
                 }
 
 
@@ -1285,22 +1612,72 @@ demoSubmit.addEventListener(
 
 
             /* -------------------------------------
-               JSON RESPONSE
+               EMPTY RESPONSE
                ------------------------------------- */
 
-            const data =
-                await response.json();
-
-
-            /* -------------------------------------
-               API ERROR
-               ------------------------------------- */
-
-            if (!data) {
+            if (!rawText.trim()) {
 
                 throw new Error(
                     "Risposta vuota dal motore WYP."
                 );
+            }
+
+
+            /* -------------------------------------
+               PARSE JSON
+               ------------------------------------- */
+
+            let data;
+
+
+            try {
+
+                data =
+                    JSON.parse(
+                        rawText
+                    );
+
+            } catch (_) {
+
+                /*
+                 * Backend HTTP 200 ma risposta
+                 * non JSON.
+                 *
+                 * La mostriamo senza dichiarare
+                 * erroneamente un errore
+                 * deterministico.
+                 */
+
+                setOutput(
+
+                    `
+                    <div class="result-title">
+                        RISPOSTA DEL MOTORE
+                    </div>
+
+                    <div class="result-message">
+                        Il server ha risposto,
+                        ma la risposta non è in formato JSON.
+                    </div>
+
+                    <div
+                        class="result-operation"
+                        style="
+                            text-align:left;
+                            font-size:0.8rem;
+                            overflow-x:auto;
+                            white-space:pre-wrap;
+                            color:#888;
+                        "
+                    >
+                        ${escapeHtml(rawText)}
+                    </div>
+                    `,
+
+                    "api-online"
+                );
+
+                return;
             }
 
 
@@ -1317,21 +1694,39 @@ demoSubmit.addEventListener(
         } catch (error) {
 
             /* -------------------------------------
-               CONNECTION / API ERROR
+               TIMEOUT
                ------------------------------------- */
 
             let message =
-                error.message ||
-                "Errore sconosciuto.";
+                error &&
+                error.message
+                    ? error.message
+                    : "Errore sconosciuto.";
 
 
             if (
+                error &&
                 error.name ===
                 "AbortError"
             ) {
 
                 message =
                     "La richiesta ha superato il tempo massimo di attesa.";
+            }
+
+
+            /* -------------------------------------
+               FETCH / NETWORK ERROR
+               ------------------------------------- */
+
+            if (
+                error &&
+                error.name ===
+                "TypeError"
+            ) {
+
+                message =
+                    "Impossibile raggiungere il motore WYP. Verificare che il backend sia online e che l'endpoint /solve sia raggiungibile dal browser.";
             }
 
 
@@ -1353,6 +1748,12 @@ demoSubmit.addEventListener(
             );
 
         } finally {
+
+            if (timeout !== null) {
+
+                clearTimeout(timeout);
+            }
+
 
             /* -------------------------------------
                UNLOCK UI
