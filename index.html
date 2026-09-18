@@ -834,94 +834,117 @@ const log =
     document.getElementById("status-log");
 
 
-form.addEventListener(
-    "submit",
-    async function (event) {
+if (form) {
 
-        event.preventDefault();
+    form.addEventListener(
+        "submit",
+        async function (event) {
 
-        kernel.style.display = "flex";
-        log.innerHTML = "";
+            event.preventDefault();
 
-        const sequences = [
-            "> INITIALIZING AOS KERNEL ...",
-            "> ACCESSING FAURE_CORE_2026...",
-            "> PREPARING REQUEST...",
-            "> VALIDATING SUBMISSION...",
-            "> SUCCESS: DISPATCHED TO ARCHITECT."
-        ];
+            if (kernel) {
+                kernel.style.display = "flex";
+            }
 
+            if (log) {
+                log.innerHTML = "";
+            }
 
-        for (const step of sequences) {
-
-            log.innerHTML +=
-                step + "<br>";
-
-            await new Promise(
-                resolve =>
-                    setTimeout(resolve, 500)
-            );
-        }
+            const sequences = [
+                "> INITIALIZING AOS KERNEL ...",
+                "> ACCESSING FAURE_CORE_2026...",
+                "> PREPARING REQUEST...",
+                "> VALIDATING SUBMISSION...",
+                "> SUCCESS: DISPATCHED TO ARCHITECT."
+            ];
 
 
-        const formData =
-            new FormData(form);
+            for (const step of sequences) {
 
+                if (log) {
+                    log.innerHTML +=
+                        step + "<br>";
+                }
 
-        try {
-
-            const response =
-                await fetch(
-                    form.action,
-                    {
-                        method: "POST",
-                        body: formData,
-
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        }
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "FORM HTTP " +
-                    response.status
+                await new Promise(
+                    resolve =>
+                        setTimeout(resolve, 500)
                 );
             }
 
 
-            log.innerHTML +=
-                "<br>> FORM SUBMISSION COMPLETE.";
+            const formData =
+                new FormData(form);
 
 
-            setTimeout(
-                () => {
-                    window.location.reload();
-                },
-                1500
-            );
+            try {
+
+                /*
+                 * Questa form è distinta dal solver.
+                 *
+                 * Manteniamo l'invio originale verso
+                 * form.action perché potrebbe essere un
+                 * endpoint esterno dedicato alla form.
+                 */
+
+                const response =
+                    await fetch(
+                        form.action,
+                        {
+                            method: "POST",
+                            body: formData,
+
+                            headers: {
+                                "Accept":
+                                    "application/json"
+                            }
+                        }
+                    );
 
 
-        } catch (error) {
+                if (!response.ok) {
 
-            log.innerHTML +=
-                "<br>> FORM SUBMISSION ERROR.<br>" +
-                "> " +
-                (
-                    error &&
-                    error.message
-                        ? error.message
-                        : "Errore sconosciuto."
+                    throw new Error(
+                        "FORM HTTP " +
+                        response.status
+                    );
+                }
+
+
+                if (log) {
+                    log.innerHTML +=
+                        "<br>> FORM SUBMISSION COMPLETE.";
+                }
+
+
+                setTimeout(
+                    () => {
+                        window.location.reload();
+                    },
+                    1500
                 );
 
-        }
 
-    }
-);
+            } catch (error) {
+
+                if (log) {
+                    log.innerHTML +=
+                        "<br>> FORM SUBMISSION ERROR.<br>" +
+                        "> " +
+                        (
+                            error &&
+                            error.message
+                                ? error.message
+                                : "Errore sconosciuto."
+                        );
+                }
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -952,6 +975,10 @@ function setOutput(
     html,
     className = ""
 ) {
+
+    if (!demoOutput) {
+        return;
+    }
 
     demoOutput.className =
         className;
@@ -993,16 +1020,23 @@ function escapeHtml(value) {
            "status": "SUCCESS",
            "result": {
                ...
-               "resolution": {
-                   ...
-               }
            }
        }
 
-   Il terminale lavora quindi sul contenuto di `result`
+   In caso di errore:
+
+       {
+           "status": "ENGINE_ERROR",
+           "error": "...",
+           "exception": "...",
+           "detail": "..."
+       }
+
+   Il terminale lavora sul contenuto di `result`
    quando l'envelope API è presente.
 
-   Sono mantenuti anche i formati precedenti/alternativi.
+   Gli errori NON vengono persi durante
+   l'unwrapping.
    ========================================================= */
 
 function unwrapApiResponse(data) {
@@ -1042,6 +1076,581 @@ function unwrapApiResponse(data) {
    EXTRACT STATUS
    ========================================================= */
 
+function extractApiStatus(
+    data,
+    httpStatus = 200
+) {
+
+    /*
+     * HTTP status ha precedenza per gli errori
+     * server/client.
+     */
+
+    if (
+        Number.isFinite(httpStatus) &&
+        httpStatus >= 500
+    ) {
+        return httpStatus;
+    }
+
+
+    if (
+        Number.isFinite(httpStatus) &&
+        httpStatus >= 400
+    ) {
+        return httpStatus;
+    }
+
+
+    if (
+        data &&
+        typeof data === "object"
+    ) {
+
+        const status =
+            data.status;
+
+
+        /*
+         * SUCCESS è il normale envelope
+         * del backend WYP.
+         */
+
+        if (
+            typeof status === "string" &&
+            status.toUpperCase() ===
+                "SUCCESS"
+        ) {
+            return 200;
+        }
+
+
+        /*
+         * Alcuni backend possono restituire
+         * uno status HTTP numerico nel JSON.
+         */
+
+        if (
+            typeof status === "number"
+        ) {
+            return status;
+        }
+
+
+        /*
+         * Errori applicativi WYP.
+         */
+
+        if (
+            typeof status === "string"
+        ) {
+
+            const normalized =
+                status.toUpperCase();
+
+
+            if (
+                normalized ===
+                    "ENGINE_ERROR"
+            ) {
+                return 500;
+            }
+
+
+            if (
+                normalized ===
+                    "LICENSE_REQUIRED"
+            ) {
+                return 403;
+            }
+
+
+            if (
+                normalized ===
+                    "INVALID_REQUEST"
+            ) {
+                return 400;
+            }
+
+
+            if (
+                normalized ===
+                    "NOT_FOUND"
+            ) {
+                return 404;
+            }
+        }
+
+    }
+
+
+    return httpStatus;
+}
+
+
+/* =========================================================
+   EXTRACT ERROR MESSAGE
+   ========================================================= */
+
+function extractApiMessage(
+    data,
+    fallback = "Errore sconosciuto."
+) {
+
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
+        return fallback;
+    }
+
+
+    /*
+     * Per ENGINE_ERROR preferiamo il dettaglio
+     * reale restituito dal core.
+     */
+
+    if (
+        data.detail !== undefined &&
+        data.detail !== null &&
+        String(data.detail).trim()
+    ) {
+        return String(
+            data.detail
+        );
+    }
+
+
+    if (
+        data.error !== undefined &&
+        data.error !== null &&
+        String(data.error).trim()
+    ) {
+        return String(
+            data.error
+        );
+    }
+
+
+    if (
+        data.message !== undefined &&
+        data.message !== null &&
+        String(data.message).trim()
+    ) {
+        return String(
+            data.message
+        );
+    }
+
+
+    return fallback;
+}
+
+
+/* =========================================================
+   EXTRACT SOLVER RESULT
+   ========================================================= */
+
+function extractSolverResult(data) {
+
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
+        return data;
+    }
+
+
+    /*
+     * Formato principale:
+
+         {
+             status: "SUCCESS",
+             result: {...}
+         }
+     */
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            data,
+            "result"
+        )
+    ) {
+        return data.result;
+    }
+
+
+    /*
+     * Compatibilità con eventuali
+     * risposte già unwrap.
+     */
+
+    return unwrapApiResponse(
+        data
+    );
+}
+
+
+/* =========================================================
+   FORMAT SERVER ERROR
+   ========================================================= */
+
+function formatServerError(
+    data,
+    httpStatus
+) {
+
+    const message =
+        extractApiMessage(
+            data,
+            "Protected solver execution failed."
+        );
+
+    const exceptionText =
+        data &&
+        data.exception
+            ? String(data.exception)
+            : "";
+
+    const tracebackText =
+        data &&
+        data.traceback
+            ? String(data.traceback)
+            : "";
+
+
+    return `
+        <div class="result-title">
+            ERRORE DEL CORE
+        </div>
+
+        <div class="result-error">
+            ${escapeHtml(message)}
+        </div>
+
+        ${
+            exceptionText
+                ? `
+                    <div class="result-error">
+                        <strong>Exception:</strong>
+                        ${escapeHtml(
+                            exceptionText
+                        )}
+                    </div>
+                  `
+                : ""
+        }
+
+        ${
+            httpStatus
+                ? `
+                    <div class="result-error">
+                        <strong>HTTP:</strong>
+                        ${escapeHtml(
+                            String(httpStatus)
+                        )}
+                    </div>
+                  `
+                : ""
+        }
+
+        ${
+            tracebackText
+                ? `
+                    <details class="result-error">
+                        <summary>
+                            Dettaglio tecnico
+                        </summary>
+
+                        <pre>${escapeHtml(
+                            tracebackText
+                        )}</pre>
+                    </details>
+                  `
+                : ""
+        }
+
+        <div class="result-error">
+            <br>
+            Il server WYP è raggiungibile,
+            ma il core ha restituito un errore.
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   WYP SOLVER REQUEST
+   ========================================================= */
+
+async function callWypSolver(
+    problem
+) {
+
+    if (
+        typeof problem !== "string" ||
+        !problem.trim()
+    ) {
+        throw new Error(
+            "Inserire un problema valido."
+        );
+    }
+
+
+    /*
+     * IMPORTANTE:
+     *
+     * Il server Python WYP legge:
+     *
+     *     Content-Length
+     *     JSON body
+     *
+     * e cerca:
+     *
+     *     {
+     *         "problem": "..."
+     *     }
+     *
+     * NON deve essere inviato FormData.
+     */
+
+    const response =
+        await fetch(
+            WYP_API,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    "Accept":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    problem:
+                        problem.trim()
+                })
+            }
+        );
+
+
+    /*
+     * Proviamo sempre a leggere JSON.
+     * Questo permette di mostrare il dettaglio
+     * restituito dal backend anche quando HTTP
+     * è 400/403/500.
+     */
+
+    let data = null;
+
+    const responseText =
+        await response.text();
+
+
+    if (responseText) {
+
+        try {
+
+            data =
+                JSON.parse(
+                    responseText
+                );
+
+        } catch (parseError) {
+
+            data = {
+                error:
+                    responseText
+            };
+
+        }
+
+    }
+
+
+    const status =
+        extractApiStatus(
+            data,
+            response.status
+        );
+
+
+    /*
+     * Gli errori HTTP vengono restituiti
+     * al chiamante con tutte le informazioni
+     * disponibili.
+     */
+
+    if (
+        !response.ok ||
+        status >= 400
+    ) {
+
+        const error =
+            new Error(
+                extractApiMessage(
+                    data,
+                    `WYP HTTP ${response.status}`
+                )
+            );
+
+
+        error.httpStatus =
+            response.status;
+
+        error.apiStatus =
+            status;
+
+        error.apiData =
+            data;
+
+
+        throw error;
+    }
+
+
+    return {
+        status,
+        data,
+        result:
+            extractSolverResult(
+                data
+            )
+    };
+}
+
+
+/* =========================================================
+   SOLVER UI
+   ========================================================= */
+
+if (demoSubmit) {
+
+    demoSubmit.addEventListener(
+        "click",
+        async function () {
+
+            const problem =
+                demoProblem
+                    ? demoProblem.value
+                    : "";
+
+
+            if (
+                !problem ||
+                !problem.trim()
+            ) {
+
+                setOutput(
+                    `
+                    <div class="result-title">
+                        RICHIESTA INCOMPLETA
+                    </div>
+
+                    <div class="result-error">
+                        Inserire un problema.
+                    </div>
+                    `,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            setOutput(
+                `
+                <div class="result-title">
+                    WYP CORE
+                </div>
+
+                <div class="result-error">
+                    Elaborazione in corso...
+                </div>
+                `,
+                "loading"
+            );
+
+
+            try {
+
+                const solverResponse =
+                    await callWypSolver(
+                        problem
+                    );
+
+
+                /*
+                 * Risposta valida.
+                 */
+
+                setOutput(
+                    `
+                    <div class="result-title">
+                        SOLUTION
+                    </div>
+
+                    <pre class="result-success">${escapeHtml(
+                        JSON.stringify(
+                            solverResponse.result,
+                            null,
+                            2
+                        )
+                    )}</pre>
+                    `,
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "[WYP PUBLIC WEB TERMINAL] "
+                    + "Solver request failed:",
+                    error
+                );
+
+
+                const data =
+                    error &&
+                    error.apiData
+                        ? error.apiData
+                        : null;
+
+                const status =
+                    error &&
+                    error.httpStatus
+                        ? error.httpStatus
+                        : 500;
+
+
+                /*
+                 * Mostriamo il vero errore
+                 * restituito dal backend.
+                 */
+
+                setOutput(
+                    formatServerError(
+                        data,
+                        status
+                    ),
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   EXTRACT STATUS
+   ========================================================= */
+
 function extractStatus(data) {
 
     if (
@@ -1051,6 +1660,27 @@ function extractStatus(data) {
         return "";
     }
 
+
+    /*
+     * -----------------------------------------------------
+     * API ENVELOPE
+     * -----------------------------------------------------
+     *
+     * Il backend può restituire:
+     *
+     * {
+     *     status: "SUCCESS",
+     *     result: {
+     *         resolution: {
+     *             status: "..."
+     *         }
+     *     }
+     * }
+     *
+     * `data.status` rappresenta lo stato HTTP/API.
+     * Non deve avere precedenza sullo stato matematico
+     * contenuto nella resolution.
+     */
 
     const result =
         data.result &&
@@ -1062,39 +1692,25 @@ function extractStatus(data) {
 
     const resolution =
         data.resolution &&
-        typeof data.resolution === "object"
+        typeof data.resolution === "object" &&
+        !Array.isArray(data.resolution)
             ? data.resolution
             : null;
 
 
     const solution =
         data.solution &&
-        typeof data.solution === "object"
+        typeof data.solution === "object" &&
+        !Array.isArray(data.solution)
             ? data.solution
             : null;
 
 
-    /*
-     * IMPORTANT:
-     *
-     * Il valore SUCCESS dell'envelope HTTP/API
-     * non è lo stato matematico della soluzione.
-     *
-     * Priorità:
-     *
-     * resolution.status
-     * result.resolution.status
-     * result.status
-     * solution.status
-     * data.status
-     *
-     * Solo dopo viene considerato SUCCESS.
-     */
-
     const nestedResolution =
         result &&
         result.resolution &&
-        typeof result.resolution === "object"
+        typeof result.resolution === "object" &&
+        !Array.isArray(result.resolution)
             ? result.resolution
             : null;
 
@@ -1102,17 +1718,49 @@ function extractStatus(data) {
     const nestedSolution =
         result &&
         result.solution &&
-        typeof result.solution === "object"
+        typeof result.solution === "object" &&
+        !Array.isArray(result.solution)
             ? result.solution
             : null;
 
 
+    /*
+     * -----------------------------------------------------
+     * SOLUTION / RESOLUTION STATUS
+     * -----------------------------------------------------
+     *
+     * Priorità:
+     *
+     * 1. data.resolution.status
+     * 2. data.solution.status
+     * 3. result.resolution.status
+     * 4. result.solution.status
+     * 5. result.status
+     *
+     * `data.status` viene usato solo come ultimo fallback.
+     */
+
     const status =
-        (resolution && resolution.status) ||
-        (nestedResolution && nestedResolution.status) ||
-        (result && result.status) ||
-        (solution && solution.status) ||
-        (nestedSolution && nestedSolution.status) ||
+        (
+            resolution &&
+            resolution.status
+        ) ||
+        (
+            solution &&
+            solution.status
+        ) ||
+        (
+            nestedResolution &&
+            nestedResolution.status
+        ) ||
+        (
+            nestedSolution &&
+            nestedSolution.status
+        ) ||
+        (
+            result &&
+            result.status
+        ) ||
         data.status ||
         "";
 
@@ -1143,8 +1791,10 @@ function extractResolution(data) {
 
     if (
         data.resolution &&
-        typeof data.resolution === "object"
+        typeof data.resolution === "object" &&
+        !Array.isArray(data.resolution)
     ) {
+
         return data.resolution;
     }
 
@@ -1155,30 +1805,46 @@ function extractResolution(data) {
 
     if (
         data.result &&
-        typeof data.result === "object"
+        typeof data.result === "object" &&
+        !Array.isArray(data.result)
     ) {
 
         const result =
             data.result;
 
 
+        /* -----------------------------------------
+           result.resolution
+           ----------------------------------------- */
+
         if (
             result.resolution &&
-            typeof result.resolution === "object"
+            typeof result.resolution === "object" &&
+            !Array.isArray(result.resolution)
         ) {
 
             return result.resolution;
         }
 
 
+        /* -----------------------------------------
+           result.solution
+           ----------------------------------------- */
+
         if (
             result.solution &&
-            typeof result.solution === "object"
+            typeof result.solution === "object" &&
+            !Array.isArray(result.solution)
         ) {
 
             return result.solution;
         }
 
+
+        /*
+         * Il result stesso può essere già
+         * l'oggetto resolution.
+         */
 
         return result;
     }
@@ -1190,11 +1856,18 @@ function extractResolution(data) {
 
     if (
         data.solution &&
-        typeof data.solution === "object"
+        typeof data.solution === "object" &&
+        !Array.isArray(data.solution)
     ) {
+
         return data.solution;
     }
 
+
+    /*
+     * Se data è già una resolution normalizzata,
+     * la restituiamo direttamente.
+     */
 
     return data;
 }
@@ -1204,7 +1877,7 @@ function extractResolution(data) {
    EXTRACT RESULT VALUE
    =========================================================
 
-   Supporta esplicitamente il formato attuale:
+   Supporta esplicitamente:
 
        resolution.values.result
 
@@ -1216,21 +1889,29 @@ function extractResolution(data) {
        resolution.answer
        resolution.solution
 
-   Viene data priorità al valore matematico effettivo
-   contenuto in `values.result`, evitando di stampare
-   inutilmente:
-
-       result: 500
-
-   quando il valore finale è semplicemente:
-
-       500
+   Viene data priorità al valore matematico effettivo.
    ========================================================= */
 
 function extractResultValue(
     data,
     resolution
 ) {
+
+    /* -----------------------------------------
+       NORMALIZE RESOLUTION
+       ----------------------------------------- */
+
+    if (
+        !resolution ||
+        typeof resolution !== "object"
+    ) {
+
+        resolution =
+            extractResolution(
+                data
+            );
+    }
+
 
     /* -----------------------------------------
        CURRENT WYP FORMAT
@@ -1262,7 +1943,7 @@ function extractResultValue(
 
         /*
          * Se esiste un solo valore nel mapping,
-         * possiamo mostrarlo direttamente.
+         * mostriamo direttamente quel valore.
          */
 
         const valueKeys =
@@ -1289,19 +1970,60 @@ function extractResultValue(
     if (
         resolution &&
         resolution.presentation &&
-        typeof resolution.presentation === "object"
+        typeof resolution.presentation === "object" &&
+        !Array.isArray(
+            resolution.presentation
+        )
     ) {
 
+        const presentation =
+            resolution.presentation;
+
+
         if (
-            resolution.presentation.answer !==
-            null &&
-            resolution.presentation.answer !==
-            undefined
+            presentation.answer !== null &&
+            presentation.answer !== undefined
         ) {
 
-            return (
-                resolution.presentation.answer
-            );
+            return presentation.answer;
+        }
+    }
+
+
+    /* -----------------------------------------
+       DIRECT RESULT OBJECT
+       ----------------------------------------- */
+
+    if (
+        resolution &&
+        resolution.result &&
+        typeof resolution.result === "object" &&
+        !Array.isArray(resolution.result)
+    ) {
+
+        const nestedResult =
+            resolution.result;
+
+
+        if (
+            Object.prototype.hasOwnProperty.call(
+                nestedResult,
+                "value"
+            )
+        ) {
+
+            return nestedResult.value;
+        }
+
+
+        if (
+            Object.prototype.hasOwnProperty.call(
+                nestedResult,
+                "answer"
+            )
+        ) {
+
+            return nestedResult.answer;
         }
     }
 
@@ -1353,7 +2075,7 @@ function extractResultValue(
 
 
         /* -----------------------------------------
-           VALORE PRIMITIVO
+           PRIMITIVE
            ----------------------------------------- */
 
         if (
@@ -1380,16 +2102,20 @@ function extractResultValue(
                 continue;
             }
 
+
             return candidate
-                .map(item =>
-                    formatResultValue(item)
+                .map(
+                    item =>
+                        formatResultValue(
+                            item
+                        )
                 )
                 .join("\n");
         }
 
 
         /* -----------------------------------------
-           OGGETTO
+           OBJECT
            ----------------------------------------- */
 
         if (
@@ -1411,12 +2137,16 @@ function extractResultValue(
         data &&
         data.result &&
         typeof data.result === "object" &&
-        data.result !== resolution
+        !Array.isArray(data.result)
     ) {
 
         const nested =
             data.result;
 
+
+        /* -----------------------------------------
+           nested.values.result
+           ----------------------------------------- */
 
         if (
             nested.values &&
@@ -1433,8 +2163,28 @@ function extractResultValue(
 
                 return nested.values.result;
             }
+
+
+            const nestedValueKeys =
+                Object.keys(
+                    nested.values
+                );
+
+
+            if (
+                nestedValueKeys.length === 1
+            ) {
+
+                return nested.values[
+                    nestedValueKeys[0]
+                ];
+            }
         }
 
+
+        /* -----------------------------------------
+           nested.answer
+           ----------------------------------------- */
 
         if (
             nested.answer !== null &&
@@ -1442,6 +2192,19 @@ function extractResultValue(
         ) {
 
             return nested.answer;
+        }
+
+
+        /* -----------------------------------------
+           nested.value
+           ----------------------------------------- */
+
+        if (
+            nested.value !== null &&
+            nested.value !== undefined
+        ) {
+
+            return nested.value;
         }
     }
 
@@ -1487,8 +2250,9 @@ function formatResultValue(value) {
     ) {
 
         return value
-            .map(item =>
-                formatResultValue(item)
+            .map(
+                item =>
+                    formatResultValue(item)
             )
             .join(" | ");
     }
@@ -1543,36 +2307,211 @@ function renderHumanResult(data) {
     }
 
 
-    /*
-     * IMPORTANT:
-     *
-     * Normalizziamo l'envelope prima di leggere
-     * status, resolution e risultato.
-     *
-     * Il backend restituisce:
-     *
-     * {
-     *     status: "SUCCESS",
-     *     result: {
-     *         resolution: {
-     *             status: "DETERMINISTIC",
-     *             values: {
-     *                 result: "500"
-     *             }
-     *         }
-     *     }
-     * }
-     */
+    /* -----------------------------------------
+       PRESERVE ORIGINAL API ENVELOPE
+       -----------------------------------------
+
+       IMPORTANTE:
+
+       Non dobbiamo eliminare subito l'envelope
+       originale.
+
+       Il backend può restituire:
+
+           {
+               "status": "ENGINE_ERROR",
+               "error": "...",
+               "exception": "...",
+               "detail": "..."
+           }
+
+       oppure:
+
+           {
+               "status": "SUCCESS",
+               "result": {
+                   "resolution": {
+                       ...
+                   }
+               }
+           }
+
+       Conserviamo quindi entrambi:
+
+           original
+           normalized
+    */
+
+    const original =
+        data;
+
 
     const normalized =
-        unwrapApiResponse(data);
+        unwrapApiResponse(
+            original
+        );
 
+
+    /* -----------------------------------------
+       HTTP / ENGINE ERROR
+
+       Questo controllo deve avvenire PRIMA
+       dell'interpretazione matematica.
+
+       In questo modo non confondiamo:
+
+           HTTP/API SUCCESS
+
+       con:
+
+           solver SUCCESS
+
+       e possiamo mostrare direttamente il
+       messaggio restituito dal backend.
+       ----------------------------------------- */
+
+    const originalStatus =
+        original &&
+        typeof original.status !== "undefined"
+            ? String(
+                original.status
+            )
+                .trim()
+                .toUpperCase()
+            : "";
+
+
+    const normalizedStatus =
+        normalized &&
+        typeof normalized.status !== "undefined"
+            ? String(
+                normalized.status
+            )
+                .trim()
+                .toUpperCase()
+            : "";
+
+
+    const isEngineError =
+        originalStatus === "ENGINE_ERROR" ||
+        originalStatus === "INTERNAL_ERROR" ||
+        originalStatus === "SERVER_ERROR" ||
+        originalStatus === "CORE_ERROR";
+
+
+    if (
+        isEngineError
+    ) {
+
+        const errorMessage =
+            original.detail ||
+            original.error ||
+            original.exception ||
+            "Il core WYP ha restituito un errore interno.";
+
+
+        const exception =
+            original.exception
+                ? String(
+                    original.exception
+                )
+                : "";
+
+
+        return `
+            <div class="result-title">
+                ERRORE DEL CORE
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(
+                    errorMessage
+                )}
+
+                ${
+                    exception
+                        ? `
+                            <br><br>
+                            <strong>Tipo:</strong>
+                            ${escapeHtml(
+                                exception
+                            )}
+                        `
+                        : ""
+                }
+
+                <br><br>
+
+                Il server WYP è raggiungibile,
+                ma il core ha restituito un errore.
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       GENERIC API ERROR
+       ----------------------------------------- */
+
+    if (
+        original.error ||
+        original.detail ||
+        original.exception
+    ) {
+
+        const errorMessage =
+            original.detail ||
+            original.error ||
+            original.exception ||
+            "Il server ha restituito un errore.";
+
+
+        return `
+            <div class="result-title">
+                ERRORE DEL MOTORE
+            </div>
+
+            <div class="result-error">
+                ${escapeHtml(
+                    errorMessage
+                )}
+
+                ${
+                    original.exception
+                        ? `
+                            <br><br>
+                            <strong>Tipo:</strong>
+                            ${escapeHtml(
+                                original.exception
+                            )}
+                        `
+                        : ""
+                }
+            </div>
+        `;
+    }
+
+
+    /* -----------------------------------------
+       EXTRACT RESOLUTION
+       ----------------------------------------- */
 
     const resolution =
         extractResolution(
             normalized
         );
 
+
+    /* -----------------------------------------
+       EXTRACT SOLVER STATUS
+       -----------------------------------------
+
+       IMPORTANTE:
+
+       extractStatus() lavora sul contenuto
+       normalizzato, non sul semplice status
+       HTTP/API SUCCESS.
+       ----------------------------------------- */
 
     const status =
         extractStatus(
@@ -1598,10 +2537,9 @@ function renderHumanResult(data) {
             );
 
 
-        /*
-         * Preferiamo la relation proveniente
-         * dalla resolution.
-         */
+        /* -----------------------------------------
+           RELATION
+           ----------------------------------------- */
 
         const relation =
             resolution.relation ||
@@ -1622,21 +2560,24 @@ function renderHumanResult(data) {
             "";
 
 
-        /*
-         * Il formato attuale usa:
-
-             resolution.presentation.explanation
-
-         * quindi viene considerato prima delle
-         * vecchie forme.
-         */
+        /* -----------------------------------------
+           PRESENTATION
+           ----------------------------------------- */
 
         const presentation =
+            resolution &&
             resolution.presentation &&
-            typeof resolution.presentation === "object"
+            typeof resolution.presentation === "object" &&
+            !Array.isArray(
+                resolution.presentation
+            )
                 ? resolution.presentation
                 : null;
 
+
+        /* -----------------------------------------
+           EXPLANATION
+           ----------------------------------------- */
 
         const explanation =
             (
@@ -1650,15 +2591,9 @@ function renderHumanResult(data) {
             "Il risultato è determinato dai dati forniti e dalla relazione matematica identificata.";
 
 
-        /*
-         * Calcolo leggibile.
-         *
-         * Il backend attuale fornisce:
-
-             presentation.calculation
-
-         * quindi viene preferito alla relation.
-         */
+        /* -----------------------------------------
+           CALCULATION
+           ----------------------------------------- */
 
         const calculation =
             (
@@ -1670,34 +2605,49 @@ function renderHumanResult(data) {
             "";
 
 
+        /* -----------------------------------------
+           RESULT VALUE
+           ----------------------------------------- */
+
+        const formattedResult =
+            resultValue !== null &&
+            resultValue !== undefined
+                ? formatResultValue(
+                    resultValue
+                )
+                : "";
+
+
         return `
             <div class="result-title">
                 RISULTATO DETERMINATO
             </div>
 
             <div class="result-message">
-                ${escapeHtml(explanation)}
+                ${escapeHtml(
+                    explanation
+                )}
             </div>
 
             ${
                 calculation
                     ? `
                         <div class="result-operation">
-                            ${escapeHtml(calculation)}
+                            ${escapeHtml(
+                                calculation
+                            )}
                         </div>
                     `
                     : ""
             }
 
             ${
-                resultValue !== null
+                formattedResult
                     ? `
                         <div class="result-answer">
                             RISULTATO:
                             ${escapeHtml(
-                                formatResultValue(
-                                    resultValue
-                                )
+                                formattedResult
                             )}
                         </div>
                     `
@@ -1740,8 +2690,12 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-insufficient">
-                ${escapeHtml(reason)}
+                ${escapeHtml(
+                    reason
+                )}
+
                 <br><br>
+
                 Servono ulteriori dati o una relazione
                 che colleghi le informazioni fornite
                 alla quantità richiesta.
@@ -1776,57 +2730,40 @@ function renderHumanResult(data) {
             </div>
 
             <div class="result-insufficient">
-                ${escapeHtml(reason)}
+                ${escapeHtml(
+                    reason
+                )}
             </div>
         `;
     }
 
 
     /* -----------------------------------------
-       API ERROR
+       LICENSE ERROR
        ----------------------------------------- */
 
     if (
-        normalized.error ||
-        normalized.detail ||
-        normalized.exception
+        status === "LICENSE_REQUIRED" ||
+        status === "LICENSE_ERROR" ||
+        status === "FORBIDDEN"
     ) {
 
-        const error =
-            normalized.error ||
+        const licenseMessage =
+            original.detail ||
+            original.error ||
             normalized.detail ||
-            normalized.exception;
+            normalized.error ||
+            "La richiesta richiede una licenza valida.";
 
 
         return `
             <div class="result-title">
-                ERRORE DEL MOTORE
+                LICENZA RICHIESTA
             </div>
 
             <div class="result-error">
-                ${escapeHtml(error)}
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       GENERIC TEXT RESPONSE
-       ----------------------------------------- */
-
-    if (
-        typeof normalized.message === "string" &&
-        normalized.message.trim()
-    ) {
-
-        return `
-            <div class="result-title">
-                RISPOSTA DEL MOTORE
-            </div>
-
-            <div class="result-message">
                 ${escapeHtml(
-                    normalized.message
+                    licenseMessage
                 )}
             </div>
         `;
@@ -1834,53 +2771,114 @@ function renderHumanResult(data) {
 
 
     /* -----------------------------------------
-       API SUCCESS ENVELOPE WITHOUT
-       RECOGNIZED INNER STATUS
+       UNKNOWN STATUS
        ----------------------------------------- */
 
     if (
-        data.status &&
-        String(data.status)
+        status === "SUCCESS" &&
+        normalized !== original
+    ) {
+
+        const fallbackValue =
+            extractResultValue(
+                normalized,
+                resolution
+            );
+
+
+        if (
+            fallbackValue !== null &&
+            fallbackValue !== undefined
+        ) {
+
+            return `
+                <div class="result-title">
+                    RISULTATO
+                </div>
+
+                <div class="result-answer">
+                    ${escapeHtml(
+                        formatResultValue(
+                            fallbackValue
+                        )
+                    )}
+                </div>
+            `;
+        }
+    }
+
+
+    /* -----------------------------------------
+       UNKNOWN / UNRECOGNIZED RESPONSE
+       ----------------------------------------- */
+
+    const diagnostic =
+        original.detail ||
+        original.error ||
+        original.message ||
+        normalized.detail ||
+        normalized.error ||
+        normalized.message ||
+        (
+            status
+                ? `Stato ricevuto: ${status}`
+                : "Il core ha restituito una risposta non riconosciuta."
+        );
+
+
+    return `
+        <div class="result-title">
+            RISPOSTA DEL CORE
+        </div>
+
+        <div class="result-message">
+            ${escapeHtml(
+                diagnostic
+            )}
+        </div>
+    `;
+}
+
+
+    /* -----------------------------------------
+   GENERIC TEXT RESPONSE
+   ----------------------------------------- */
+
+if (
+    normalized &&
+    typeof normalized.message === "string" &&
+    normalized.message.trim()
+) {
+
+    return `
+        <div class="result-title">
+            RISPOSTA DEL MOTORE
+        </div>
+
+        <div class="result-message">
+            ${escapeHtml(
+                normalized.message
+            )}
+        </div>
+    `;
+}
+
+
+/* -----------------------------------------
+   API SUCCESS ENVELOPE WITHOUT
+   RECOGNIZED INNER STATUS
+   ----------------------------------------- */
+
+if (
+    originalStatus === "SUCCESS" ||
+    (
+        original &&
+        original.status &&
+        String(original.status)
             .trim()
             .toUpperCase() === "SUCCESS"
-    ) {
-
-        return `
-            <div class="result-title">
-                RISPOSTA RICEVUTA
-            </div>
-
-            <div class="result-message">
-                Il backend ha restituito una risposta
-                valida, ma lo stato interno della
-                risoluzione non è riconosciuto dal terminale.
-            </div>
-
-            <div
-                class="result-operation"
-                style="
-                    text-align:left;
-                    font-size:0.8rem;
-                    overflow-x:auto;
-                    white-space:pre-wrap;
-                    color:#888;
-                "
-            >
-                ${escapeHtml(
-                    JSON.stringify(
-                        data,
-                        null,
-                        2
-                    )
-                )}
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       UNKNOWN FORMAT
-       ----------------------------------------- */
+    )
+) {
 
     return `
         <div class="result-title">
@@ -1888,9 +2886,9 @@ function renderHumanResult(data) {
         </div>
 
         <div class="result-message">
-            Il backend ha risposto correttamente,
-            ma il formato restituito non corrisponde
-            a uno dei formati riconosciuti dal terminale.
+            Il backend ha restituito una risposta
+            valida, ma lo stato interno della
+            risoluzione non è riconosciuto dal terminale.
         </div>
 
         <div
@@ -1905,13 +2903,50 @@ function renderHumanResult(data) {
         >
             ${escapeHtml(
                 JSON.stringify(
-                    data,
+                    original,
                     null,
                     2
                 )
             )}
         </div>
     `;
+}
+
+
+/* -----------------------------------------
+   UNKNOWN FORMAT
+   ----------------------------------------- */
+
+return `
+    <div class="result-title">
+        RISPOSTA RICEVUTA
+    </div>
+
+    <div class="result-message">
+        Il backend ha risposto correttamente,
+        ma il formato restituito non corrisponde
+        a uno dei formati riconosciuti dal terminale.
+    </div>
+
+    <div
+        class="result-operation"
+        style="
+            text-align:left;
+            font-size:0.8rem;
+            overflow-x:auto;
+            white-space:pre-wrap;
+            color:#888;
+        "
+    >
+        ${escapeHtml(
+            JSON.stringify(
+                original,
+                null,
+                2
+            )
+        )}
+    </div>
+`;
 }
 
 
@@ -1930,15 +2965,20 @@ function renderHttpError(
         status;
 
 
+    /* -----------------------------------------
+       EXTRACT SERVER MESSAGE
+       ----------------------------------------- */
+
     if (
         data &&
         typeof data === "object"
     ) {
 
         message =
-            data.error ||
             data.detail ||
+            data.error ||
             data.message ||
+            data.exception ||
             message;
     }
 
@@ -1947,7 +2987,9 @@ function renderHttpError(
        LICENSE
        ----------------------------------------- */
 
-    if (status === 403) {
+    if (
+        status === 403
+    ) {
 
         return `
             <div class="result-title">
@@ -1955,8 +2997,12 @@ function renderHttpError(
             </div>
 
             <div class="result-error">
-                ${escapeHtml(message)}
+                ${escapeHtml(
+                    message
+                )}
+
                 <br><br>
+
                 Il backend è raggiungibile,
                 ma la richiesta non è autorizzata.
             </div>
@@ -1968,7 +3014,9 @@ function renderHttpError(
        BAD REQUEST
        ----------------------------------------- */
 
-    if (status === 400) {
+    if (
+        status === 400
+    ) {
 
         return `
             <div class="result-title">
@@ -1976,17 +3024,56 @@ function renderHttpError(
             </div>
 
             <div class="result-error">
-                ${escapeHtml(message)}
+                ${escapeHtml(
+                    message
+                )}
             </div>
         `;
     }
 
 
     /* -----------------------------------------
-       SERVER ERROR
+       SERVER / CORE ERROR
        ----------------------------------------- */
 
-    if (status >= 500) {
+    if (
+        status >= 500
+    ) {
+
+        const errorText =
+            data &&
+            typeof data === "object"
+                ? (
+                    data.detail ||
+                    data.error ||
+                    data.message ||
+                    "Errore interno del server."
+                )
+                : (
+                    message ||
+                    "Errore interno del server."
+                );
+
+
+        const exceptionText =
+            data &&
+            typeof data === "object" &&
+            data.exception
+                ? String(
+                    data.exception
+                )
+                : "";
+
+
+        const tracebackText =
+            data &&
+            typeof data === "object" &&
+            data.traceback
+                ? String(
+                    data.traceback
+                )
+                : "";
+
 
         return `
             <div class="result-title">
@@ -1994,11 +3081,68 @@ function renderHttpError(
             </div>
 
             <div class="result-error">
-                ${escapeHtml(message)}
-                <br><br>
+                ${escapeHtml(
+                    errorText
+                )}
+            </div>
+
+            ${
+                exceptionText
+                    ? `
+                        <div class="result-error">
+                            <strong>Exception:</strong>
+                            ${escapeHtml(
+                                exceptionText
+                            )}
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                tracebackText
+                    ? `
+                        <details class="result-error">
+                            <summary>
+                                Dettaglio tecnico
+                            </summary>
+
+                            <pre>${escapeHtml(
+                                tracebackText
+                            )}</pre>
+                        </details>
+                    `
+                    : ""
+            }
+
+            <div class="result-error">
+                <br>
+
                 Il server WYP è raggiungibile,
                 ma il core ha restituito un errore.
             </div>
+
+            ${
+                rawText &&
+                !data
+                    ? `
+                        <div
+                            class="result-operation"
+                            style="
+                                text-align:left;
+                                font-size:0.8rem;
+                                overflow-x:auto;
+                                white-space:pre-wrap;
+                                color:#888;
+                            "
+                        >
+                            ${escapeHtml(
+                                rawText
+                            )}
+                        </div>
+                    `
+                    : ""
+            }
         `;
     }
 
@@ -2013,7 +3157,9 @@ function renderHttpError(
         </div>
 
         <div class="result-error">
-            ${escapeHtml(message)}
+            ${escapeHtml(
+                message
+            )}
         </div>
 
         ${
@@ -2029,7 +3175,9 @@ function renderHttpError(
                             color:#888;
                         "
                     >
-                        ${escapeHtml(rawText)}
+                        ${escapeHtml(
+                            rawText
+                        )}
                     </div>
                 `
                 : ""
@@ -2042,460 +3190,552 @@ function renderHttpError(
    SOLVER REQUEST
    ========================================================= */
 
-demoSubmit.addEventListener(
-    "click",
-    async function () {
+if (
+    demoSubmit &&
+    demoProblem
+) {
 
-        const text =
-            demoProblem.value.trim();
+    demoSubmit.addEventListener(
+        "click",
+        async function () {
+
+            const text =
+                demoProblem.value.trim();
 
 
-        /* -----------------------------------------
-           INPUT VALIDATION
-           ----------------------------------------- */
+            /* -----------------------------------------
+               INPUT VALIDATION
+               ----------------------------------------- */
 
-        if (!text) {
+            if (!text) {
+
+                setOutput(
+                    `
+                    <div class="result-title">
+                        INPUT RICHIESTO
+                    </div>
+
+                    <div class="result-message">
+                        Inserisci il problema che vuoi
+                        sottoporre all'analisi.
+                    </div>
+                    `,
+                    "api-error"
+                );
+
+                demoProblem.focus();
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               LOCK UI
+               ----------------------------------------- */
+
+            demoSubmit.disabled =
+                true;
+
 
             setOutput(
                 `
                 <div class="result-title">
-                    INPUT RICHIESTO
+                    ANALISI IN CORSO
                 </div>
 
                 <div class="result-message">
-                    Inserisci il problema che vuoi
-                    sottoporre all'analisi.
+                    Il problema è in fase di analisi.
+                    <br><br>
+                    Il sistema sta verificando struttura,
+                    vincoli e relazioni deterministiche.
                 </div>
-                `,
-                "api-error"
+                `
             );
 
-            demoProblem.focus();
 
-            return;
-        }
-
-
-        /* -----------------------------------------
-           LOCK UI
-           ----------------------------------------- */
-
-        demoSubmit.disabled =
-            true;
-
-
-        setOutput(
-            `
-            <div class="result-title">
-                ANALISI IN CORSO
-            </div>
-
-            <div class="result-message">
-                Il problema è in fase di analisi.
-                <br><br>
-                Il sistema sta verificando struttura,
-                vincoli e relazioni deterministiche.
-            </div>
-            `
-        );
-
-
-        let timeout = null;
-
-
-        try {
-
-            /* -------------------------------------
-               ABORT CONTROLLER
-               ------------------------------------- */
-
-            const controller =
-                new AbortController();
-
-
-            timeout =
-                setTimeout(
-                    () => {
-                        controller.abort();
-                    },
-                    30000
-                );
-
-
-            /* -------------------------------------
-               API REQUEST
-               ------------------------------------- */
-
-            let response;
+            let timeout =
+                null;
 
 
             try {
 
-                response =
-                    await fetch(
-                        WYP_API,
-                        {
-                            method: "POST",
+                /* -------------------------------------
+                   ABORT CONTROLLER
+                   ------------------------------------- */
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                "Accept":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    problem: text
-                                }),
-
-                            signal:
-                                controller.signal
-                        }
-                    );
-
-            } catch (networkError) {
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * Un TypeError di fetch NON significa
-                 * necessariamente che Render sia offline.
-                 *
-                 * Dal browser può significare:
-                 *
-                 * - CORS;
-                 * - DNS;
-                 * - TLS;
-                 * - connessione rifiutata;
-                 * - policy browser;
-                 * - endpoint non raggiungibile.
-                 *
-                 * Non fingiamo quindi che il backend
-                 * abbia restituito "ENGINE_ERROR".
-                 */
-
-                if (
-                    networkError &&
-                    networkError.name === "AbortError"
-                ) {
-
-                    throw networkError;
-                }
+                const controller =
+                    new AbortController();
 
 
-                const networkMessage =
-                    networkError &&
-                    networkError.message
-                        ? networkError.message
-                        : "Network request failed.";
+                timeout =
+                    setTimeout(
+                        function () {
 
+                            controller.abort();
 
-                const error =
-                    new Error(
-                        "FETCH_ERROR: " +
-                        networkMessage
+                        },
+                        30000
                     );
 
 
-                error.name =
-                    "WYPNetworkError";
+                /* -------------------------------------
+                   API REQUEST
+                   ------------------------------------- */
 
+                let response;
 
-                throw error;
-            }
-
-
-            /* -------------------------------------
-               CLEAR TIMEOUT
-               ------------------------------------- */
-
-            clearTimeout(timeout);
-            timeout = null;
-
-
-            /* -------------------------------------
-               READ RAW RESPONSE FIRST
-               ------------------------------------- */
-
-            const rawText =
-                await response.text();
-
-
-            /* -------------------------------------
-               PARSE JSON IF POSSIBLE
-               ------------------------------------- */
-
-            let data = null;
-
-
-            if (
-                rawText &&
-                rawText.trim()
-            ) {
 
                 try {
 
-                    data =
-                        JSON.parse(
-                            rawText
+                    response =
+                        await fetch(
+                            WYP_API,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Accept":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        {
+                                            problem:
+                                                text
+                                        }
+                                    ),
+
+                                signal:
+                                    controller.signal
+                            }
                         );
 
-                } catch (_) {
+                } catch (networkError) {
 
-                    data = null;
+                    /* ---------------------------------
+                       ABORT
+                       --------------------------------- */
+
+                    if (
+                        networkError &&
+                        networkError.name ===
+                            "AbortError"
+                    ) {
+
+                        throw networkError;
+                    }
+
+
+                    /* ---------------------------------
+                       NETWORK / CORS / TLS / DNS
+                       --------------------------------- */
+
+                    const networkMessage =
+                        networkError &&
+                        networkError.message
+                            ? networkError.message
+                            : "Network request failed.";
+
+
+                    const error =
+                        new Error(
+                            "FETCH_ERROR: " +
+                            networkMessage
+                        );
+
+
+                    error.name =
+                        "WYPNetworkError";
+
+
+                    throw error;
                 }
-            }
 
 
-            /* -------------------------------------
-               HTTP ERROR
-               ------------------------------------- */
+                /* -------------------------------------
+                   READ RESPONSE BODY
 
-            if (!response.ok) {
+                   Il body viene letto SEMPRE,
+                   anche quando response.ok === false.
+
+                   Questo è fondamentale per vedere
+                   il vero errore restituito dal core.
+                   ------------------------------------- */
+
+                const rawText =
+                    await response.text();
+
+
+                /* -------------------------------------
+                   CLEAR TIMEOUT
+                   ------------------------------------- */
+
+                if (
+                    timeout !== null
+                ) {
+
+                    clearTimeout(
+                        timeout
+                    );
+
+                    timeout =
+                        null;
+                }
+
+
+                /* -------------------------------------
+                   PARSE JSON
+                   ------------------------------------- */
+
+                let data =
+                    null;
+
+
+                if (
+                    rawText &&
+                    rawText.trim()
+                ) {
+
+                    try {
+
+                        data =
+                            JSON.parse(
+                                rawText
+                            );
+
+                    } catch (parseError) {
+
+                        data =
+                            null;
+                    }
+                }
+
+
+                /* -------------------------------------
+                   HTTP ERROR
+                   ------------------------------------- */
+
+                if (
+                    !response.ok
+                ) {
+
+                    setOutput(
+                        renderHttpError(
+                            response.status,
+                            data,
+                            rawText
+                        ),
+                        "api-error"
+                    );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   EMPTY RESPONSE
+                   ------------------------------------- */
+
+                if (
+                    !rawText ||
+                    !rawText.trim()
+                ) {
+
+                    setOutput(
+                        `
+                        <div class="result-title">
+                            RISPOSTA VUOTA
+                        </div>
+
+                        <div class="result-error">
+                            Il backend ha risposto con HTTP
+                            ${escapeHtml(
+                                response.status
+                            )},
+                            ma non ha restituito alcun
+                            contenuto.
+                        </div>
+                        `,
+                        "api-error"
+                    );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   NON JSON
+                   ------------------------------------- */
+
+                if (
+                    !data
+                ) {
+
+                    setOutput(
+                        `
+                        <div class="result-title">
+                            RISPOSTA DEL MOTORE
+                        </div>
+
+                        <div class="result-message">
+                            Il server ha risposto con HTTP
+                            ${escapeHtml(
+                                response.status
+                            )},
+                            ma la risposta non è in formato
+                            JSON.
+                        </div>
+
+                        <div
+                            class="result-operation"
+                            style="
+                                text-align:left;
+                                font-size:0.8rem;
+                                overflow-x:auto;
+                                white-space:pre-wrap;
+                                color:#888;
+                            "
+                        >
+                            ${escapeHtml(
+                                rawText
+                            )}
+                        </div>
+                        `,
+                        "api-online"
+                    );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   ENGINE ERROR INSIDE HTTP 200
+
+                   Il backend potrebbe teoricamente
+                   restituire un errore applicativo
+                   anche dentro HTTP 200.
+
+                   Lo mostriamo comunque come errore
+                   del core.
+                   ------------------------------------- */
+
+                const responseStatus =
+                    data &&
+                    typeof data.status !== "undefined"
+                        ? String(
+                            data.status
+                        )
+                            .trim()
+                            .toUpperCase()
+                        : "";
+
+
+                if (
+                    responseStatus ===
+                        "ENGINE_ERROR"
+                ) {
+
+                    setOutput(
+                        renderHttpError(
+                            500,
+                            data,
+                            rawText
+                        ),
+                        "api-error"
+                    );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   HUMAN RESULT
+                   ------------------------------------- */
 
                 setOutput(
-                    renderHttpError(
-                        response.status,
-                        data,
-                        rawText
+                    renderHumanResult(
+                        data
                     ),
-                    "api-error"
-                );
-
-                return;
-            }
-
-
-            /* -------------------------------------
-               EMPTY RESPONSE
-               ------------------------------------- */
-
-            if (
-                !rawText ||
-                !rawText.trim()
-            ) {
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        RISPOSTA VUOTA
-                    </div>
-
-                    <div class="result-error">
-                        Il backend ha risposto con HTTP
-                        ${response.status}, ma non ha
-                        restituito alcun contenuto.
-                    </div>
-                    `,
-                    "api-error"
-                );
-
-                return;
-            }
-
-
-            /* -------------------------------------
-               NON JSON
-               ------------------------------------- */
-
-            if (!data) {
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        RISPOSTA DEL MOTORE
-                    </div>
-
-                    <div class="result-message">
-                        Il server ha risposto con HTTP
-                        ${response.status}, ma la risposta
-                        non è in formato JSON.
-                    </div>
-
-                    <div
-                        class="result-operation"
-                        style="
-                            text-align:left;
-                            font-size:0.8rem;
-                            overflow-x:auto;
-                            white-space:pre-wrap;
-                            color:#888;
-                        "
-                    >
-                        ${escapeHtml(rawText)}
-                    </div>
-                    `,
                     "api-online"
                 );
 
-                return;
-            }
+            } catch (error) {
+
+                /* -------------------------------------
+                   TIMEOUT
+                   ------------------------------------- */
+
+                if (
+                    error &&
+                    error.name ===
+                        "AbortError"
+                ) {
+
+                    setOutput(
+                        `
+                        <div class="result-title">
+                            TIMEOUT DELLA RICHIESTA
+                        </div>
+
+                        <div class="result-error">
+                            Il browser ha atteso 30 secondi
+                            senza ricevere una risposta dal
+                            backend WYP.
+
+                            <br><br>
+
+                            Questo non significa automaticamente
+                            che il deploy Render sia fallito.
+                        </div>
+                        `,
+                        "api-error"
+                    );
+
+                    return;
+                }
 
 
-            /* -------------------------------------
-               HUMAN RESULT
-               ------------------------------------- */
+                /* -------------------------------------
+                   FETCH / NETWORK / CORS
+                   ------------------------------------- */
 
-            setOutput(
-                renderHumanResult(data),
-                "api-online"
-            );
+                if (
+                    error &&
+                    error.name ===
+                        "WYPNetworkError"
+                ) {
+
+                    setOutput(
+                        `
+                        <div class="result-title">
+                            CONNESSIONE AL BACKEND FALLITA
+                        </div>
+
+                        <div class="result-error">
+                            Il browser non ha ricevuto una
+                            risposta HTTP dal backend WYP.
+
+                            <br><br>
+
+                            Endpoint:
+                            <br>
+
+                            <code>
+                                ${escapeHtml(
+                                    WYP_API
+                                )}
+                            </code>
+
+                            <br><br>
+
+                            Dettaglio browser:
+                            <br>
+
+                            ${escapeHtml(
+                                error.message
+                            )}
+
+                            <br><br>
+
+                            Se il servizio Render è ONLINE,
+                            verificare soprattutto CORS e
+                            raggiungibilità dell'endpoint
+                            dal browser.
+                        </div>
+                        `,
+                        "api-error"
+                    );
+
+                    return;
+                }
 
 
-        } catch (error) {
+                /* -------------------------------------
+                   GENERIC CLIENT ERROR
+                   ------------------------------------- */
 
-            /* -------------------------------------
-               TIMEOUT
-               ------------------------------------- */
+                const message =
+                    error &&
+                    error.message
+                        ? error.message
+                        : "Errore sconosciuto.";
 
-            if (
-                error &&
-                error.name ===
-                "AbortError"
-            ) {
 
                 setOutput(
                     `
                     <div class="result-title">
-                        TIMEOUT DELLA RICHIESTA
+                        ERRORE CLIENT
                     </div>
 
                     <div class="result-error">
-                        Il browser ha atteso 30 secondi
-                        senza ricevere una risposta dal
-                        backend WYP.
-                        <br><br>
-                        Questo non significa automaticamente
-                        che il deploy Render sia fallito.
-                    </div>
-                    `,
-                    "api-error"
-                );
-
-                return;
-            }
-
-
-            /* -------------------------------------
-               FETCH / NETWORK / CORS
-               ------------------------------------- */
-
-            if (
-                error &&
-                error.name ===
-                "WYPNetworkError"
-            ) {
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        CONNESSIONE AL BACKEND FALLITA
-                    </div>
-
-                    <div class="result-error">
-                        Il browser non ha ricevuto una
-                        risposta HTTP dal backend WYP.
-                        <br><br>
-
-                        Endpoint:
-                        <br>
-                        <code>
-                        ${escapeHtml(WYP_API)}
-                        </code>
-
-                        <br><br>
-
-                        Dettaglio browser:
-                        <br>
                         ${escapeHtml(
-                            error.message
+                            message
                         )}
-
-                        <br><br>
-
-                        Se il servizio Render è ONLINE,
-                        verificare soprattutto CORS e
-                        raggiungibilità dell'endpoint
-                        dal browser.
                     </div>
                     `,
                     "api-error"
                 );
 
-                return;
+            } finally {
+
+                /* -------------------------------------
+                   CLEAR TIMEOUT
+                   ------------------------------------- */
+
+                if (
+                    timeout !== null
+                ) {
+
+                    clearTimeout(
+                        timeout
+                    );
+
+                    timeout =
+                        null;
+                }
+
+
+                /* -------------------------------------
+                   UNLOCK UI
+                   ------------------------------------- */
+
+                demoSubmit.disabled =
+                    false;
             }
 
-
-            /* -------------------------------------
-               GENERIC CLIENT ERROR
-               ------------------------------------- */
-
-            const message =
-                error &&
-                error.message
-                    ? error.message
-                    : "Errore sconosciuto.";
+        }
+    );
 
 
-            setOutput(
-                `
-                <div class="result-title">
-                    ERRORE CLIENT
-                </div>
+    /* =====================================================
+       ENTER KEY SUPPORT
+       ===================================================== */
 
-                <div class="result-error">
-                    ${escapeHtml(message)}
-                </div>
-                `,
-                "api-error"
-            );
-
-        } finally {
+    demoProblem.addEventListener(
+        "keydown",
+        function (event) {
 
             if (
-                timeout !== null
+                event.key === "Enter" &&
+                (
+                    event.ctrlKey ||
+                    event.metaKey
+                )
             ) {
 
-                clearTimeout(
-                    timeout
-                );
+                event.preventDefault();
+
+                demoSubmit.click();
             }
 
-
-            /* -------------------------------------
-               UNLOCK UI
-               ------------------------------------- */
-
-            demoSubmit.disabled =
-                false;
         }
+    );
 
-    }
-);
-
-
-/* =========================================================
-   ENTER KEY SUPPORT
-   ========================================================= */
-
-demoProblem.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Enter" &&
-            (event.ctrlKey || event.metaKey)
-        ) {
-
-            event.preventDefault();
-
-            demoSubmit.click();
-        }
-
-    }
-);
+}
 
 </script>
 
