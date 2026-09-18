@@ -1,78 +1,113 @@
-# AI BOOTSTRAP — WYP / AUF2026
+Ho letto **l'intero `AI_BOOTSTRAP.md` attuale** della repo pubblica, compresa la parte finale aggiunta sullo stato del backend.  GitHub+1
 
- ## 0\. SCOPO
+ Ci sono però alcune informazioni ormai superate rispetto allo stato che mi hai appena mostrato: soprattutto **Render è già verde**, il server parte con `PYTHONPATH=src python -m wyp.server`, il Worker è operativo come gateway e il JS pubblico è già stato riallineato al Worker. Quindi il bootstrap va riscritto per fotografare **lo stato reale attuale**, senza lasciare istruzioni vecchie come "definire il vero `/solve`" se quello è già stato implementato.  GitHub
 
- Questo file è il punto ufficiale di ripresa del progetto per una nuova istanza AI.
+ Ti lascio quindi il file completo aggiornato, pronto da sostituire a `docs/AI_BOOTSTRAP.md`.
 
- PRIMA DI MODIFICARE QUALSIASI FILE:
+ # AI BOOTSTRAP — WYP / AUF2026
 
- 1. leggere questo documento;
-2. controllare la struttura reale della repository;
-3. verificare il codice realmente presente;
-4. non assumere che vecchie versioni del progetto siano ancora presenti;
-5. non ricostruire componenti già esistenti;
-6. non modificare componenti funzionanti senza una ragione verificata;
-7. dopo ogni modifica eseguire almeno un controllo sintattico/import;
-8. dopo modifiche al backend verificare il deploy Render;
-9. dopo modifiche al gateway verificare Cloudflare;
-10. infine verificare il percorso pubblico completo.
+ ## 0\. SCOPO DI QUESTO FILE
 
- Il progetto è:
+ Questo file è il punto di ripresa operativo del progetto per una nuova istanza AI.
 
- **WYP — AUF2026**
+ Una nuova istanza deve leggere questo file **prima di modificare codice**.
+
+ NON ripartire da zero.
+
+ NON ricostruire l'architettura senza prima verificare lo stato reale della repository.
+
+ NON sostituire componenti funzionanti senza una ragione tecnica verificata.
+
+ Il progetto è **WYP**, parte dell'ecosistema **AUF2026 / AOS-PRIVATE-CORE**.
 
  Obiettivo:
 
- > fornire un'interfaccia pubblica per il sistema WYP mantenendo solver, matematica, verifica e licenze nella repository privata.
+ > mantenere un sistema WYP pubblico, accessibile tramite GitHub Pages, con un frontend semplice e pubblico, mentre matematica, solver, teoremi, verifica e licensing rimangono nel private core.
+
+ L'architettura è deliberatamente separata:
+
+```
+PUBLIC WEB
+    |
+    v
+GitHub Pages
+    |
+    +--------------------+
+    |                    |
+    v                    v
+Jotform             WYP Tester
+                         |
+                         v
+                Cloudflare Worker
+                         |
+                         v
+                AOS PRIVATE CORE
+                    Render
+                         |
+                         v
+                    WYP / FDM
+```
 
 ---
 
- # 1\. ARCHITETTURA ATTUALE
+ # 1\. STATO ATTUALE
 
- Il percorso previsto è:
+ Lo stato attuale verificato è:
 
 ```
-PUBLIC INTERNET
-       |
-       v
 GitHub Pages
-https://auf2026.github.io/WYP_system/
-       |
-       | HTML / CSS / JavaScript
-       |
-       v
+    |
+    v
 Cloudflare Worker
-https://wyp.auf2026.workers.dev/
-       |
-       | POST /solve
-       v
-AOS PRIVATE CORE
+    |
+    v
+AOS Private Core
+    |
+    v
+WYP server
+    |
+    v
+FDM / WYP
+```
+
+ Il private core Render è attualmente operativo.
+
+ Deploy verificato:
+
+```
+==> Build successful 🎉
+==> Deploying...
+[WYP] service=WYP
+[WYP] component=FDM
+[WYP] version=1.0.0
+[WYP] listening=http://0.0.0.0:10000
+[WYP] HTTP backend ready
+[WYP] 127.0.0.1 - "HEAD / HTTP/1.1" 200 -
+==> Your service is live 🎉
+```
+
+ URL:
+
+```
 https://aos-private-core.onrender.com
-       |
-       v
-Python WYP
-       |
-       +---- core
-       +---- fdm
-       +---- theorems
-       +---- license
-       |
-       v
-JSON RESULT
-       |
-       v
-Cloudflare Worker
-       |
-       v
-GitHub Pages
 ```
 
- Il browser pubblico NON deve chiamare direttamente Render.
+ Il Worker pubblico è operativo:
 
- Il browser deve sempre utilizzare:
+```
+https://wyp.auf2026.workers.dev/
+```
+
+ Endpoint solver pubblico:
 
 ```
 https://wyp.auf2026.workers.dev/solve
+```
+
+ La pagina pubblica è:
+
+```
+https://auf2026.github.io/WYP_system/
 ```
 
 ---
@@ -85,15 +120,23 @@ https://wyp.auf2026.workers.dev/solve
 AUF2026/WYP_system
 ```
 
- Homepage:
+ URL:
+
+```
+https://github.com/AUF2026/WYP_system
+```
+
+ GitHub Pages:
 
 ```
 https://auf2026.github.io/WYP_system/
 ```
 
- La repository pubblica contiene solamente materiale destinato al pubblico.
+ La repository è PUBBLICA.
 
- Può contenere:
+ Deve contenere solamente materiale destinato al frontend/documentazione pubblica.
+
+ Esempi:
 
 ```
 index.html
@@ -102,16 +145,17 @@ research.html
 documentation.html
 license.html
 
+README.md
+LICENSE.md
+
 assets/
 css/
 js/
 images/
 docs/
-README.md
-LICENSE.md
 ```
 
- NON deve contenere:
+ La repository pubblica NON deve contenere:
 
 ```
 private keys
@@ -120,13 +164,16 @@ license tokens
 Render secrets
 Cloudflare credentials
 private solver source
-private theorem implementation
+protected mathematical implementation
 protected Lean source
-private mathematical implementation
-internal verification secrets
+private theorem implementation
+internal verification logic
+private backend credentials
 ```
 
- Il JavaScript pubblico deve essere esclusivamente client-side UI + HTTP gateway client.
+ Il JavaScript pubblico deve comportarsi come un client HTTP.
+
+ Non deve implementare la matematica privata.
 
 ---
 
@@ -135,72 +182,67 @@ internal verification secrets
  Repository:
 
 ```
-https://github.com/AUF2026/AOS-PRIVATE-CORE
+AUF2026/AOS-PRIVATE-CORE
 ```
 
- Questa è la repository del vero motore WYP.
+ Il private core contiene il motore WYP.
 
- La matematica privata rimane qui.
+ La matematica canonica deve rimanere nel private core.
 
- Struttura rilevante:
+ Struttura concettuale:
 
 ```
 src/wyp/
+
     core/
+
     fdm/
+
     theorems/
+
     license/
+
     server.py
+
     ...
+```
+
+ Il private core è il luogo corretto per:
+
+```
+WYP solver
+FDM
+AOSKernel
+theorems
+verification
+Lean integration
+Python mathematical implementation
+license verification
+server
+internal APIs
 ```
 
  Il frontend pubblico non deve duplicare queste strutture.
 
 ---
 
- # 4\. STATO RENDER — VERIFICATO
+ # 4\. RENDER PRIVATE CORE
 
- Private core:
+ URL:
 
 ```
 https://aos-private-core.onrender.com
 ```
 
- STATO ATTUALE:
+ Il deployment è attualmente funzionante.
+
+ Python:
 
 ```
-ONLINE
+3.14.3
 ```
 
- Ultimo deploy verificato:
-
-```
-Build successful 🎉
-Deploying...
-Setting WEB_CONCURRENCY=1
-Running 'PYTHONPATH=src python -m wyp.server'
-
-[WYP] service=WYP
-[WYP] component=FDM
-[WYP] version=1.0.0
-[WYP] listening=http://0.0.0.0:10000
-[WYP] HTTP backend ready
-[WYP] 127.0.0.1 - "HEAD / HTTP/1.1" 200 -
-
-Your service is live 🎉
-
-[WYP] 127.0.0.1 - "GET / HTTP/1.1" 200 -
-```
-
- Il processo Python parte correttamente.
-
- NON reinstallare FastAPI senza una necessità verificata.
-
----
-
- # 5\. RENDER BUILD
-
- Build command attuale:
+ Build command:
 
 ```
 pip install --upgrade pip && pip install -r src/wyp/requirements.txt
@@ -212,13 +254,17 @@ pip install --upgrade pip && pip install -r src/wyp/requirements.txt
 PYTHONPATH=src python -m wyp.server
 ```
 
- Python attualmente utilizzato da Render:
+ Il server non utilizza FastAPI.
 
-```
-Python 3.14.3
-```
+ IMPORTANTE:
 
- Dipendenze verificate nel deploy:
+ NON reintrodurre FastAPI automaticamente.
+
+ In precedenza FastAPI era stata introdotta e il deploy falliva per dipendenza mancante.
+
+ La configurazione funzionante attuale non richiede FastAPI.
+
+ Il requirements attuale contiene almeno le dipendenze necessarie alla configurazione crittografica corrente:
 
 ```
 cryptography
@@ -226,13 +272,60 @@ cffi
 pycparser
 ```
 
- Il deploy attuale funziona senza FastAPI.
+ Il server attualmente parte correttamente.
+
+---
+
+ # 5\. SERVER HTTP
+
+ Il private core espone HTTP.
+
+ Endpoint pubblico di stato attraverso il Worker:
+
+```
+GET /
+```
+
+ Il private core risponde correttamente al root endpoint.
+
+ Il solver utilizza:
+
+```
+POST /solve
+```
+
+ Il contratto attuale del solver deve essere considerato la fonte reale di verità del backend.
+
+ NON assumere che il vecchio contratto FDM sia ancora il contratto pubblico.
+
+ Il frontend pubblico invia un problema WYP, non i parametri interni del modello FDM.
+
+ Esempio:
+
+```
+{
+  "problem": "2 + 3"
+}
+```
+
+ oppure il formato effettivamente stabilito dal private core.
+
+ Il frontend non deve inventare:
+
+```
+modulus
+dimension
+quotient
+base
+```
+
+ a meno che tali campi siano esplicitamente parte del nuovo contratto pubblico.
 
 ---
 
  # 6\. CLOUDFLARE WORKER
 
- Gateway pubblico:
+ Worker:
 
 ```
 https://wyp.auf2026.workers.dev/
@@ -244,53 +337,58 @@ https://wyp.auf2026.workers.dev/
 https://wyp.auf2026.workers.dev/solve
 ```
 
- Il Worker inoltra a:
+ Il Worker è un **gateway HTTP**.
+
+ Architettura:
 
 ```
+Browser
+    |
+    v
+Cloudflare Worker
+    |
+    v
 https://aos-private-core.onrender.com/solve
 ```
 
- Il Worker attuale è un gateway HTTP.
-
- Responsabilità:
-
-```
-HTTP
-CORS
-JSON validation superficiale
-proxy verso Render
-ritorno della risposta upstream
-timeout
-gestione errori gateway
-```
-
- Il Worker NON deve contenere:
+ Il Worker NON contiene:
 
 ```
 private key
 license key
 license token
-solver
+verification secrets
+solver implementation
+mathematical implementation
+Lean code
 FDM implementation
-theorem implementation
-Lean implementation
-protected mathematics
-private verification logic
+protected logic
 ```
 
- Il Worker non deve trasformarsi in un secondo backend matematico.
+ Il Worker deve occuparsi solamente di:
+
+```
+HTTP
+CORS
+request validation superficiale
+timeout
+forwarding
+response forwarding
+```
+
+ Il Worker non deve diventare un secondo solver.
 
 ---
 
- # 7\. CLOUDFLARE STATUS
+ # 7\. WORKER STATUS
 
- Il Worker risponde alla root:
+ Il Worker espone:
 
 ```
 GET /
 ```
 
- con uno stato del gateway equivalente a:
+ Risposta prevista:
 
 ```
 {
@@ -300,794 +398,818 @@ GET /
 }
 ```
 
- Questo endpoint indica che il gateway è raggiungibile.
+ Questo endpoint rappresenta lo stato del gateway.
 
- NON deve essere interpretato automaticamente come prova che il solver privato sia disponibile.
+ Non deve essere interpretato automaticamente come prova che ogni componente matematico interno sia disponibile.
+
+ Il controllo effettivo del solver avviene tramite:
+
+```
+POST /solve
+```
 
 ---
 
- # 8\. CLOUDFLARE /solve
+ # 8\. WORKER /solve
 
- Endpoint:
+ Il Worker riceve:
 
 ```
-POST https://wyp.auf2026.workers.dev/solve
+POST /solve
 ```
 
- Il Worker accetta JSON.
+ dal browser.
 
- Il formato pubblico attuale è:
+ Il Worker:
+
+ 1. legge il body;
+2. verifica che non sia vuoto;
+3. verifica che sia JSON valido;
+4. verifica che il JSON sia un object;
+5. inoltra il payload al private core;
+6. applica un timeout;
+7. restituisce la risposta del private core.
+
+ Il Worker non modifica il risultato matematico.
+
+ Il flusso è:
+
+```
+Browser
+   |
+   | POST /solve
+   v
+Cloudflare
+   |
+   | POST /solve
+   v
+Render Private Core
+   |
+   v
+WYP
+   |
+   v
+JSON
+   |
+   v
+Cloudflare
+   |
+   v
+Browser
+```
+
+---
+
+ # 9\. CORS
+
+ Il Worker gestisce CORS.
+
+ Sono previsti:
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization, Accept
+```
+
+ Il preflight:
+
+```
+OPTIONS
+```
+
+ deve essere gestito dal Worker.
+
+ Il private core non deve essere chiamato direttamente dal browser.
+
+---
+
+ # 10\. TIMEOUT
+
+ Il Worker utilizza un timeout upstream.
+
+ Configurazione attuale:
+
+```
+30000 ms
+```
+
+ In caso di timeout deve essere restituito uno stato coerente, ad esempio:
 
 ```
 {
-  "problem": "..."
+  "status": "PRIVATE_CORE_TIMEOUT",
+  "error": "The protected AOS API did not respond within the configured timeout."
 }
 ```
 
- Il Worker inoltra il payload al private core senza introdurre parametri matematici propri.
-
- Esempio:
+ In caso di impossibilità di raggiungere il private core:
 
 ```
 {
-  "problem": "2 + 3"
+  "status": "PRIVATE_CORE_UNAVAILABLE",
+  "error": "Unable to reach the protected AOS API."
 }
 ```
 
- NON introdurre nel frontend:
+---
+
+ # 11\. LICENSING
+
+ Il licensing rimane SERVER-SIDE.
+
+ Modulo:
+
+```
+wyp/license
+```
+
+ La verifica utilizza Ed25519.
+
+ Le credenziali di licenza non devono essere presenti nella repository pubblica.
+
+ Il private core utilizza variabili d'ambiente.
+
+ Configurazione:
+
+```
+WYP_LICENSE_KEY
+WYP_LICENSE_PUBLIC_KEY
+```
+
+ La funzione di verifica è:
+
+```
+require_license()
+```
+
+ La verifica comprende, secondo l'implementazione privata:
+
+```
+token presence
+token structure
+Base64URL decoding
+JSON parsing
+Ed25519 signature verification
+product verification
+claims verification
+issued_at
+expires_at
+expiration
+```
+
+ IMPORTANTE:
+
+ NON inserire il token di licenza nel frontend.
+
+ NON inserire il token nel Worker.
+
+ NON inserire il token in Git.
+
+ NON inserire la private signing key nella repository.
+
+ La configurazione effettiva rimane nel private environment.
+
+---
+
+ # 12\. PUBLIC VERIFICATION KEY
+
+ La public verification key è un elemento crittografico distinto dalla private signing key.
+
+ Il browser non deve riceverla semplicemente perché esiste.
+
+ La verifica della licenza è responsabilità del private core.
+
+ Non introdurre la public key nel JavaScript pubblico senza una precisa necessità architetturale.
+
+---
+
+ # 13\. WYP FDM
+
+ Il private core contiene il modello FDM.
+
+ Componenti concettuali:
+
+```
+FDMModel
+FDMDerivation
+FDMComputation
+FDMEngine
+```
+
+ L'AOSKernel è lo strato numerico.
+
+ Concettualmente:
+
+```
+AOSKernel
+    |
+    +-- exact
+    +-- decimal
+    +-- float
+    +-- power
+    +-- identity
+```
+
+ AOSKernel NON deve conoscere:
+
+```
+HTTP
+Cloudflare
+Jotform
+HTML
+licensing
+natural-language UI
+frontend
+```
+
+ Questa separazione deve essere mantenuta.
+
+---
+
+ # 14\. FDM PUBLIC CONTRACT
+
+ Il frontend pubblico NON deve essere un'interfaccia diretta al costruttore interno FDM.
+
+ Non richiedere all'utente:
 
 ```
 modulus
 dimension
 quotient
-FDM internals
 ```
 
- a meno che tali campi non diventino esplicitamente parte del contratto pubblico definitivo.
+ solo perché tali valori vengono utilizzati internamente.
+
+ Il tester pubblico deve essere orientato al problema.
+
+ Concettualmente:
+
+```
+USER PROBLEM
+      |
+      v
+WYP API
+      |
+      v
+problem interpretation
+      |
+      v
+mathematical engine
+      |
+      v
+FDM / theorems / verification
+```
+
+ L'implementazione interna deve rimanere privata.
 
 ---
 
- # 9\. FRONTEND PUBBLICO — STATO ATTUALE
+ # 15\. THEOREMS
 
- Il JavaScript della homepage è stato aggiornato.
+ I teoremi appartengono al private core.
 
- Endpoint utilizzato dal browser:
+ Modulo previsto:
+
+```
+wyp.theorems
+```
+
+ Il frontend pubblico può descrivere:
+
+```
+research
+method
+formalization
+verification
+theorems
+FDM
+solver
+```
+
+ ma non deve contenere:
+
+```
+private theorem implementations
+private Lean source
+internal registry logic
+protected mathematical derivations
+```
+
+---
+
+ # 16\. PUBLIC PAGE
+
+ Homepage:
+
+```
+https://auf2026.github.io/WYP_system/
+```
+
+ La homepage è il punto di ingresso pubblico al progetto.
+
+ Architettura:
+
+```
+PUBLIC PAGE
+
+    Jotform
+       |
+       | separato
+       |
+       v
+
+    WYP TESTER
+       |
+       v
+    Cloudflare
+       |
+       v
+    Private Core
+```
+
+ Il form Jotform e il solver WYP sono due sistemi distinti.
+
+---
+
+ # 17\. JOTFORM
+
+ Il form contatti è gestito da:
+
+```
+Jotform
+```
+
+ Il form deve rimanere indipendente.
+
+ Il JavaScript pubblico NON deve:
+
+```
+intercettare arbitrariamente il submit Jotform
+modificare form.action
+trasformare il submit in una richiesta WYP
+inviare dati del contatto al solver
+inviare dati personali al private core
+```
+
+ Il flusso corretto è:
+
+```
+Jotform
+    |
+    v
+Jotform backend
+
+WYP Tester
+    |
+    v
+Cloudflare
+    |
+    v
+Private Core
+```
+
+ Sono due flussi separati.
+
+---
+
+ # 18\. PUBLIC WYP TESTER
+
+ Il tester pubblico utilizza esclusivamente:
+
+```
+https://wyp.auf2026.workers.dev/solve
+```
+
+ NON deve utilizzare:
+
+```
+https://aos-private-core.onrender.com/solve
+```
+
+ direttamente dal browser.
+
+ Il browser non deve conoscere l'endpoint Render come destinazione solver.
+
+ Il JavaScript pubblico deve contenere solamente il riferimento al Worker.
+
+ Configurazione:
 
 ```
 const WYP_API =
     "https://wyp.auf2026.workers.dev/solve";
 ```
 
- Health/status:
-
-```
-const WYP_HEALTH =
-    "https://wyp.auf2026.workers.dev/";
-```
-
- Il browser NON chiama:
-
-```
-https://aos-private-core.onrender.com/solve
-```
-
- direttamente.
-
- Il flusso è:
-
-```
-textarea
-   |
-   v
-requestWYP()
-   |
-   v
-Cloudflare Worker
-   |
-   v
-Render private core
-```
-
- Il frontend non contiene matematica.
-
 ---
 
- # 10\. FRONTEND — RESPONSABILITÀ
+ # 19\. PUBLIC JAVASCRIPT
 
- Il JavaScript pubblico deve occuparsi esclusivamente di:
-
-```
-UI
-input
-button
-keyboard shortcuts
-HTTP
-CORS-compatible requests
-response parsing
-status
-error display
-result display
-```
-
- NON deve occuparsi di:
-
-```
-FDM mathematics
-theorem proving
-license verification
-private keys
-solver implementation
-mathematical derivations
-Lean execution
-```
-
----
-
- # 11\. JOTFORM
-
- Il form contatti Jotform è indipendente dal solver.
-
- Il JavaScript WYP NON deve:
-
-```
-intercept Jotform submit
-replace form.action
-convert contact data into solver data
-send contact data to Render
-send contact data to Cloudflare /solve
-```
-
- Il flusso della homepage rimane:
-
-```
-JOTFORM
-   |
-   | separato
-   |
-WYP TESTER
-   |
-   v
-CLOUDFLARE
-```
-
----
-
- # 12\. PRIVATE CORE — SERVER
-
- Il server è:
-
-```
-src/wyp/server.py
-```
-
- Il server non deve contenere la matematica vera.
-
- Il server deve essere il boundary HTTP.
-
- Architettura:
-
-```
-HTTP request
-     |
-     v
-request validation
-     |
-     v
-license verification
-     |
-     v
-WYP problem handling
-     |
-     v
-deterministic solver
-     |
-     v
-FDM / theorems / verification
-     |
-     v
-JSON response
-```
-
- La matematica rimane nei relativi moduli.
-
----
-
- # 13\. CORE — ARCHITETTURA ATTUALE
-
- Nella repository privata esistono ora componenti core per:
-
-```
-interpreter
-problem
-result
-numeric
-kernel
-pipeline
-router
-llm
-```
-
- Il principio architetturale è:
-
-```
-natural language
-      |
-      v
-WYPProblem
-      |
-      v
-deterministic solver
-      |
-      v
-SolverResult
-      |
-      v
-response composition
-```
-
- L'LLM non è il solver matematico.
-
----
-
- # 14\. WYP PROBLEM
-
- Il problema canonico deve rappresentare una richiesta strutturata.
-
- Concettualmente:
-
-```
-{
-  "intent": "solve",
-  "domain": "fdm",
-  "problem": {},
-  "constraints": {},
-  "metadata": {}
-}
-```
-
- Il formato reale deve essere determinato dal codice presente nella repository privata.
-
- NON inventare nuovi campi senza verificare:
-
-```
-src/wyp/core/problem.py
-```
-
----
-
- # 15\. INTERPRETER
-
- Il componente interpreter ha il compito di trasformare una richiesta in:
-
-```
-WYPProblem
-```
-
- Non deve eseguire direttamente la matematica.
-
- Principio:
-
-```
-interpretation != computation
-```
-
- L'interpreter non deve essere utilizzato come sostituto del solver.
-
- Prima di aggiungere classi o funzioni all'interpreter:
-
-```
-controllare src/wyp/core/interpreter.py
-```
-
- e controllare gli import effettivi in:
-
-```
-src/wyp/core/__init__.py
-```
-
- IMPORTANTE:
-
- non aggiungere nomi esportati arbitrariamente.
-
- Gli errori precedenti:
-
-```
-ImportError:
-StructuredProblemInterpreter
-
-ImportError:
-CallableInterpreter
-
-ImportError:
-interpret_mapping
-```
-
- sono stati causati da disallineamenti tra gli export di `core/__init__.py` e le definizioni realmente presenti in `interpreter.py`.
-
- REGOLA:
-
- > prima verificare ciò che esiste, poi modificare gli export.
-
----
-
- # 16\. ROUTER
-
- Il router deterministico è:
-
-```
-src/wyp/core/router.py
-```
+ Il JavaScript pubblico deve essere semplice.
 
  Responsabilità:
 
 ```
-WYPProblem
-     |
-     v
-domain + intent
-     |
-     v
-registered deterministic solver
+UI
+tester
+POST al Worker
+visualizzazione risultato
+gestione errori
+health/status
+eventi tastiera
 ```
 
- Il router NON implementa matematica.
-
- Il router deve solo:
+ NON deve contenere:
 
 ```
-register
-resolve
-dispatch
+FDM equations
+solver implementation
+theorem implementation
+license verification
+license token
+private key
+Render credentials
+private mathematical logic
 ```
 
- Il solver FDM esistente viene adattato al contratto WYP tramite il boundary previsto dal router.
-
- NON creare un secondo FDM engine nel router.
+ Il frontend deve rimanere un client.
 
 ---
 
- # 17\. PIPELINE
+ # 20\. PUBLIC JS — RESPONSE HANDLING
 
- Il pipeline è:
-
-```
-request
-   |
-   v
-interpreter
-   |
-   v
-WYPProblem
-   |
-   v
-deterministic solver
-   |
-   v
-SolverResult
-   |
-   v
-response composer
-   |
-   v
-answer
-```
-
- Il principio fondamentale è:
+ Il frontend deve distinguere almeno:
 
 ```
-LLM = interpretation + response composition
-
-Solver = authoritative computation
+SUCCESS
+LICENSE_REQUIRED
+ENGINE_ERROR
+INVALID_REQUEST
+PRIVATE_CORE_UNAVAILABLE
+PRIVATE_CORE_TIMEOUT
+PRIVATE_CORE_INVALID_RESPONSE
+UNKNOWN STATUS
 ```
 
- Il composer non deve ricalcolare il risultato.
+ Il frontend non deve reinterpretare matematicamente il risultato.
 
- Il risultato del solver è autorevole.
+ Deve visualizzare il risultato ricevuto dal backend.
+
+ Il JSON del private core è autorevole rispetto al risultato del solver.
 
 ---
 
- # 18\. LLM BOUNDARY
+ # 21\. PUBLIC JS — HEALTH
 
- Il componente:
-
-```
-src/wyp/core/llm.py
-```
-
- definisce il boundary astratto dell'LLM.
-
- Non deve introdurre direttamente:
+ Il frontend può controllare:
 
 ```
-OpenAI dependency
-GGUF runtime
-llama.cpp dependency
-transformers dependency
-specific inference provider
+https://wyp.auf2026.workers.dev/
 ```
 
- Il core rimane indipendente dal provider.
+ Il controllo attuale utilizza il root endpoint del Worker.
 
- Il componente LLM può:
-
-```
-interpretare
-comporre risposte
-```
-
- ma non deve sostituire:
+ Non assumere automaticamente che esista:
 
 ```
-deterministic solver
-verification
-mathematical engine
+https://wyp.auf2026.workers.dev/health
 ```
+
+ se il Worker non lo implementa.
+
+ Il browser non deve interrogare direttamente:
+
+```
+https://aos-private-core.onrender.com
+```
+
+ per il normale status della pagina pubblica.
 
 ---
 
- # 19\. FDM
+ # 22\. PUBLIC API
 
- FDM rimane nel private core.
-
- Il modello interno FDM non deve diventare automaticamente il contratto pubblico.
-
- L'implementazione matematica rimane in:
+ Il frontend espone eventualmente:
 
 ```
-src/wyp/fdm/
+window.WYP
 ```
 
- Il kernel numerico deve rimanere separato dai layer:
+ con funzioni orientate al client, ad esempio:
 
 ```
-HTTP
-LLM
+WYP.api
+WYP.health
+WYP.solve
+```
+
+ e può esporre:
+
+```
+window.solveWYP(...)
+```
+
+ come helper pubblico.
+
+ Questi helper devono rimanere semplici wrapper HTTP.
+
+ NON devono contenere logica matematica.
+
+---
+
+ # 23\. MENU E PAGINE PUBBLICHE
+
+ La struttura pubblica prevista è:
+
+```
+WYP
+├── Home
+├── About
+├── Research
+├── Documentation
+└── License
+```
+
+ Pagine:
+
+```
+index.html
+about.html
+research.html
+documentation.html
+license.html
+```
+
+ Il progetto deve rimanere statico e semplice.
+
+ NON introdurre framework inutili.
+
+ NON trasformare il progetto in una SPA se non necessario.
+
+---
+
+ # 24\. CONTENUTO PUBBLICO
+
+ Il contenuto pubblico può descrivere:
+
+```
+WYP
+AUF2026
+ricerca
+metodo
+approccio matematico
+formalizzazione
+verifica
+FDM
+theorems
+Lean
+solver
 licensing
-Cloudflare
-Jotform
-natural-language interpretation
+documentazione
+```
+
+ Le dichiarazioni pubbliche devono essere formulate in modo tecnico e verificabile.
+
+ Evitare claim assoluti non supportati da risultati pubblicamente verificabili.
+
+ Quando viene dichiarato un risultato scientifico, distinguere chiaramente:
+
+```
+implemented
+tested
+verified
+formally verified
+published
+experimental
+research claim
+```
+
+ Non presentare come risultato formalmente dimostrato qualcosa che il private core non abbia effettivamente verificato.
+
+---
+
+ # 25\. COSA È STATO RISOLTO
+
+ Sono attualmente risolti:
+
+```
+Render deployment
+Python 3.14.3
+cryptography installation
+private core startup
+HTTP server
+GET /
+Cloudflare Worker deployment
+Worker status endpoint
+Worker /solve gateway
+CORS
+upstream timeout
+public/private separation
+Jotform separation
+public tester architecture
+license configuration
+Ed25519 verification infrastructure
+```
+
+ Il Render deployment attualmente mostra:
+
+```
+[WYP] service=WYP
+[WYP] component=FDM
+[WYP] version=1.0.0
+[WYP] HTTP backend ready
+```
+
+ Il Worker è raggiungibile.
+
+---
+
+ # 26\. ERRORI PRECEDENTI DA NON REINTRODURRE
+
+ In precedenza il private core aveva una serie di incompatibilità tra `core/__init__.py` e `core/interpreter.py`.
+
+ Sono comparsi errori del tipo:
+
+```
+ImportError:
+cannot import name 'StructuredProblemInterpreter'
+```
+
+ poi:
+
+```
+ImportError:
+cannot import name 'CallableInterpreter'
+```
+
+ poi:
+
+```
+ImportError:
+cannot import name 'interpret_mapping'
+```
+
+ Questi errori sono stati corretti riallineando gli export/import del core.
+
+ IMPORTANTE:
+
+ Prima di aggiungere un nuovo import in `__init__.py`, verificare che il simbolo esista realmente nel modulo destinazione.
+
+ NON creare alias o classi inesistenti solamente per soddisfare un import.
+
+ NON modificare contemporaneamente molti moduli senza testare l'import chain.
+
+---
+
+ # 27\. REGOLA IMPORTANTE SULL'ARCHITETTURA
+
+ Il progetto ha tre livelli distinti:
+
+```
+PUBLIC
+    GitHub Pages
+        |
+        v
+GATEWAY
+    Cloudflare Worker
+        |
+        v
+PRIVATE
+    AOS Private Core
+```
+
+ Questa separazione deve essere mantenuta.
+
+ NON:
+
+```
+Browser → Render
+```
+
+ Sì:
+
+```
+Browser → Cloudflare → Render
+```
+
+ NON:
+
+```
+Browser → private solver
+```
+
+ Sì:
+
+```
+Browser → public API gateway → private solver
 ```
 
 ---
 
- # 20\. AOS KERNEL
+ # 28\. CLOUDFLARE NON È IL SOLVER
 
- L'AOSKernel è uno strato numerico.
+ Il Worker non deve diventare il luogo della matematica.
+
+ Non spostare nel Worker:
+
+```
+FDM
+theorems
+AOSKernel
+verification
+Lean
+license verification
+```
+
+ Il Worker è solamente:
+
+```
+HTTP gateway
+```
+
+ L'eventuale utilizzo futuro di Cloudflare AI, Workers AI, Llama o modelli analoghi non modifica automaticamente questa architettura.
+
+ Se in futuro verrà introdotto un LLM, dovrà essere deciso esplicitamente quale ruolo ricopre.
+
+ Una possibile architettura è:
+
+```
+User
+ |
+ v
+Public UI
+ |
+ v
+Cloudflare
+ |
+ v
+Private Core
+ |
+ +--> LLM interpretation
+ |
+ +--> deterministic solver
+ |
+ +--> verification
+ |
+ v
+Result
+```
+
+ Il modello linguistico non deve diventare automaticamente l'autorità matematica.
+
+---
+
+ # 29\. LLM BOUNDARY
+
+ Il private core può utilizzare un LLM come componente di:
+
+```
+interpretazione
+classificazione
+problem structuring
+response composition
+```
+
+ ma la matematica deterministica rimane nel solver.
 
  Concettualmente:
 
 ```
-AOSKernel
-   |
-   +-- exact
-   +-- decimal
-   +-- float
-   +-- power
-   +-- identity
+USER TEXT
+    |
+    v
+LLM INTERPRETATION
+    |
+    v
+STRUCTURED WYP PROBLEM
+    |
+    v
+DETERMINISTIC SOLVER
+    |
+    v
+VERIFIED RESULT
+    |
+    v
+LLM RESPONSE COMPOSITION
+    |
+    v
+USER
 ```
 
- NON deve conoscere:
-
-```
-HTTP
-Cloudflare
-Jotform
-license
-natural language
-theorem registry
-HTML
-```
-
- Non modificare AOSKernel per risolvere problemi che appartengono al server/API.
+ Il modello linguistico NON deve essere considerato il motore matematico autorevole.
 
 ---
 
- # 21\. THEOREMS
+## 30\. Test end-to-end
 
- I teoremi appartengono esclusivamente alla repository privata.
+ Partiamo dal test più semplice: verificare che il **Worker pubblico** raggiunga effettivamente il **core Render**.
 
- Percorso:
-
-```
-src/wyp/theorems/
-```
-
- Il frontend pubblico può descrivere:
+ Da terminale:
 
 ```
-formalization
-verification
-theorem proving
-research
-methodology
+curl -i https://wyp.auf2026.workers.dev/
 ```
 
- ma non deve contenere le implementazioni private.
-
- Prima di modificare il theorem layer verificare i file realmente presenti.
-
- In particolare:
-
-```
-src/wyp/theorems/base.py
-src/wyp/theorems/registry.py
-src/wyp/theorems/__init__.py
-```
-
- NON assumere che classi o funzioni citate in documentazione precedente esistano ancora.
-
----
-
- # 22\. LICENSING
-
- La verifica della licenza è SERVER-SIDE.
-
- Modulo:
-
-```
-src/wyp/license/
-```
-
- La verifica utilizza Ed25519.
-
- Le credenziali/licenze effettive rimangono nelle variabili d'ambiente del private deployment.
-
- NON inserire mai in questo file:
-
-```
-license token
-private signing key
-secret credentials
-Render secrets
-Cloudflare secrets
-```
-
- Il frontend non deve conoscere il token di licenza.
-
- Il Worker non deve conoscere il token di licenza.
-
- La verifica deve rimanere nel private core.
-
----
-
- # 23\. STATO ATTUALE DEL DEPLOY
-
- STATO VERIFICATO:
-
-```
-RENDER:
-ONLINE
-
-PYTHON SERVER:
-ONLINE
-
-WYP:
-ONLINE
-
-FDM:
-LOADED
-
-CLOUDFLARE WORKER:
-ONLINE
-
-PUBLIC HOMEPAGE:
-CONFIGURATA PER USARE IL WORKER
-```
-
- Il deploy Render attuale non presenta più:
-
-```
-SyntaxError in pipeline.py
-IndentationError in pipeline.py
-ImportError StructuredProblemInterpreter
-ImportError CallableInterpreter
-ImportError interpret_mapping
-```
-
- Se questi errori ricompaiono, NON correggere aggiungendo casualmente simboli.
-
- Controllare prima:
-
-```
-core/__init__.py
-core/interpreter.py
-```
-
- e verificare che gli export corrispondano alle definizioni reali.
-
----
-
- # 24\. PROBLEMA ARCHITETTURALE ORIGINARIO
-
- Il vecchio endpoint FDM richiedeva parametri interni come:
-
-```
-{
-  "modulus": 12,
-  "dimension": 3,
-  "name": "faure"
-}
-```
-
- mentre il frontend pubblico inviava:
-
-```
-{
-  "problem": "2 + 3"
-}
-```
-
- Questo produceva errori del tipo:
-
-```
-Missing required field: modulus
-```
-
- La soluzione NON è aggiungere `modulus` e `dimension` al frontend.
-
- La soluzione architetturale è:
-
-```
-public problem
-      |
-      v
-WYP problem interpretation
-      |
-      v
-deterministic routing
-      |
-      v
-appropriate mathematical subsystem
-      |
-      v
-verified result
-```
-
- Il frontend non deve conoscere la struttura interna FDM.
-
----
-
- # 25\. CONTRATTO PUBBLICO ATTUALE
-
- Input:
-
-```
-POST /solve
-Content-Type: application/json
-```
-
- Body:
-
-```
-{
-  "problem": "..."
-}
-```
-
- Gateway:
-
-```
-Cloudflare Worker
-```
-
- Backend:
-
-```
-AOS PRIVATE CORE
-```
-
- Il formato definitivo della risposta deve essere verificato in:
-
-```
-src/wyp/server.py
-```
-
- e non inventato nel frontend.
-
----
-
- # 26\. PROSSIMO STEP REALE
-
- Il prossimo lavoro NON è più:
-
-```
-Render deployment
-Cloudflare gateway
-homepage endpoint
-basic public JS
-```
-
- Questi pezzi sono già configurati.
-
- Il prossimo step è:
-
-```
-PRIVATE CORE /solve
-```
-
- e consiste nel verificare che il server riceva:
-
-```
-{
-  "problem": "..."
-}
-```
-
- e lo trasformi correttamente nel nuovo flusso WYP.
-
- Target:
-
-```
-POST /solve
-       |
-       v
-validate request
-       |
-       v
-require_license()
-       |
-       v
-problem interpretation
-       |
-       v
-WYPProblem
-       |
-       v
-router
-       |
-       v
-deterministic solver
-       |
-       v
-SolverResult
-       |
-       v
-JSON
-```
-
----
-
- # 27\. ORDINE DI VERIFICA
-
- Prima di modificare codice:
-
-```
-1. server.py
-2. problem.py
-3. interpreter.py
-4. router.py
-5. result.py
-6. fdm/api.py
-7. fdm/engine.py
-8. theorem registry
-9. verification
-```
-
- Non modificare tutti i layer contemporaneamente.
-
----
-
- # 28\. TEST DA ESEGUIRE
-
- ## Test 1 — Render
-
-```
-GET /
-```
-
- Atteso:
-
-```
-HTTP 200
-```
-
- ## Test 2 — Worker
-
-```
-GET https://wyp.auf2026.workers.dev/
-```
-
- Atteso:
+ Devi ottenere una risposta JSON del Worker simile a:
 
 ```
 {
@@ -1097,326 +1219,125 @@ GET https://wyp.auf2026.workers.dev/
 }
 ```
 
- ## Test 3 — Private solve
-
- Testare direttamente:
+ Poi:
 
 ```
-POST https://aos-private-core.onrender.com/solve
+curl -i -X POST \
+  https://wyp.auf2026.workers.dev/solve \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"problem":"2 + 2"}'
 ```
 
- con il contratto reale definito da `server.py`.
+ Qui **non dobbiamo inventare quale sarà il risultato matematico restituito**: deve essere quello prodotto dal tuo core.
 
- ## Test 4 — Worker solve
+ ## 31\. Test diretto del Private Core
 
-```
-POST https://wyp.auf2026.workers.dev/solve
-```
-
- con lo stesso payload.
-
- ## Test 5 — Public page
+ Prima di coinvolgere la pagina pubblica, verifichiamo anche Render:
 
 ```
-https://auf2026.github.io/WYP_system/
+curl -i https://aos-private-core.onrender.com/
 ```
 
- e usare il tester.
+ Dal log che hai mostrato, questo endpoint è già stato raggiunto correttamente da Render stesso con `200`.
 
----
-
- # 29\. TEST END-TO-END DEFINITIVO
-
- Il sistema è considerato correttamente integrato solo quando funziona:
+ Poi:
 
 ```
-Browser
+curl -i -X POST \
+  https://aos-private-core.onrender.com/solve \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"problem":"2 + 2"}'
+```
+
+ ## 32\. Se entrambi funzionano
+
+ A quel punto la pagina pubblica può continuare a usare esclusivamente:
+
+```
+const WYP_API =
+    "https://wyp.auf2026.workers.dev/solve";
+
+const WYP_HEALTH =
+    "https://wyp.auf2026.workers.dev/";
+```
+
+ **Non**:
+
+```
+https://aos-private-core.onrender.com/solve
+```
+
+ Il browser deve conoscere soltanto il Worker.
+
+ ## 33\. JotForm
+
+ Il form JotForm rimane separato.
+
+ Il codice del terminale WYP non deve:
+
+```
+form.submit();
+```
+
+ non deve modificare:
+
+```
+form.action
+```
+
+ e non deve intercettare il submit del form JotForm.
+
+ La pagina avrà quindi due flussi indipendenti:
+
+```
+JotForm
    |
-   v
-GitHub Pages
+   +----> JotForm
+
+WYP Terminal
    |
-   v
-WYP Public Tester
-   |
-   v
-Cloudflare Worker
-   |
-   v
-AOS Private Core
-   |
-   v
-license verification
-   |
-   v
-WYP problem
-   |
-   v
-deterministic routing
-   |
-   v
-FDM / Theorems / Verification
-   |
-   v
-SolverResult
-   |
-   v
-JSON
-   |
-   v
-Cloudflare
-   |
-   v
-Browser
+   +----> Cloudflare Worker
+              |
+              +----> Render Private Core
 ```
 
----
+ ## 34\. Test dal browser
 
- # 30\. REGOLE ASSOLUTE PER LA NUOVA ISTANZA AI
-
- NON:
+ Apri la pagina pubblica, inserisci:
 
 ```
-reinstallare FastAPI senza necessità
-spostare matematica nella repo pubblica
-mettere licenze nel frontend
-mettere secret nel Worker
-chiamare Render direttamente dal browser
-modificare Jotform per collegarlo al solver
-aggiungere modulus/dimension al frontend per aggirare un errore
-inventare classi mancanti
-inventare import mancanti
-duplicare il solver
-duplicare FDM
-duplicare i teoremi
-far calcolare all'LLM il risultato matematico
+2 + 2
 ```
 
- Prima di ogni modifica:
+ e premi il pulsante WYP.
+
+ Nel browser, **Network → Fetch/XHR**, deve comparire una richiesta:
 
 ```
-READ
-VERIFY
-MODIFY
-IMPORT-CHECK
-DEPLOY
-TEST
+POST
+https://wyp.auf2026.workers.dev/solve
 ```
 
----
-
- # 31\. REGOLA IMPORTANTE SUGLI EXPORT
-
- Gli errori recenti hanno mostrato un problema concreto:
+ Non deve comparire una richiesta browser verso:
 
 ```
-core/__init__.py
+aos-private-core.onrender.com
 ```
 
- può esportare simboli che non esistono più in:
+ ## 35\. Stato attuale
+
+ Da quello che hai mostrato, il deployment Render è già arrivato a:
 
 ```
-core/interpreter.py
+[WYP] service=WYP
+[WYP] component=FDM
+[WYP] version=1.0.0
+[WYP] HTTP backend ready
+==> Your service is live 🎉
 ```
 
- Esempi storici:
+ Quindi **non tocchiamo Python/core adesso**.
 
-```
-StructuredProblemInterpreter
-CallableInterpreter
-interpret_mapping
-```
-
- REGOLA:
-
- > non aggiungere un nome a `__init__.py` perché sembra architetturalmente utile.
-
- Prima verificare:
-
-```
-hasattr(module, "Name")
-```
-
- oppure leggere direttamente la definizione del file.
-
- Ogni `__all__` deve corrispondere a simboli realmente definiti/importabili.
-
----
-
- # 32\. REGOLA SUL BOOTSTRAP
-
- Questo documento descrive lo STATO ATTUALE.
-
- Quando un componente viene realmente completato:
-
-```
-aggiornare questo file
-```
-
- e non lasciare istruzioni obsolete come se fossero ancora il prossimo step.
-
- In particolare aggiornare:
-
-```
-Render status
-Worker status
-public JS status
-API contract
-next step
-known errors
-repository structure
-```
-
----
-
- # 33\. STATO DI RIPRESA CORRENTE
-
- Punto esatto da cui riprendere:
-
-```
-Render private core:
-GREEN / ONLINE
-
-Cloudflare Worker:
-ONLINE
-
-Public GitHub Pages:
-CONFIGURATA PER PASSARE DAL WORKER
-
-Public JS:
-AGGIORNATO
-
-Jotform:
-SEPARATO DAL SOLVER
-
-Core architecture:
-INTERPRETER
-PROBLEM
-ROUTER
-PIPELINE
-LLM
-RESULT
-PRESENTI
-
-FDM:
-PRESENTE
-
-AOSKernel:
-PRESENTE
-
-Licensing:
-SERVER-SIDE
-
-NEXT:
-VERIFICARE E CHIUDERE IL CONTRATTO
-PRIVATE CORE POST /solve
-```
-
----
-
- # 34\. OBIETTIVO IMMEDIATO
-
- Non aggiungere altra architettura prima di avere verificato:
-
-```
-POST /solve
-```
-
- Il singolo obiettivo è:
-
-```
-{
-  "problem": "..."
-}
-```
-
- ↓
-
-```
-private core
-```
-
- ↓
-
-```
-SolverResult
-```
-
- ↓
-
-```
-JSON
-```
-
- ↓
-
-```
-Worker
-```
-
- ↓
-
-```
-Public tester
-```
-
- Una volta verificato questo flusso, si può procedere con:
-
-```
-theorem discovery
-verification
-response composition
-public documentation
-About
-Research
-Documentation
-License
-```
-
----
-
- # 35\. PRINCIPIO FINALE
-
- WYP deve mantenere questa separazione:
-
-```
-PUBLIC
-    |
-    | problem
-    v
-CLOUDFLARE
-    |
-    | HTTP
-    v
-PRIVATE CORE
-    |
-    +-- license
-    |
-    +-- interpreter
-    |
-    +-- router
-    |
-    +-- solver
-    |
-    +-- FDM
-    |
-    +-- theorems
-    |
-    +-- verification
-    |
-    v
-RESULT
-```
-
- La repository pubblica mostra il sistema.
-
- La repository privata esegue il sistema.
-
- Il browser non deve conoscere la matematica privata.
-
- Il Worker non deve conoscere la matematica privata.
-
- Il solver deterministico rimane l'autorità sul risultato matematico.
-
- **Questo è lo stato da cui riprendere.**
-
- Questo sostituisce il vecchio bootstrap: ho anche eliminato dal documento il **token/licenza di sviluppo** che era presente nella versione pubblica attuale, perché non serve per riprendere il progetto e non va propagato in documentazione versionata.  GitHub
+ Il prossimo passaggio concreto è eseguire i due `curl` del punto **30 e 31**. Se mi incolli l'output, procediamo direttamente dal primo eventuale errore, senza modificare componenti che stanno già funzionando.
