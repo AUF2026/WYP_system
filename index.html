@@ -177,184 +177,459 @@ footer a:hover { color: #ffffff; text-decoration: underline; }
 <div id="kernel-status"><div class="status-text" id="status-log"></div></div>
 
 <script>
+/* =========================================================
+WYP PUBLIC WEB TERMINAL
+PUBLIC PAGE
+|
++--> JOTFORM
+|
++--> WYP FDM TESTER
+|
+v
+CLOUDFLARE WORKER
+|
+v
+AOS PRIVATE CORE
+|
+v
+LICENSE VERIFICATION
+|
+v
+FDM COMPUTATION
+
+PUBLIC GATEWAY:
+https://wyp.auf2026.workers.dev
+
+SOLVER:
+https://wyp.auf2026.workers.dev/solve
+
+IMPORTANT:
+
+The browser does NOT contain:
+
+WYP_LICENSE_KEY
+
+WYP_LICENSE_PUBLIC_KEY
+
+private signing key
+
+private verification material
+
+solver implementation
+
+License verification happens inside the private
+Python core through require_license().
+
+========================================================= */
 
 /* =========================================================
-   WYP PUBLIC WEB TERMINAL
-   =========================================================
+CONFIGURATION
+========================================================= */
 
-   PUBLIC FRONTEND
-        ↓
-   AOS PRIVATE CORE
-        ↓
-   WYP FDM ENGINE
+const WYP_GATEWAY =
+"https://wyp.auf2026.workers.dev";
 
-   Backend:
-   https://aos-private-core.onrender.com
-
-   Solver:
-   https://aos-private-core.onrender.com/solve
-
-   Health:
-   https://aos-private-core.onrender.com/health
-
-   No private key, license key, or verification key
-   is stored in this browser code.
-   ========================================================= */
-
+const WYP_SOLVE_API =
+WYP_GATEWAY + "/solve";
 
 /* =========================================================
-   WYP API
-   ========================================================= */
-
-const WYP_API =
-    "https://aos-private-core.onrender.com/solve";
-
-
-/* =========================================================
-   PUBLIC FORM
-   ========================================================= */
+DOM REFERENCES
+========================================================= */
 
 const form =
-    document.getElementById("my-form");
+document.getElementById(
+"my-form"
+);
 
 const kernel =
-    document.getElementById("kernel-status");
+document.getElementById(
+"kernel-status"
+);
 
 const log =
-    document.getElementById("status-log");
+document.getElementById(
+"status-log"
+);
 
+const demoSubmit =
+document.getElementById(
+"demoSubmit"
+);
 
-if (form) {
+const demoOutput =
+document.getElementById(
+"demoOutput"
+);
 
-    form.addEventListener(
-        "submit",
-        async function (event) {
+const demoProblem =
+document.getElementById(
+"demoProblem"
+);
 
-            event.preventDefault();
+/* =========================================================
+UTILITY
+========================================================= */
 
-            if (kernel) {
-                kernel.style.display = "flex";
-            }
+function sleep(
+milliseconds
+) {
 
-            if (log) {
-                log.textContent = "";
-            }
+return new Promise(
+    function (resolve) {
 
-            const steps = [
-                "> INITIALIZING AOS KERNEL...",
-                "> ACCESSING FAURE_CORE_2026...",
-                "> SUCCESS: DISPATCHED TO ARCHITECT."
-            ];
+        setTimeout(
+            resolve,
+            milliseconds
+        );
 
-            for (const step of steps) {
+    }
+);
 
-                if (log) {
-                    log.innerHTML +=
-                        `${step}<br>`;
-                }
+}
 
-                await new Promise(
-                    resolve => {
-                        setTimeout(
-                            resolve,
-                            600
-                        );
-                    }
-                );
-            }
+/* =========================================================
+JSON REQUEST TO CLOUDFLARE
+========================================================= */
 
-            const formData =
-                new FormData(form);
+async function callWYP(
+payload
+) {
 
-            try {
+const response =
+    await fetch(
+        WYP_SOLVE_API,
+        {
+            method: "POST",
 
-                const response =
-                    await fetch(
-                        form.action || WYP_API,
-                        {
-                            method: "POST",
-                            body: formData,
-                            headers: {
-                                Accept:
-                                    "application/json"
-                            }
-                        }
-                    );
+            headers: {
+                "Content-Type":
+                    "application/json",
 
-                const raw =
-                    await response.text();
+                "Accept":
+                    "application/json"
+            },
 
-                if (!response.ok) {
-
-                    throw new Error(
-                        `FORM HTTP ${response.status}` +
-                        (
-                            raw
-                                ? `: ${raw}`
-                                : ""
-                        )
-                    );
-                }
-
-                if (log) {
-
-                    log.innerHTML +=
-                        "<br>" +
-                        "> FORM SUBMISSION COMPLETE.";
-                }
-
-                setTimeout(
-                    () => {
-                        window.location.reload();
-                    },
-                    1500
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "[WYP] Form submission failed:",
-                    error
-                );
-
-                if (log) {
-
-                    log.innerHTML +=
-                        "<br>" +
-                        "> FORM SUBMISSION ERROR.<br>" +
-                        "> " +
-                        (
-                            error &&
-                            error.message
-                                ? error.message
-                                : "Errore sconosciuto."
-                        );
-                }
-            }
+            body:
+                JSON.stringify(
+                    payload
+                )
         }
+    );
+
+
+const raw =
+    await response.text();
+
+
+let data =
+    null;
+
+
+if (
+    raw &&
+    raw.trim()
+) {
+
+    try {
+
+        data =
+            JSON.parse(
+                raw
+            );
+
+    } catch (error) {
+
+        throw new Error(
+            "The WYP gateway returned a non-JSON response."
+        );
+    }
+}
+
+
+if (!response.ok) {
+
+    let message =
+        null;
+
+
+    if (
+        data &&
+        typeof data === "object"
+    ) {
+
+        message =
+            data.error ||
+            data.detail ||
+            data.message ||
+            null;
+    }
+
+
+    throw new Error(
+        message ||
+        raw ||
+        (
+            "HTTP " +
+            response.status
+        )
     );
 }
 
 
+if (!data) {
+
+    throw new Error(
+        "The WYP gateway returned an empty response."
+    );
+}
+
+
+return data;
+
+}
+
 /* =========================================================
-   WYP FDM ENGINE UI
-   ========================================================= */
+PUBLIC JOTFORM
+Jotform rimane responsabile del proprio submit.
 
-const demoSubmit =
-    document.getElementById(
-        "demoSubmit"
+NON modifichiamo:
+
+form.action
+
+form.method
+
+FormData
+
+campi Jotform
+
+destinazione Jotform
+
+Questo listener serve soltanto alla visualizzazione
+del terminale/status già presente nella pagina.
+========================================================= */
+
+if (form) {
+
+form.addEventListener(
+    "submit",
+    async function () {
+
+        if (kernel) {
+
+            kernel.style.display =
+                "flex";
+        }
+
+
+        if (log) {
+
+            log.textContent =
+                "";
+        }
+
+
+        const steps = [
+
+            "> INITIALIZING AOS KERNEL...",
+
+            "> ACCESSING FAURE_CORE_2026...",
+
+            "> DISPATCHING JOTFORM REQUEST..."
+
+        ];
+
+
+        for (
+            const step
+            of steps
+        ) {
+
+            if (log) {
+
+                log.innerHTML +=
+                    step +
+                    "<br>";
+            }
+
+
+            await sleep(
+                600
+            );
+        }
+
+
+        if (log) {
+
+            log.innerHTML +=
+                "<br>" +
+                "> JOTFORM SUBMISSION DISPATCHED.";
+        }
+
+    }
+);
+
+}
+
+/* =========================================================
+FDM TESTER
+The backend contract exposed by server.py is:
+
+   {
+       "modulus": ...,
+       "dimension": ...,
+       "name": ...,
+       "metadata": ...
+   }
+
+The public tester accepts two input styles:
+
+JSON object:
+
+{
+"modulus": 12,
+"dimension": 3,
+"name": "faure"
+}
+
+Simple shorthand:
+
+12^3
+
+The shorthand is converted locally into the canonical
+request object.
+
+No mathematical computation is performed locally.
+The actual computation remains in the private core.
+================================================= */
+
+/* =========================================================
+PARSE TESTER INPUT
+========================================================= */
+
+function parseTesterInput(
+text
+) {
+
+const value =
+    text.trim();
+
+if (!value) {
+
+    throw new Error(
+        "Problem input is required."
+    );
+}
+
+/* -----------------------------------------------------
+   JSON MODE
+   ----------------------------------------------------- */
+
+if (
+    value.startsWith("{") &&
+    value.endsWith("}")
+) {
+
+    let payload;
+
+    try {
+
+        payload =
+            JSON.parse(
+                value
+            );
+
+    } catch (error) {
+
+        throw new Error(
+            "Invalid JSON input."
+        );
+    }
+
+    if (
+        payload === null ||
+        typeof payload !== "object" ||
+        Array.isArray(payload)
+    ) {
+
+        throw new Error(
+            "Tester JSON must be an object."
+        );
+    }
+
+    return payload;
+}
+
+/* -----------------------------------------------------
+   SHORTHAND MODE
+   -----------------------------------------------------
+
+   Example:
+
+       12^3
+
+   becomes:
+
+       {
+           modulus: 12,
+           dimension: 3,
+           name: "faure"
+       }
+   ----------------------------------------------------- */
+
+const match =
+    value.match(
+        /^\s*([0-9]+(?:\.[0-9]+)?)\s*\^\s*([0-9]+)\s*$/
     );
 
-const demoOutput =
-    document.getElementById(
-        "demoOutput"
-    );
+if (match) {
 
-const demoProblem =
-    document.getElementById(
-        "demoProblem"
-    );
+    return {
+        modulus:
+            match[1],
 
+        dimension:
+            Number(
+                match[2]
+            ),
+
+        name:
+            "faure"
+    };
+}
+
+throw new Error(
+    "Use a JSON FDM request or the shorthand format modulus^dimension, for example 12^3."
+);
+
+}
+
+/* =========================================================
+FORMAT ERROR
+========================================================= */
+
+function renderTesterError(
+title,
+message
+) {
+
+if (!demoOutput) {
+    return;
+}
+
+demoOutput.textContent =
+    "> " +
+    title +
+    "\n\n" +
+    "> " +
+    message;
+
+}
+
+/* =========================================================
+SOLVER
+========================================================= */
+
+async function runWYPTester() {
 
 if (
     !demoSubmit ||
@@ -362,546 +637,476 @@ if (
     !demoProblem
 ) {
 
-    console.error(
-        "[WYP] Solver elements missing.",
-        {
-            demoSubmit,
-            demoOutput,
-            demoProblem
-        }
-    );
-
-} else {
-
-    demoSubmit.addEventListener(
-        "click",
-        async function () {
-
-            const text =
-                demoProblem.value.trim();
-
-
-            /* -----------------------------------------
-               INPUT VALIDATION
-               ----------------------------------------- */
-
-            if (!text) {
-
-                demoOutput.textContent =
-                    "> ERROR: PROBLEM INPUT REQUIRED";
-
-                return;
-            }
-
-
-            /* -----------------------------------------
-               LOCK BUTTON
-               ----------------------------------------- */
-
-            demoSubmit.disabled =
-                true;
-
-
-            /* -----------------------------------------
-               INITIAL STATUS
-               ----------------------------------------- */
-
-            demoOutput.textContent =
-                "> WYP ENGINE INITIALIZING...\n" +
-                "> CONNECTING TO AOS PRIVATE CORE...\n" +
-                "> DISPATCHING PROBLEM...\n";
-
-
-            try {
-
-                /* -------------------------------------
-                   REQUEST
-                   ------------------------------------- */
-
-                const response =
-                    await fetch(
-                        WYP_API,
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                Accept:
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    problem: text
-                                })
-                        }
-                    );
-
-
-                /* -------------------------------------
-                   RESPONSE
-                   ------------------------------------- */
-
-                const raw =
-                    await response.text();
-
-                let data = null;
-
-
-                if (raw.trim()) {
-
-                    try {
-
-                        data =
-                            JSON.parse(raw);
-
-                    } catch (error) {
-
-                        throw new Error(
-                            "Backend returned a non-JSON response."
-                        );
-                    }
-                }
-
-
-                /* -------------------------------------
-                   HTTP ERROR
-                   ------------------------------------- */
-
-                if (!response.ok) {
-
-                    const message =
-                        data &&
-                        typeof data === "object"
-                            ? (
-                                data.error ||
-                                data.detail ||
-                                data.message ||
-                                `HTTP ${response.status}`
-                            )
-                            : (
-                                raw ||
-                                `HTTP ${response.status}`
-                            );
-
-                    const exception =
-                        data &&
-                        typeof data === "object"
-                            ? (
-                                data.exception ||
-                                ""
-                            )
-                            : "";
-
-                    demoOutput.textContent =
-                        "> WYP ENGINE ERROR\n\n" +
-                        `> HTTP STATUS: ${response.status}\n` +
-                        `> ERROR: ${message}` +
-                        (
-                            exception
-                                ? `\n> EXCEPTION: ${exception}`
-                                : ""
-                        );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   EMPTY RESPONSE
-                   ------------------------------------- */
-
-                if (!data) {
-
-                    demoOutput.textContent =
-                        "> WYP ENGINE ERROR\n\n" +
-                        "> EMPTY RESPONSE FROM CORE";
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   LICENSE ERROR
-                   ------------------------------------- */
-
-                if (
-                    data.status ===
-                    "LICENSE_REQUIRED"
-                ) {
-
-                    demoOutput.textContent =
-                        "> WYP ENGINE ACCESS DENIED\n\n" +
-                        "> " +
-                        (
-                            data.error ||
-                            "License verification required."
-                        );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   ENGINE ERROR
-                   ------------------------------------- */
-
-                if (
-                    data.status ===
-                    "ENGINE_ERROR"
-                ) {
-
-                    demoOutput.textContent =
-                        "> WYP ENGINE ERROR\n\n" +
-                        "> CORE EXCEPTION: " +
-                        (
-                            data.exception ||
-                            "Unknown"
-                        ) +
-                        "\n> DETAIL: " +
-                        (
-                            data.detail ||
-                            data.error ||
-                            "Unknown solver error."
-                        );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   INVALID REQUEST
-                   ------------------------------------- */
-
-                if (
-                    data.status ===
-                    "INVALID_REQUEST"
-                ) {
-
-                    demoOutput.textContent =
-                        "> WYP INVALID REQUEST\n\n" +
-                        "> " +
-                        (
-                            data.error ||
-                            "Invalid request."
-                        );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   UNKNOWN STATUS
-                   ------------------------------------- */
-
-                if (
-                    data.status !==
-                    "SUCCESS"
-                ) {
-
-                    demoOutput.textContent =
-                        "> WYP ENGINE ERROR\n\n" +
-                        "> STATUS: " +
-                        (
-                            data.status ||
-                            "UNKNOWN"
-                        ) +
-                        "\n> " +
-                        (
-                            data.error ||
-                            "Unknown WYP response."
-                        );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   SUCCESS
-                   ------------------------------------- */
-
-                demoOutput.textContent =
-                    "> WYP ENGINE ONLINE\n" +
-                    "> PROBLEM RECEIVED\n" +
-                    "> STRUCTURE ANALYSIS: COMPLETE\n" +
-                    "> INVARIANT ANALYSIS: COMPLETE\n" +
-                    "> CONSTRAINT ANALYSIS: COMPLETE\n" +
-                    "> QUANTITY ANALYSIS: COMPLETE\n" +
-                    "> MANIFESTATION: COMPLETE\n\n" +
-                    "> STATUS: SUCCESS\n\n" +
-                    JSON.stringify(
-                        data.result,
-                        null,
-                        2
-                    );
-
-
-            } catch (error) {
-
-                /* -------------------------------------
-                   NETWORK / CORS / CONNECTION ERROR
-                   ------------------------------------- */
-
-                console.error(
-                    "[WYP] Solver request failed:",
-                    error
-                );
-
-                demoOutput.textContent =
-                    "> WYP ENGINE CONNECTION ERROR\n\n" +
-                    "> ENDPOINT:\n" +
-                    WYP_API +
-                    "\n\n" +
-                    "> " +
-                    (
-                        error &&
-                        error.message
-                            ? error.message
-                            : "Unknown connection error."
-                    );
-
-            } finally {
-
-                demoSubmit.disabled =
-                    false;
-            }
-        }
-    );
-
-
-    /* =====================================================
-       CTRL/CMD + ENTER
-       ===================================================== */
-
-    demoProblem.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Enter" &&
-                (
-                    event.ctrlKey ||
-                    event.metaKey
-                )
-            ) {
-
-                event.preventDefault();
-
-                demoSubmit.click();
-            }
-        }
-    );
+    return;
 }
 
+const text =
+    demoProblem.value.trim();
 
-/* =========================================================
-   WYP HEALTH CHECK
-   ========================================================= */
+/* -----------------------------------------------------
+   INPUT
+   ----------------------------------------------------- */
 
-async function checkWYPHealth() {
+if (!text) {
 
-    const healthURL =
-        WYP_API.replace(
-            /\/solve$/,
-            "/health"
-        );
+    renderTesterError(
+        "WYP INVALID REQUEST",
+        "PROBLEM INPUT REQUIRED"
+    );
 
-    try {
-
-        const response =
-            await fetch(
-                healthURL,
-                {
-                    method: "GET",
-                    headers: {
-                        Accept:
-                            "application/json"
-                    }
-                }
-            );
-
-        if (!response.ok) {
-            return false;
-        }
-
-        const data =
-            await response.json();
-
-        return (
-            data &&
-            data.status === "ok"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "[WYP] Health check failed:",
-            error
-        );
-
-        return false;
-    }
+    return;
 }
 
+let payload;
 
-/* =========================================================
-   KERNEL STATUS
-   ========================================================= */
+try {
 
-async function updateKernelStatus() {
-
-    const statusElement =
-        document.getElementById(
-            "kernel-status"
+    payload =
+        parseTesterInput(
+            text
         );
 
-    if (!statusElement) {
+} catch (error) {
+
+    renderTesterError(
+        "WYP INVALID REQUEST",
+        error.message ||
+        "Invalid tester input."
+    );
+
+    return;
+}
+
+/* -----------------------------------------------------
+   LOCK
+   ----------------------------------------------------- */
+
+demoSubmit.disabled =
+    true;
+
+/* -----------------------------------------------------
+   INITIAL TERMINAL
+   ----------------------------------------------------- */
+
+demoOutput.textContent =
+    "> WYP ENGINE INITIALIZING...\n" +
+    "> CONNECTING TO CLOUDFLARE GATEWAY...\n" +
+    "> FORWARDING TO AOS PRIVATE CORE...\n" +
+    "> VERIFYING LICENSE...\n" +
+    "> DISPATCHING FDM REQUEST...\n";
+
+try {
+
+    /* -------------------------------------------------
+       REQUEST
+       ------------------------------------------------- */
+
+    const data =
+        await callWYP(
+            payload
+        );
+
+    /* -------------------------------------------------
+       LICENSE
+       -------------------------------------------------
+
+       The private core is responsible for this.
+
+       The browser never verifies the signature.
+       ------------------------------------------------- */
+
+    if (
+        data.status ===
+        "LICENSE_REQUIRED"
+    ) {
+
+        renderTesterError(
+            "WYP LICENSE REQUIRED",
+            data.error ||
+            data.detail ||
+            "The private core rejected the request because no valid WYP license is configured."
+        );
+
         return;
     }
 
-    const online =
-        await checkWYPHealth();
+    /* -------------------------------------------------
+       INVALID REQUEST
+       ------------------------------------------------- */
 
-    statusElement.dataset.status =
-        online
-            ? "online"
-            : "offline";
+    if (
+        data.status ===
+        "INVALID_REQUEST"
+    ) {
 
-    statusElement.setAttribute(
-        "aria-label",
-        online
-            ? "WYP engine online"
-            : "WYP engine offline"
+        renderTesterError(
+            "WYP INVALID REQUEST",
+            data.error ||
+            data.detail ||
+            "The private core rejected the request."
+        );
+
+        return;
+    }
+
+    /* -------------------------------------------------
+       ENGINE ERROR
+       ------------------------------------------------- */
+
+    if (
+        data.status ===
+        "ENGINE_ERROR"
+    ) {
+
+        renderTesterError(
+            "WYP ENGINE ERROR",
+            data.error ||
+            data.detail ||
+            "The WYP computation failed."
+        );
+
+        return;
+    }
+
+    /* -------------------------------------------------
+       PRIVATE CORE ERROR
+       ------------------------------------------------- */
+
+    if (
+        data.status ===
+            "PRIVATE_CORE_UNAVAILABLE" ||
+        data.status ===
+            "PRIVATE_CORE_TIMEOUT" ||
+        data.status ===
+            "PRIVATE_CORE_INVALID_RESPONSE"
+    ) {
+
+        renderTesterError(
+            "WYP PRIVATE CORE ERROR",
+            (
+                data.error ||
+                data.detail ||
+                data.status
+            )
+        );
+
+        return;
+    }
+
+    /* -------------------------------------------------
+       SUCCESS
+       ------------------------------------------------- */
+
+    if (
+        data.status ===
+        "SUCCESS"
+    ) {
+
+        demoOutput.textContent =
+            "> WYP ENGINE ONLINE\n" +
+            "> CLOUDFLARE GATEWAY: ONLINE\n" +
+            "> PRIVATE CORE: ONLINE\n" +
+            "> LICENSE: VERIFIED\n" +
+            "> FDM REQUEST: ACCEPTED\n" +
+            "> FDM COMPUTATION: COMPLETE\n\n" +
+            "> STATUS: SUCCESS\n\n" +
+            JSON.stringify(
+                data,
+                null,
+                2
+            );
+
+        return;
+    }
+
+    /* -------------------------------------------------
+       UNKNOWN RESPONSE
+       ------------------------------------------------- */
+
+    demoOutput.textContent =
+        "> WYP ENGINE RESPONSE\n\n" +
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+} catch (error) {
+
+    console.error(
+        "[WYP] Solver request failed:",
+        error
     );
+
+    renderTesterError(
+        "WYP ENGINE CONNECTION ERROR",
+        error.message ||
+        "Unable to connect to the WYP gateway."
+    );
+
+} finally {
+
+    demoSubmit.disabled =
+        false;
 }
 
+}
 
 /* =========================================================
-   PUBLIC WYP OBJECT
-   ========================================================= */
-
-window.WYP = Object.freeze({
-    api: WYP_API,
-    health: checkWYPHealth
-});
-
-
-/* =========================================================
-   PUBLIC SOLVER HELPER
-   ========================================================= */
-
-window.solveWYP =
-    async function solveWYP(problem) {
-
-        if (
-            typeof problem !==
-            "string"
-        ) {
-
-            throw new TypeError(
-                "WYP problem must be a string."
-            );
-        }
-
-        const normalized =
-            problem.trim();
-
-        if (!normalized) {
-
-            throw new Error(
-                "WYP problem cannot be empty."
-            );
-        }
-
-        const response =
-            await fetch(
-                WYP_API,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        Accept:
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-                            problem:
-                                normalized
-                        })
-                }
-            );
-
-        const raw =
-            await response.text();
-
-        let data = null;
-
-        if (raw.trim()) {
-
-            try {
-
-                data =
-                    JSON.parse(raw);
-
-            } catch (error) {
-
-                throw new Error(
-                    "WYP core returned invalid JSON."
-                );
-            }
-        }
-
-        if (!response.ok) {
-
-            const message =
-                data &&
-                typeof data === "object"
-                    ? (
-                        data.error ||
-                        data.detail ||
-                        data.message
-                    )
-                    : null;
-
-            throw new Error(
-                message ||
-                `WYP HTTP ${response.status}`
-            );
-        }
-
-        return data;
-    };
-
-
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
+TESTER BUTTON
+========================================================= */
 
 if (
-    document.readyState ===
-    "loading"
+demoSubmit &&
+demoOutput &&
+demoProblem
 ) {
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        updateKernelStatus,
-        {
-            once: true
+demoSubmit.addEventListener(
+    "click",
+    runWYPTester
+);
+
+/* -----------------------------------------------------
+   CTRL/CMD + ENTER
+   ----------------------------------------------------- */
+
+demoProblem.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" &&
+            (
+                event.ctrlKey ||
+                event.metaKey
+            )
+        ) {
+
+            event.preventDefault();
+
+            runWYPTester();
         }
+
+    }
+);
+
+}
+
+/* =========================================================
+CLOUDFLARE GATEWAY HEALTH
+Il Worker attuale espone:
+
+   GET /
+
+con una risposta del tipo:
+
+   {
+       "status": "ONLINE",
+       "service": "WYP",
+       "gateway": "CLOUDFLARE"
+   }
+
+Quindi questa verifica controlla il gateway,
+non direttamente Render.
+========================================================= */
+
+async function checkWYPHealth() {
+
+try {
+
+    const response =
+        await fetch(
+            WYP_GATEWAY,
+            {
+                method: "GET",
+
+                headers: {
+                    "Accept":
+                        "application/json"
+                }
+            }
+        );
+
+    if (!response.ok) {
+        return false;
+    }
+
+    const raw =
+        await response.text();
+
+    if (!raw.trim()) {
+        return false;
+    }
+
+    let data;
+
+    try {
+
+        data =
+            JSON.parse(
+                raw
+            );
+
+    } catch (error) {
+
+        return false;
+    }
+
+    return (
+        data &&
+        data.status === "ONLINE" &&
+        data.service === "WYP" &&
+        data.gateway === "CLOUDFLARE"
     );
+
+} catch (error) {
+
+    console.error(
+        "[WYP] Gateway health check failed:",
+        error
+    );
+
+    return false;
+}
+
+}
+
+/* =========================================================
+UPDATE KERNEL STATUS
+========================================================= */
+
+async function updateKernelStatus() {
+
+const statusElement =
+    document.getElementById(
+        "kernel-status"
+    );
+
+if (!statusElement) {
+    return;
+}
+
+const online =
+    await checkWYPHealth();
+
+statusElement.dataset.status =
+    online
+        ? "online"
+        : "offline";
+
+statusElement.setAttribute(
+    "aria-label",
+    online
+        ? "WYP gateway online"
+        : "WYP gateway offline"
+);
+
+statusElement.classList.toggle(
+    "online",
+    online
+);
+
+statusElement.classList.toggle(
+    "offline",
+    !online
+);
+
+}
+
+/* =========================================================
+PUBLIC WYP OBJECT
+========================================================= */
+
+window.WYP =
+Object.freeze({
+
+    gateway:
+        WYP_GATEWAY,
+
+    api:
+        WYP_SOLVE_API,
+
+    health:
+        WYP_GATEWAY,
+
+    checkHealth:
+        checkWYPHealth,
+
+    solve:
+        callWYP
+
+});
+
+/* =========================================================
+PUBLIC SOLVER HELPER
+========================================================= */
+
+window.solveWYP =
+async function solveWYP(
+payload
+) {
+
+    if (
+        typeof payload ===
+        "string"
+    ) {
+
+        payload =
+            parseTesterInput(
+                payload
+            );
+    }
+
+    if (
+        payload === null ||
+        typeof payload !== "object" ||
+        Array.isArray(payload)
+    ) {
+
+        throw new TypeError(
+            "WYP payload must be an object or a valid tester string."
+        );
+    }
+
+    return await callWYP(
+        payload
+    );
+};
+
+/* =========================================================
+INITIALIZATION
+========================================================= */
+
+function initializeWYP() {
+
+updateKernelStatus();
+
+}
+
+/* =========================================================
+DOM READY
+========================================================= */
+
+if (
+document.readyState ===
+"loading"
+) {
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeWYP,
+    {
+        once: true
+    }
+);
 
 } else {
 
-    updateKernelStatus();
+initializeWYP();
+
 }
 
 </script>
-
 </body>
 </html>
