@@ -1,10 +1,4 @@
-Ho letto il `AI_BOOTSTRAP.md` attuale direttamente dalla repository pubblica.  GitHub+1
-
- Lo aggiorno tenendo conto dei progressi **effettivamente raggiunti**: gli 8 moduli che abbiamo completato, `server.py` corretto, deploy Render riuscito e server avviato su Python 3.14.3. Non segno invece come completato il nuovo contratto `/solve` problema→teorema→FDM, perché quello è il prossimo lavoro.  GitHub
-
- Sostituisci `docs/AI_BOOTSTRAP.md` con questo:
-
- AI BOOTSTRAP — WYP / AUF2026
+AI BOOTSTRAP — WYP / AUF2026
 
 # AI BOOTSTRAP — WYP / AUF2026
 
