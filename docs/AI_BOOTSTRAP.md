@@ -1,12 +1,20 @@
-WYP AI BOOTSTRAP
-1. Scopo
+Sì. Aggiorniamo `docs/AI_BOOTSTRAP.md` per riflettere l'architettura attuale: **LLM come interprete/orchestratore, WYP Python come autorità computazionale, moduli specializzati, ingestione di JSON/Lean/LaTeX/PDF e verifica indipendente**.
 
-WYP è un sistema matematico modulare nel quale un modello linguistico può interpretare richieste in linguaggio naturale, trasformarle in strutture matematiche eseguibili e coordinare moduli di calcolo e verifica.
+ Ti lascio il file completo sostitutivo, così lo puoi copiare senza fare patch parziali.
 
-Il modello linguistico non costituisce l'autorità matematica finale.
+ AI\_BOOTSTRAP.md — Bootstrap aggiornato WYP
 
-Principio fondamentale:
+# WYP AI BOOTSTRAP
 
+ ## 1\. Scopo
+
+ WYP è un sistema matematico modulare nel quale un modello linguistico può interpretare richieste in linguaggio naturale, trasformarle in strutture matematiche eseguibili e coordinare moduli di calcolo e verifica.
+
+ Il modello linguistico non costituisce l'autorità matematica finale.
+
+ Principio fondamentale:
+
+```
 LLM
   ↓
 interpretazione
@@ -24,11 +32,15 @@ risultati strutturati
 LLM
   ↓
 risposta finale
+```
 
+ Il sistema deve privilegiare risultati calcolati e verificati rispetto a conclusioni generate esclusivamente dal modello linguistico.
 
-Il sistema deve privilegiare risultati calcolati e verificati rispetto a conclusioni generate esclusivamente dal modello linguistico.
+---
 
-2. Architettura canonica
+ ## 2\. Architettura canonica
+
+```
                          USER
                            │
                            ▼
@@ -64,10 +76,11 @@ Il sistema deve privilegiare risultati calcolati e verificati rispetto a conclus
                            │
                            ▼
                     Natural Response
+```
 
+ Il sistema può successivamente integrare:
 
-Il sistema può successivamente integrare:
-
+```
 Lean
 LaTeX
 PDF
@@ -77,21 +90,25 @@ TXT
 database matematici
 altri verificatori
 altri solver
+```
 
-3. Regola fondamentale
+---
 
-L'LLM interpreta.
+ ## 3\. Regola fondamentale
 
-WYP calcola.
+ L'LLM interpreta.
 
-I verificatori controllano.
+ WYP calcola.
 
-L'LLM compone la risposta.
+ I verificatori controllano.
 
-L'LLM non deve inventare un risultato quando esiste un modulo WYP capace di calcolarlo o verificarlo.
+ L'LLM compone la risposta.
 
-Esempio:
+ L'LLM non deve inventare un risultato quando esiste un modulo WYP capace di calcolarlo o verificarlo.
 
+ Esempio:
+
+```
 Utente:
 "risolvi x^2 - 4 = 0"
 
@@ -109,18 +126,23 @@ Verification:
 
 LLM:
   compone la spiegazione finale
+```
 
-4. WYP Intermediate Representation
+---
 
-Tutte le richieste interpretate dal modello devono poter essere trasformate in una rappresentazione strutturata interna.
+ ## 4\. WYP Intermediate Representation
 
-Nome concettuale:
+ Tutte le richieste interpretate dal modello devono poter essere trasformate in una rappresentazione strutturata interna.
 
+ Nome concettuale:
+
+```
 WYP-IR
+```
 
+ Esempio:
 
-Esempio:
-
+```
 {
   "problem_type": "polynomial_equation",
   "variables": ["x"],
@@ -135,16 +157,19 @@ Esempio:
     "symbolic"
   ]
 }
+```
 
+ WYP-IR deve essere indipendente dal modello linguistico utilizzato.
 
-WYP-IR deve essere indipendente dal modello linguistico utilizzato.
+ Il modello può cambiare senza modificare il nucleo matematico.
 
-Il modello può cambiare senza modificare il nucleo matematico.
+---
 
-5. Tipi di problema
+ ## 5\. Tipi di problema
 
-Il sistema deve poter classificare almeno:
+ Il sistema deve poter classificare almeno:
 
+```
 numeric_calculation
 equation
 system_of_equations
@@ -164,18 +189,21 @@ open_mathematical_problem
 knowledge_query
 document_extraction
 fdm_problem
+```
 
+ La classificazione non deve essere considerata una soluzione matematica.
 
-La classificazione non deve essere considerata una soluzione matematica.
+ È soltanto la fase di routing verso gli strumenti appropriati.
 
-È soltanto la fase di routing verso gli strumenti appropriati.
+---
 
-6. Tool orchestration
+ ## 6\. Tool orchestration
 
-Il modello linguistico deve poter produrre un piano strutturato.
+ Il modello linguistico deve poter produrre un piano strutturato.
 
-Esempio:
+ Esempio:
 
+```
 {
   "problem_type": "equation",
   "plan": [
@@ -189,77 +217,90 @@ Esempio:
     }
   ]
 }
+```
 
+ L'orchestratore WYP decide quali strumenti sono effettivamente disponibili ed eseguibili.
 
-L'orchestratore WYP decide quali strumenti sono effettivamente disponibili ed eseguibili.
+ Il modello non deve poter dichiarare autonomamente che un calcolo è stato eseguito.
 
-Il modello non deve poter dichiarare autonomamente che un calcolo è stato eseguito.
+ Deve ricevere il risultato dal tool.
 
-Deve ricevere il risultato dal tool.
+---
 
-7. Numerical layer
+ ## 7\. Numerical layer
 
-Il numerical layer rimane indipendente dall'LLM.
+ Il numerical layer rimane indipendente dall'LLM.
 
-Componenti esistenti:
+ Componenti esistenti:
 
+```
 NumericEngine
 NumericResult
 VerificationResult
 ExecutionResult
+```
 
+ Rappresentazioni supportate:
 
-Rappresentazioni supportate:
-
+```
 exact
 decimal
 float
+```
 
+ Il valore numerico effettivo rimane sempre distinto dalla sua rappresentazione testuale.
 
-Il valore numerico effettivo rimane sempre distinto dalla sua rappresentazione testuale.
+---
 
-8. FDM layer
+ ## 8\. FDM layer
 
-FDM rimane un modulo matematico specializzato.
+ FDM rimane un modulo matematico specializzato.
 
-Relazione canonica:
+ Relazione canonica:
 
+```
 M_d(U) = Q(U)^d
+```
 
+ Componenti:
 
-Componenti:
-
+```
 FDMModel
 FDMDerivation
 FDMComputation
 FDMEngine
 FDM verification
+```
 
+ L'LLM non deve implementare la relazione FDM.
 
-L'LLM non deve implementare la relazione FDM.
+ Deve soltanto riconoscere quando una richiesta richiede il modulo FDM e fornire al modulo i parametri strutturati.
 
-Deve soltanto riconoscere quando una richiesta richiede il modulo FDM e fornire al modulo i parametri strutturati.
+---
 
-9. Verification-first
+ ## 9\. Verification-first
 
-Ogni risultato verificabile deve seguire, quando possibile:
+ Ogni risultato verificabile deve seguire, quando possibile:
 
+```
 compute
   ↓
 verify
   ↓
 return
+```
 
+ Non:
 
-Non:
-
+```
 LLM guesses
   ↓
 answer
+```
 
+ Esempio numerico:
 
-Esempio numerico:
-
+```
 input
  ↓
 NumericEngine
@@ -269,10 +310,11 @@ NumericResult
 VerificationResult
  ↓
 LLM explanation
+```
 
+ Esempio FDM:
 
-Esempio FDM:
-
+```
 FDMModel
  ↓
 FDMEngine
@@ -282,13 +324,17 @@ FDMComputation
 FDM verification
  ↓
 LLM
+```
 
-10. Formal verification
+---
 
-Lean può essere utilizzato come verificatore formale.
+ ## 10\. Formal verification
 
-Architettura:
+ Lean può essere utilizzato come verificatore formale.
 
+ Architettura:
+
+```
 LLM
  ↓
 proposed proof / formalization
@@ -298,56 +344,66 @@ Lean
 compiler / checker
  ↓
 PASS / FAIL
+```
 
+ Il modello non deve dichiarare una dimostrazione formalmente verificata finché il verificatore formale non ha restituito un risultato positivo.
 
-Il modello non deve dichiarare una dimostrazione formalmente verificata finché il verificatore formale non ha restituito un risultato positivo.
+ Una dimostrazione proposta dal modello e una dimostrazione verificata da Lean sono due stati differenti.
 
-Una dimostrazione proposta dal modello e una dimostrazione verificata da Lean sono due stati differenti.
+---
 
-11. Open mathematical problems
+ ## 11\. Open mathematical problems
 
-Il sistema deve distinguere tra:
+ Il sistema deve distinguere tra:
 
+```
 problema risolvibile
 problema calcolabile
 problema dimostrabile
 problema formalmente verificabile
 problema aperto
 problema non sufficientemente specificato
+```
 
+ Esempio:
 
-Esempio:
-
+```
 "risolvi P vs NP"
+```
 
+ deve essere classificato come problema matematico aperto, non trasformato artificialmente in una falsa dimostrazione.
 
-deve essere classificato come problema matematico aperto, non trasformato artificialmente in una falsa dimostrazione.
+ Il sistema deve separare:
 
-Il sistema deve separare:
-
+```
 conoscenza documentata
 risultato calcolato
 congettura
 ipotesi
 proposta del modello
 dimostrazione verificata
+```
 
-12. Artifact ingestion
+---
 
-WYP deve poter utilizzare materiale matematico esterno.
+ ## 12\. Artifact ingestion
 
-Formati previsti:
+ WYP deve poter utilizzare materiale matematico esterno.
 
+ Formati previsti:
+
+```
 JSON
 Lean
 LaTeX
 PDF
 Markdown
 TXT
+```
 
+ Pipeline:
 
-Pipeline:
-
+```
 ARTIFACT
    ↓
 IMPORTER
@@ -359,18 +415,21 @@ NORMALIZER
 WYP-IR
    ↓
 KNOWLEDGE / TOOL INPUT
+```
 
+ L'obiettivo non è soltanto estrarre testo.
 
-L'obiettivo non è soltanto estrarre testo.
+ È estrarre struttura matematica.
 
-È estrarre struttura matematica.
+---
 
-13. JSON
+ ## 13\. JSON
 
-JSON strutturato può essere utilizzato direttamente come input WYP-IR quando conforme allo schema.
+ JSON strutturato può essere utilizzato direttamente come input WYP-IR quando conforme allo schema.
 
-Esempio:
+ Esempio:
 
+```
 {
   "definitions": [],
   "assumptions": [],
@@ -379,31 +438,37 @@ Esempio:
   "claims": [],
   "requested_action": "prove"
 }
+```
 
+ Il sistema deve validare lo schema prima dell'esecuzione.
 
-Il sistema deve validare lo schema prima dell'esecuzione.
+---
 
-14. LaTeX
+ ## 14\. LaTeX
 
-LaTeX deve essere trattato come sorgente strutturale.
+ LaTeX deve essere trattato come sorgente strutturale.
 
-Esempio:
+ Esempio:
 
+```
 M_d(U) = Q(U)^d
+```
 
+ può essere normalizzato in una rappresentazione interna equivalente.
 
-può essere normalizzato in una rappresentazione interna equivalente.
+ Il testo LaTeX originale deve comunque essere conservato come sorgente.
 
-Il testo LaTeX originale deve comunque essere conservato come sorgente.
+ Non bisogna perdere la provenienza dell'informazione.
 
-Non bisogna perdere la provenienza dell'informazione.
+---
 
-15. Lean
+ ## 15\. Lean
 
-Il codice Lean deve essere conservato come artefatto verificabile.
+ Il codice Lean deve essere conservato come artefatto verificabile.
 
-Pipeline:
+ Pipeline:
 
+```
 Lean source
    ↓
 parser / project environment
@@ -413,25 +478,29 @@ formal declarations
 verification
    ↓
 structured result
+```
 
+ L'LLM può:
 
-L'LLM può:
-
+```
 leggere
 spiegare
 proporre
 trasformare
 generare
+```
 
+ ma la validità formale deve essere determinata dal sistema Lean.
 
-ma la validità formale deve essere determinata dal sistema Lean.
+---
 
-16. PDF
+ ## 16\. PDF
 
-I PDF devono essere trattati come documenti sorgente.
+ I PDF devono essere trattati come documenti sorgente.
 
-Pipeline concettuale:
+ Pipeline concettuale:
 
+```
 PDF
  ↓
 text extraction
@@ -445,23 +514,28 @@ definition extraction
 theorem / lemma extraction
  ↓
 WYP-IR
+```
 
+ Quando l'estrazione è ambigua, il sistema deve conservare l'incertezza invece di inventare contenuto.
 
-Quando l'estrazione è ambigua, il sistema deve conservare l'incertezza invece di inventare contenuto.
+ Le informazioni estratte devono mantenere la provenienza:
 
-Le informazioni estratte devono mantenere la provenienza:
-
+```
 {
   "source": "document.pdf",
   "page": 12,
   "section": "Theorem 3",
   "content": "..."
 }
+```
 
-17. Provenance
+---
 
-Ogni informazione derivata da un artifact dovrebbe poter mantenere:
+ ## 17\. Provenance
 
+ Ogni informazione derivata da un artifact dovrebbe poter mantenere:
+
+```
 source
 source_type
 document_id
@@ -470,19 +544,23 @@ section
 line
 hash
 extraction_method
+```
 
+ La provenienza permette di ricostruire da dove è arrivata un'informazione.
 
-La provenienza permette di ricostruire da dove è arrivata un'informazione.
+---
 
-18. WYP Artifact
+ ## 18\. WYP Artifact
 
-Il sistema dovrà introdurre un contenitore concettuale:
+ Il sistema dovrà introdurre un contenitore concettuale:
 
+```
 WYPArtifact
+```
 
+ Responsabilità:
 
-Responsabilità:
-
+```
 identità dell'artefatto
 sorgente
 formato
@@ -492,16 +570,19 @@ metadati
 provenienza
 hash
 stato di parsing
+```
 
+ L'artefatto originale non deve essere modificato dall'estrazione.
 
-L'artefatto originale non deve essere modificato dall'estrazione.
+---
 
-19. WYP Tool
+ ## 19\. WYP Tool
 
-I moduli matematici devono progressivamente convergere verso un'interfaccia comune.
+ I moduli matematici devono progressivamente convergere verso un'interfaccia comune.
 
-Concettualmente:
+ Concettualmente:
 
+```
 WYPTool
  ├── name
  ├── capabilities
@@ -509,28 +590,33 @@ WYPTool
  ├── execute()
  ├── output schema
  └── verification
+```
 
+ Esempi:
 
-Esempi:
-
+```
 NumericTool
 SymbolicTool
 FDMTool
 LeanTool
 DocumentTool
+```
 
+ Questo permette all'orchestratore di selezionare gli strumenti senza legarsi a una singola implementazione.
 
-Questo permette all'orchestratore di selezionare gli strumenti senza legarsi a una singola implementazione.
+---
 
-20. WYP Execution
+ ## 20\. WYP Execution
 
-Ogni richiesta complessa dovrebbe poter produrre una traccia strutturata:
+ Ogni richiesta complessa dovrebbe poter produrre una traccia strutturata:
 
+```
 WYPExecution
+```
 
+ Esempio:
 
-Esempio:
-
+```
 {
   "request": "...",
   "problem": {},
@@ -541,42 +627,49 @@ Esempio:
   "warnings": [],
   "final_answer": "..."
 }
+```
 
+ Questo permette audit, debugging e riproducibilità.
 
-Questo permette audit, debugging e riproducibilità.
+---
 
-21. LLM backend
+ ## 21\. LLM backend
 
-L'LLM deve essere un componente sostituibile.
+ L'LLM deve essere un componente sostituibile.
 
-Possibili backend:
+ Possibili backend:
 
+```
 remote API
 local model
 GGUF
 llama.cpp
 altri runtime compatibili
+```
 
+ Il resto del sistema non deve dipendere dal formato del modello.
 
-Il resto del sistema non deve dipendere dal formato del modello.
+ Architettura:
 
-Architettura:
-
+```
 LLM Adapter
      ↓
 WYP-IR
      ↓
 WYP Orchestrator
+```
 
+ Il modello può quindi essere sostituito senza riscrivere FDM, NumericEngine o Verification.
 
-Il modello può quindi essere sostituito senza riscrivere FDM, NumericEngine o Verification.
+---
 
-22. GGUF
+ ## 22\. GGUF
 
-GGUF è considerato un possibile formato di distribuzione/esecuzione per un modello locale.
+ GGUF è considerato un possibile formato di distribuzione/esecuzione per un modello locale.
 
-Non deve essere confuso con il solver matematico.
+ Non deve essere confuso con il solver matematico.
 
+```
 GGUF
   =
 modello linguistico
@@ -584,24 +677,29 @@ modello linguistico
 WYP
   =
 sistema di interpretazione, calcolo, orchestrazione e verifica
+```
 
+ Il GGUF non sostituisce i moduli matematici.
 
-Il GGUF non sostituisce i moduli matematici.
+---
 
-23. Regola di affidabilità
+ ## 23\. Regola di affidabilità
 
-Il sistema deve preferire:
+ Il sistema deve preferire:
 
+```
 calcolo verificato
+```
 
+ rispetto a:
 
-rispetto a:
-
+```
 affermazione generata
+```
 
+ Esempio:
 
-Esempio:
-
+```
 LLM:
 "Il risultato dovrebbe essere 1728."
 
@@ -613,17 +711,22 @@ PASS
 
 LLM:
 "Il risultato verificato è 1728."
+```
 
+ Se il verifier restituisce FAIL:
 
-Se il verifier restituisce FAIL:
-
+```
 LLM:
 non deve trasformare il risultato in una certezza.
+```
 
-24. Error handling
+---
 
-Ogni livello deve poter restituire:
+ ## 24\. Error handling
 
+ Ogni livello deve poter restituire:
+
+```
 success
 failure
 unsupported
@@ -631,18 +734,21 @@ ambiguous
 verification_failed
 artifact_parse_failed
 tool_unavailable
+```
 
+ Gli errori non devono essere trasformati in risultati matematici.
 
-Gli errori non devono essere trasformati in risultati matematici.
+---
 
-25. Security boundary
+ ## 25\. Security boundary
 
-L'LLM non deve avere accesso arbitrario al sistema operativo.
+ L'LLM non deve avere accesso arbitrario al sistema operativo.
 
-Le operazioni devono passare attraverso tool autorizzati.
+ Le operazioni devono passare attraverso tool autorizzati.
 
-In particolare:
+ In particolare:
 
+```
 LLM
   ≠
 shell arbitraria
@@ -654,14 +760,17 @@ accesso filesystem arbitrario
 LLM
   ≠
 esecuzione codice arbitrario
+```
 
+ L'esecuzione deve essere mediata da componenti WYP espliciti.
 
-L'esecuzione deve essere mediata da componenti WYP espliciti.
+---
 
-26. Stato corrente
+ ## 26\. Stato corrente
 
-Componenti già presenti:
+ Componenti già presenti:
 
+```
 FDMModel
 FDMDerivation
 FDMComputation
@@ -678,12 +787,13 @@ FDM verification
 WYP HTTP server
 
 WYP public API
+```
 
+ Il deployment HTTP è stato portato a esecuzione tramite Python standard library e il servizio è stato verificato in deployment.
 
-Il deployment HTTP è stato portato a esecuzione tramite Python standard library e il servizio è stato verificato in deployment.
+ Il file `wyp/api.py` espone il percorso applicativo:
 
-Il file wyp/api.py espone il percorso applicativo:
-
+```
 request
  ↓
 FDMModel
@@ -693,13 +803,17 @@ FDMEngine
 FDMComputation
  ↓
 public dictionary
+```
 
-27. Prossima evoluzione
+---
 
-La prossima fase non consiste nel sostituire FDM.
+ ## 27\. Prossima evoluzione
 
-Consiste nell'aggiungere sopra i componenti esistenti:
+ La prossima fase non consiste nel sostituire FDM.
 
+ Consiste nell'aggiungere sopra i componenti esistenti:
+
+```
 WYPProblem
 WYP-IR
 WYPTool
@@ -707,10 +821,11 @@ WYPArtifact
 WYPExecution
 LLM Adapter
 WYP Orchestrator
+```
 
+ Ordine consigliato:
 
-Ordine consigliato:
-
+```
 1. definire WYP-IR
 2. definire WYPProblem
 3. definire WYPTool
@@ -725,13 +840,17 @@ Ordine consigliato:
 12. aggiungere LLM adapter
 13. aggiungere local/GGUF backend
 14. collegare il solver HTML
+```
 
-28. Principio di continuità
+---
 
-Ogni nuova istanza AI che riprende il progetto deve leggere questo documento prima di modificare il codice.
+ ## 28\. Principio di continuità
 
-Prima di intervenire deve:
+ Ogni nuova istanza AI che riprende il progetto deve leggere questo documento prima di modificare il codice.
 
+ Prima di intervenire deve:
+
+```
 1. identificare l'architettura esistente
 2. leggere i moduli coinvolti
 3. non duplicare componenti già presenti
@@ -741,16 +860,21 @@ Prima di intervenire deve:
 7. modificare un livello alla volta
 8. eseguire test prima del deploy
 9. verificare il deployment dopo modifiche al boundary HTTP
+```
 
-29. Regola finale
+---
 
-WYP non deve diventare semplicemente:
+ ## 29\. Regola finale
 
+ WYP non deve diventare semplicemente:
+
+```
 LLM → risposta
+```
 
+ La destinazione architetturale è:
 
-La destinazione architetturale è:
-
+```
 utente
   ↓
 LLM
@@ -768,10 +892,12 @@ structured execution result
 LLM
   ↓
 human-readable answer
+```
 
+ Il modello linguistico fornisce comprensione e composizione.
 
-Il modello linguistico fornisce comprensione e composizione.
+ WYP fornisce struttura, calcolo, strumenti, provenienza e verifica.
 
-WYP fornisce struttura, calcolo, strumenti, provenienza e verifica.
+ Questa separazione deve essere mantenuta durante tutte le successive evoluzioni del sistema.
 
-Questa separazione deve essere mantenuta durante tutte le successive evoluzioni del sistema.
+ Questo è il bootstrap aggiornato da usare come **contratto architetturale** per le prossime istanze AI. Il prossimo lavoro tecnico, coerentemente con questo documento, è **definire `WYP-IR`, `WYPProblem`, `WYPTool`, `WYPExecution` e `WYPArtifact` prima di introdurre il GGUF**.
