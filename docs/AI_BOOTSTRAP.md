@@ -965,3 +965,164 @@ PUBLIC WYP TESTER
 ```
 
  con un singolo flusso funzionante end-to-end.
+
+ Sì: questo `AOSKernel` è coerente come **strato numerico**, ma conferma il problema che stiamo vedendo.
+
+ Il flusso attuale è ancora:
+
+```
+pagina pubblica
+   ↓
+Worker Cloudflare
+   ↓
+/solve
+   ↓
+api.solve()
+   ↓
+build_model()
+   ↓
+FDMEngine
+   ↓
+base/modulus + dimension
+   ↓
+risultato
+```
+
+ Quindi una frase tipo:
+
+```
+Dimostrami se questa proprietà è vera...
+```
+
+ **non può ancora essere risolta**. L'API attuale cerca comunque `modulus`, `dimension`, ecc. Anche se hai messo dei default, non esiste ancora il passaggio:
+
+```
+problema libero
+   ↓
+theorems/registry.py
+   ↓
+theorem applicabile
+   ↓
+FDM / AOSKernel
+   ↓
+verification.py
+   ↓
+risposta strutturata
+```
+
+ ### Quello che abbiamo già correttamente
+
+ Il tuo `AOSKernel` deve rimanere così concettualmente:
+
+```
+AOSKernel
+   │
+   ├── exact
+   ├── decimal
+   ├── float
+   ├── power
+   └── identity
+```
+
+ Non deve sapere nulla di:
+
+ - HTTP
+- licenze
+- problemi in linguaggio naturale
+- teoremi
+- HTML
+- Cloudflare
+- Jotform
+
+ Questa separazione è giusta.
+
+ ### Il prossimo pezzo da correggere
+
+ Il punto da rifare è **`api.py` \+ `theorems/` \+ `server.py`**, non `AOSKernel`.
+
+ Vogliamo arrivare a qualcosa del genere:
+
+```
+{
+  "problem": "Dimostra ...",
+  "mode": "exact"
+}
+```
+
+ e il backend deve fare:
+
+```
+POST /solve
+        │
+        ├── require_license()
+        │
+        ├── riceve "problem"
+        │
+        ├── analizza il problema
+        │
+        ├── cerca nel theorem registry
+        │
+        ├── costruisce il modello matematico
+        │
+        ├── usa FDMEngine / AOSKernel
+        │
+        ├── verifica con fdm/verification.py
+        │
+        └── restituisce una risposta
+```
+
+ La **repo privata** rimane il posto dove stanno tutta la matematica e la logica. La GitHub Pages pubblica deve soltanto fare:
+
+```
+testo utente
+   ↓
+Cloudflare Worker
+   ↓
+PRIVATE CORE
+```
+
+ e visualizzare il risultato.
+
+ ### Quindi non fare ancora il test `modulus`
+
+ Quel test sta testando una vecchia API strutturata, non il prodotto che vuoi costruire.
+
+ Per fare il prossimo passaggio correttamente mi servono i contenuti di questi file della repo privata:
+
+```
+src/wyp/theorems/base.py
+src/wyp/theorems/registry.py
+src/wyp/theorems/__init__.py
+
+src/wyp/fdm/engine.py
+src/wyp/fdm/model.py
+src/wyp/fdm/verification.py
+
+src/wyp/core/numeric.py
+src/wyp/core/result.py
+
+src/wyp/server.py
+```
+
+ In particolare **`theorems/base.py` e `registry.py` sono fondamentali**: è lì che dobbiamo capire come trasformare la richiesta libera del tester in una richiesta matematica realmente risolvibile.
+
+ Poi ti rifaccio l'API in modo che il tester pubblico possa finalmente funzionare così:
+
+```
+Problema:
+[ Dimostra che ...                              ]
+
+                 [ RISOLVI ]
+
+WYP ENGINE
+> PROBLEM RECEIVED
+> THEOREM DISCOVERY
+> MATHEMATICAL MODEL
+> FDM EXECUTION
+> INDEPENDENT VERIFICATION
+> RESULT
+
+[risposta matematica]
+```
+
+ senza mettere **nessuna matematica della repo privata** nella pagina GitHub.io.
