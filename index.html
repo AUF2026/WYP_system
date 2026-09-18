@@ -2,16 +2,11 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="WYP">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>WYP | OPERATIONAL TERMINAL</title>
-
 <style>
 :root {
     --neon: #00f2ff;
@@ -22,778 +17,164 @@
     --col-width: 650px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: var(--bg);
-    color: #fff;
-    font-family: var(--font-mono);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: #fff; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
 
 body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    background:
-        linear-gradient(
-            rgba(18,16,16,0) 50%,
-            rgba(0,0,0,0.2) 50%
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,0,0,0.02),
-            rgba(0,255,0,0.01),
-            rgba(0,0,255,0.02)
-        );
-
-    z-index: 999;
-    background-size: 100% 3px, 3px 100%;
-    pointer-events: none;
+    content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%), linear-gradient(90deg, rgba(255,0,0,0.02), rgba(0,255,0,0.01), rgba(0,0,255,0.02));
+    z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: var(--col-width);
-    padding: 80px 20px 120px;
+.wrapper { width: 100%; max-width: var(--col-width); padding: 80px 20px 120px; display: flex; flex-direction: column; }
+header { width: 100%; text-align: center; margin-bottom: 60px; }
 
-    display: flex;
-    flex-direction: column;
-}
+.logo-box { width: 100%; filter: drop-shadow(0 0 25px var(--electric-blue)); animation: boot 1.5s ease-out; }
+.logo-box svg { width: 100%; height: auto; display: block; }
 
-header {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 60px;
-}
+@keyframes boot { 0% { opacity: 0; transform: scale(0.98); filter: brightness(3); } 100% { opacity: 1; transform: scale(1); } }
 
-.logo-box {
-    width: 100%;
-    filter: drop-shadow(
-        0 0 25px var(--electric-blue)
-    );
+.tagline { font-size: 1.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 40px; color: #1A85F8; text-shadow: 0 0 15px rgba(45,218,255,0.6); line-height: 1.1; }
+.sub-claim { font-size: 0.75rem; color: #2DDAFF; letter-spacing: 4px; margin-top: 15px; text-transform: uppercase; }
 
-    animation: boot 1.5s ease-out;
-}
+.intro-description { margin-bottom: 40px; font-size: 1rem; line-height: 1.6; color: #999; }
+.terminal-container { background: var(--surface); border: 1px solid #151515; box-shadow: 0 0 60px rgba(0,0,0,1); margin-bottom: 40px; }
+.field-group { padding: 30px; border-bottom: 1px solid #111; transition: 0.3s; }
+.field-group:focus-within { background: #080808; border-left: 3px solid var(--electric-blue); }
 
-.logo-box svg {
-    width: 100%;
-    height: auto;
-    display: block;
-}
+label { display: block; font-size: 0.65rem; color: var(--electric-blue); margin-bottom: 18px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
+input, textarea, select { width: 100%; background: transparent; border: none; color: var(--electric-blue) !important; font-size: 1.1rem; outline: none; font-family: var(--font-mono); text-transform: uppercase; font-weight: 600; }
+::placeholder { color: rgba(45,218,255,0.4) !important; }
+textarea { resize: none; text-transform: none; line-height: 1.6; }
+select { cursor: pointer; -webkit-appearance: none; border-bottom: 1px solid #222; }
+option { background: #000; color: var(--electric-blue); }
 
-@keyframes boot {
-    0% {
-        opacity: 0;
-        transform: scale(0.98);
-        filter: brightness(3);
-    }
+.btn-execute { width: 100%; background: transparent; border: 1px solid var(--electric-blue); color: var(--electric-blue); padding: 40px; font-family: var(--font-mono); font-weight: 900; font-size: 1.8rem; letter-spacing: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: -1px; text-align: center; }
+.btn-execute:hover { background: var(--electric-blue); color: #000; box-shadow: 0 0 50px rgba(45,218,255,0.5); }
 
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+#kernel-status { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
+.status-text { color: var(--electric-blue); font-size: 1rem; line-height: 2.5; letter-spacing: 2px; text-align: center; font-family: var(--font-mono); white-space: pre-wrap; overflow-y: auto; max-height: 90vh; width: 100%; max-width: 600px; }
 
-.tagline {
-    font-size: 1.6rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+.cursor { display: inline-block; width: 10px; background: var(--electric-blue); margin-left: 2px; animation: blink 1s infinite; }
+@keyframes blink { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
 
-    margin-top: 40px;
-
-    color: #1A85F8;
-
-    text-shadow:
-        0 0 15px rgba(45,218,255,0.6);
-
-    line-height: 1.1;
-}
-
-.sub-claim {
-    font-size: 0.75rem;
-    color: #2DDAFF;
-    letter-spacing: 4px;
-    margin-top: 15px;
-    text-transform: uppercase;
-}
-
-.intro-description {
-    margin-bottom: 40px;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #999;
-}
-
-.terminal-container {
-    background: var(--surface);
-    border: 1px solid #151515;
-
-    box-shadow:
-        0 0 60px rgba(0,0,0,1);
-
-    margin-bottom: 40px;
-}
-
-.field-group {
-    padding: 30px;
-    border-bottom: 1px solid #111;
-    transition: 0.3s;
-}
-
-.field-group:focus-within {
-    background: #080808;
-    border-left: 3px solid var(--electric-blue);
-}
-
-label {
-    display: block;
-
-    font-size: 0.65rem;
-    color: var(--electric-blue);
-
-    margin-bottom: 18px;
-
-    letter-spacing: 3px;
-    text-transform: uppercase;
-
-    opacity: 0.8;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-
-    background: transparent;
-    border: none;
-
-    color: var(--electric-blue) !important;
-
-    font-size: 1.1rem;
-    outline: none;
-
-    font-family: var(--font-mono);
-    font-weight: 600;
-}
-
-input,
-select {
-    text-transform: uppercase;
-}
-
-textarea {
-    resize: none;
-    text-transform: none;
-    line-height: 1.6;
-}
-
-::placeholder {
-    color: rgba(45,218,255,0.4) !important;
-}
-
-select {
-    cursor: pointer;
-    -webkit-appearance: none;
-    border-bottom: 1px solid #222;
-}
-
-option {
-    background: #000;
-    color: var(--electric-blue);
-}
-
-.btn-execute {
-    width: 100%;
-
-    background: transparent;
-
-    border: 1px solid var(--electric-blue);
-
-    color: var(--electric-blue);
-
-    padding: 40px;
-
-    font-family: var(--font-mono);
-    font-weight: 900;
-
-    font-size: 1.8rem;
-
-    letter-spacing: 10px;
-
-    text-transform: uppercase;
-
-    cursor: pointer;
-
-    transition: 0.3s;
-
-    margin-top: -1px;
-
-    text-align: center;
-}
-
-.btn-execute:hover {
-    background: var(--electric-blue);
-    color: #000;
-
-    box-shadow:
-        0 0 50px rgba(45,218,255,0.5);
-}
-
-.btn-execute:disabled {
-    opacity: 0.5;
-    cursor: wait;
-}
-
-#kernel-status {
-    display: none;
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: #000;
-
-    z-index: 10000;
-
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
-    padding: 40px;
-}
-
-.status-text {
-    color: var(--electric-blue);
-
-    font-size: 1rem;
-
-    line-height: 2.5;
-
-    letter-spacing: 2px;
-
-    text-align: center;
-
-    font-family: var(--font-mono);
-
-    white-space: pre-wrap;
-
-    overflow-y: auto;
-
-    max-height: 90vh;
-
-    width: 100%;
-    max-width: 600px;
-}
-
-footer {
-    color: #999;
-
-    background-color: transparent;
-
-    font-size: 0.7rem;
-
-    padding: 40px 0 20px;
-
-    text-align: center;
-
-    text-transform: uppercase;
-
-    letter-spacing: 2px;
-}
-
-footer a {
-    color: #00f2ff;
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: #ffffff;
-    text-decoration: underline;
-}
-
-/* =========================================================
-   WYP HUMAN RESULT PANEL
-   ========================================================= */
-
-#demoOutput {
-    background: #050505;
-    color: var(--electric-blue);
-
-    padding: 28px;
-
-    border: 1px solid #111;
-
-    font-family: 'Segoe UI', Roboto, sans-serif;
-
-    font-size: 1rem;
-
-    white-space: normal;
-
-    overflow-y: auto;
-
-    max-height: 600px;
-
-    min-height: 120px;
-
-    border-radius: 5px;
-
-    line-height: 1.7;
-
-    text-align: left;
-
-    transition: 0.3s ease;
-}
-
-.result-title {
-    color: #ffffff;
-
-    font-family: var(--font-mono);
-
-    font-size: 1rem;
-
-    font-weight: 900;
-
-    letter-spacing: 2px;
-
-    text-transform: uppercase;
-
-    margin-bottom: 18px;
-}
-
-.result-message {
-    color: #bdbdbd;
-
-    font-family: 'Segoe UI', Roboto, sans-serif;
-
-    font-size: 1rem;
-
-    line-height: 1.7;
-}
-
-.result-operation {
-    color: var(--electric-blue);
-
-    font-family: var(--font-mono);
-
-    font-size: 1.35rem;
-
-    font-weight: 700;
-
-    text-align: center;
-
-    margin: 22px 0;
-
-    padding: 16px;
-
-    border-top: 1px solid #151515;
-    border-bottom: 1px solid #151515;
-}
-
-.result-answer {
-    color: #00ff88;
-
-    font-family: var(--font-mono);
-
-    font-size: 1.5rem;
-
-    font-weight: 900;
-
-    text-align: center;
-
-    margin-top: 20px;
-
-    text-shadow:
-        0 0 12px rgba(0,255,136,0.35);
-}
-
-.result-insufficient {
-    color: #ffcc66;
-
-    font-family: 'Segoe UI', Roboto, sans-serif;
-
-    font-size: 1.05rem;
-
-    line-height: 1.7;
-
-    padding: 18px;
-
-    border-left: 2px solid #ffcc66;
-
-    background: rgba(255,204,102,0.03);
-}
-
-.result-error {
-    color: #ff6677;
-
-    font-family: 'Segoe UI', Roboto, sans-serif;
-
-    font-size: 1rem;
-
-    line-height: 1.7;
-
-    padding: 18px;
-
-    border-left: 2px solid #ff4455;
-
-    background: rgba(255,68,85,0.03);
-}
-
-.api-online {
-    color: var(--electric-blue) !important;
-}
-
-.api-error {
-    color: #ff4455 !important;
-}
+footer { color: #999; background-color: transparent; font-size: 0.7rem; padding: 40px 0 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+footer a { color: #00f2ff; text-decoration: none; }
+footer a:hover { color: #ffffff; text-decoration: underline; }
 </style>
 </head>
-
 <body>
-
 <div class="wrapper">
+    <header>
+        <div class="logo-box">
+            <svg xmlns="http://www.w3.org" viewBox="0 0 280 85">
+                <g transform="scale(0.85)">
+                    <path d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z" fill="#2ddaff"></path>
+                    <path d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z" fill="#1a85f8"></path>
+                    <path d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z" fill="#2ddaff" opacity=".8"></path>
+                </g>
+                <g transform="translate(72, 58)">
+                    <path d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z" fill="#ffffff"></path>
+                    <path d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z" fill="#2ddaff"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="tagline">WHAT'S YOUR PROBLEM? IT'S SOLVED.</div>
+        <div class="sub-claim">Deterministic Resolution O(1)</div>
+    </header>
 
-<header>
+    <div class="intro-description">
+        <p style="text-align: justify; line-height: 1.6; font-family: 'Segoe UI', Roboto, sans-serif;">
+        L' ecosistema Ã¨ governato dalla logica deterministica proprietaria <strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi piÃ¹ critici del panorama industriale globale. Laddove i sistemi tradizionali si affidano a stime probabilistiche, noi operiamo nel dominio della <strong>Certezza Nominale</strong>. Grazie allâ€™integrazione del sistema <strong>AOS</strong>, eseguiamo analisi con una precisione infinitesimale di <strong>110 decimali su 120</strong>, utilizzando architetture in <strong>Python 3.13.11</strong> e librerie certificate. Il nostro approccio ha giÃ  permesso la progettazione di soluzioni deterministiche per sistemi e valvole aerospaziali utilizzate da <strong>NASA</strong> e <strong>SpaceX</strong>, oltre all'ottimizzazione termofluidodinamica di complessi impianti energetici, termici e idrici. Supportati da teoremi avanzati, abbiamo ottenuto la risoluzione certificata dei <strong>7 Millennium Prize Problems</strong> e dei <strong>Paradossi Fisici Universali</strong>. Superiamo i limiti intrinseci dei modelli probabilistici per offrire soluzioni definitive a sfide ritenute "impossibili" dai metodi convenzionali: chiunque tenti di sfidare questa architettura troverÃ  nell'inevitabile rigore del determinismo la propria definitiva sconfitta.
+        </p>
+    </div>
 
-<div class="logo-box">
+    <!-- SEZIONE FORM INVIO -->
+    <main class="terminal-container">
+        <form id="my-form" action="https://formspree.io" method="POST">
+            <div class="field-group">
+                <label>IDENT - ASSET - AZIENDA</label>
+                <input type="text" name="Azienda" placeholder="ID AZIENDA / BRAND" required>
+            </div>
+            <div class="field-group">
+                <label>ENCRYPTED E-MAIL CHANNEL</label>
+                <input type="email" name="Email" placeholder="INSERISCI EMAIL" required>
+            </div>
+            <div class="field-group">
+                <label>ANALYSIS - DOMAIN - SETTORE</label>
+                <select name="Settore" required>
+                    <option value="" disabled selected>SET DOMAIN...</option>
+                    <option value="SaaS-Arch">SaaS ARCHITECTURE</option>
+                    <option value="Bypass-Logic">PROCESS BYPASSING</option>
+                    <option value="AI-Ops">AI INTEGRATION</option>
+                    <option value="Security">CYBER SECURITY</option>
+                    <option value="Cloud-Infra">CLOUD INFRASTRUCTURE</option>
+                    <option value="Automation">INDUSTRIAL AUTOMATION</option>
+                    <option value="Data-Analysis">DATA ANALYSIS & DATABASES</option>
+                    <option value="DevOps">DEVOPS & CI/CD</option>
+                    <option value="Blockchain">BLOCKCHAIN SOLUTIONS</option>
+                    <option value="Edge-Computing">EDGE COMPUTING</option>
+                    <option value="API-Integration">API INTEGRATION</option>
+                    <option value="Enterprise-IT">ENTERPRISE IT SYSTEMS</option>
+                    <option value="Data-Protection">DATA PROTECTION & COMPLIANCE</option>
+                    <option value="IoT-Solutions">IOT SOLUTIONS</option>
+                    <option value="Serverless">SERVERLESS ARCHITECTURE</option>
+                    <option value="Other">OTHER / ALTRO</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>PROBLEM LOG DESC - PROBLEMATICA</label>
+                <textarea name="Messaggio" rows="3" placeholder="Descrizione dettagliata del problema da risolvere." required></textarea>
+            </div>
+            <button type="submit" class="btn-execute">EXECUTE SUBMIT<br>INVIA FORM</button>
+        </form>
+    </main>
 
-<svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 280 85"
->
-
-<g transform="scale(0.85)">
-
-<path
-    d="M5 29.85L56 9.69C61.37 7.34 68.32 3.79 71.45 0c0 0 20.94 20-6.56 30.85L20.64 48.36z"
-    fill="#2ddaff">
-</path>
-
-<path
-    d="M0 64.55l51-20.16c5.38-2.34 12.33-5.89 15.46-9.68 0 0 20.94 20-6.56 30.84L15.59 83.07z"
-    fill="#1a85f8">
-</path>
-
-<path
-    d="M0 64.55l27-10.68 33.17 39.36-13.5 5.35c-7.43 2.94-17 1.18-21.31-3.92z"
-    fill="#2ddaff"
-    opacity=".8">
-</path>
-
-</g>
-
-<g transform="translate(72, 58)">
-
-<path
-    d="M21.45-11.7L13-39 16.9-39.65 16.9-45.5 1.3-45.5 1.3-39.65 5.2-39 17.55 0 25.35 0 33.8-26.65 42.25 0 50.05 0 62.4-39 66.3-39.65 66.3-45.5 50.7-45.5 50.7-39.65 54.6-39 46.15-11.7 37.7-39 41.6-39.65 41.6-45.5 26-45.5 26-39.65 29.9-39ZM88.08-26.98L81.25-39 84.5-39.65 84.5-45.5 68.9-45.5 68.9-39.65 72.8-39 84.18-19.5 84.18-6.5 80.28-5.85 80.28 0 95.88 0 95.88-5.85 91.98-6.5 91.98-19.5 103.35-39 107.25-39.65 107.25-45.5 91.65-45.5 91.65-39.65 94.9-39ZM109.85-45.5L109.85-39.65 113.75-39 113.75-6.5 109.85-5.85 109.85 0 125.45 0 125.45-5.85 121.55-6.5 121.55-19.5 130.65-19.5C137.87-19.5 143.65-25.35 143.65-32.5 143.65-39.72 137.87-45.5 130.65-45.5ZM135.85-31.85C135.85-28.93 133.51-26.65 130.65-26.65L121.55-26.65 121.55-38.35 130.65-38.35C133.51-38.35 135.85-36.08 135.85-33.15ZM146.9-45.5L146.9-34.45 152.75-34.45 153.4-38.35 161.85-38.35C164.39-38.35 166.4-36.4 166.4-33.8L166.4-31.85C166.4-29.84 164.97-28.14 162.15-27.69L155-26C151.32-24.89 148.2-20.87 148.2-15.93L148.2-12.35 155-12.35 155-15.93C155-17.62 156.04-18.98 157.6-19.3L164.75-20.8C170.95-21.91 174.2-27.3 174.2-32.83 174.2-40.3 168.61-45.5 161.85-45.5z"
-    fill="#ffffff">
-</path>
-
-<path
-    d="M147.88 0L156.33 0 156.33-8.45 147.88-8.45Z"
-    fill="#2ddaff">
-</path>
-
-</g>
-
-</svg>
-
-</div>
-
-<div class="tagline">
-WHAT'S YOUR PROBLEM? IT'S SOLVED.
-</div>
-
-<div class="sub-claim">
-Deterministic Resolution O(1)
-</div>
-
-</header>
-
-<div class="intro-description">
-
-<p
-style="
-text-align: justify;
-line-height: 1.6;
-font-family: 'Segoe UI', Roboto, sans-serif;
-">
-
-Il Framework AUF2026-AOS144-HDFP e la sua parte fruibile on line WYP? è governato dalla logica deterministica proprietaria FDM
-<strong>FAURE_CORE_2026</strong>, un framework blindato e protetto, progettato per eradicare l'incertezza e risolvere i "buchi neri" tecnici e operativi più critici del panorama industriale globale.
-
-Laddove i sistemi tradizionali si affidano a stime probabilistiche, AOS-HDFP opera in maniera automatica sia in flota classic mode, sia nel dominio proprietario Faure della
-<strong>Certezza Nominale Deterministica</strong>.
-
-Grazie all'integrazione del sistema
-<strong>AOS/AOS144-HDFP</strong>,
-si esegue analisi con una precisione infinitesimale di
-<strong>X decimali su Y</strong>
-a seconda delle esigenze di progetto.
-
-L'approccio è destinato alla progettazione e analisi di sistemi complessi e deterministici, inclusi impianti energetici, termici e idrici e altre architetture ingegneristiche.
-
-</p>
-
-</div>
-
-<!-- FORM -->
-
+    <!-- SEZIONE DEMO AOS V1.0 -->
+    <!-- SEZIONE WYP ENGINE -->
 <main class="terminal-container">
+    <h2 style="color: var(--electric-blue); text-align:center; margin-top:30px; text-transform:uppercase; letter-spacing:3px;">
+        WYP ENGINE â€” DETERMINISTIC ANALYSIS
+    </h2>
 
-<form
-    id="my-form"
-    action="https://formspree.io"
-    method="POST"
->
+    <div class="field-group">
+        <label>PROBLEM INPUT</label>
+        <textarea
+            id="demoProblem"
+            rows="5"
+            placeholder="DESCRIBE THE PROBLEM TO ANALYZE..."
+        ></textarea>
+    </div>
 
-<div class="field-group">
+    <button id="demoSubmit" class="btn-execute">
+        EXECUTE WYP<br>
+        ANALYZE PROBLEM
+    </button>
 
-<label>
-IDENT - ASSET - AZIENDA
-</label>
-
-<input
-    type="text"
-    name="Azienda"
-    placeholder="ID AZIENDA / BRAND"
-    required
->
-
-</div>
-
-<div class="field-group">
-
-<label>
-E-MAIL SUBMISSION
-</label>
-
-<input
-    type="email"
-    name="Email"
-    placeholder="INSERISCI EMAIL"
-    required
->
-
-</div>
-
-<div class="field-group">
-
-<label>
-ANALYSIS - DOMAIN - SETTORE
-</label>
-
-<select
-    name="Settore"
-    required
->
-
-<option
-    value=""
-    disabled
-    selected
->
-SET DOMAIN...
-</option>
-
-<option value="SaaS-Arch">
-SaaS ARCHITECTURE
-</option>
-
-<option value="Bypass-Logic">
-PROCESS BYPASSING
-</option>
-
-<option value="AI-Ops">
-AI INTEGRATION
-</option>
-
-<option value="Security">
-CYBER SECURITY
-</option>
-
-<option value="Cloud-Infra">
-CLOUD INFRASTRUCTURE
-</option>
-
-<option value="Automation">
-INDUSTRIAL AUTOMATION
-</option>
-
-<option value="Data-Analysis">
-DATA ANALYSIS & DATABASES
-</option>
-
-<option value="DevOps">
-DEVOPS & CI/CD
-</option>
-
-<option value="Blockchain">
-BLOCKCHAIN SOLUTIONS
-</option>
-
-<option value="Edge-Computing">
-EDGE COMPUTING
-</option>
-
-<option value="API-Integration">
-API INTEGRATION
-</option>
-
-<option value="Enterprise-IT">
-ENTERPRISE IT SYSTEMS
-</option>
-
-<option value="Data-Protection">
-DATA PROTECTION & COMPLIANCE
-</option>
-
-<option value="IoT-Solutions">
-IOT SOLUTIONS
-</option>
-
-<option value="Serverless">
-SERVERLESS ARCHITECTURE
-</option>
-
-<option value="Other">
-OTHER / ALTRO
-</option>
-
-</select>
-
-</div>
-
-<div class="field-group">
-
-<label>
-PROBLEM LOG DESC - PROBLEMATICA
-</label>
-
-<textarea
-    name="Messaggio"
-    rows="3"
-    placeholder="Descrizione dettagliata del problema da risolvere."
-    required
-></textarea>
-
-</div>
-
-<button
-    type="submit"
-    class="btn-execute"
->
-EXECUTE SUBMIT<br>
-INVIA FORM
-</button>
-
-</form>
-
+    <div style="padding:30px;">
+        <pre
+            id="demoOutput"
+            style="
+                background:#050505;
+                color:var(--electric-blue);
+                padding:20px;
+                border:1px solid #111;
+                font-family:var(--font-mono);
+                font-size:0.85rem;
+                white-space:pre-wrap;
+                overflow-y:auto;
+                max-height:600px;
+                min-height:100px;
+                border-radius:5px;
+            "
+        ></pre>
+    </div>
 </main>
 
-<!-- WYP ENGINE -->
-
-<main class="terminal-container">
-
-<h2
-style="
-color: var(--electric-blue);
-text-align:center;
-margin-top:30px;
-padding:0 20px;
-text-transform:uppercase;
-letter-spacing:3px;
-"
->
-AOS144-HDFP ENGINE -
-FDM DETERMINISTIC SOLVER
-</h2>
-
-<div class="field-group">
-
-<label>
-PROBLEM INPUT
-</label>
-
-<textarea
-    id="demoProblem"
-    rows="5"
-    placeholder="DESCRIVI IL PROBLEMA DA ANALIZZARE..."
-></textarea>
-
+    <footer>ALAIN FAURE AUF2026&copy; <a href="mailto:AUF2026@protonmail.com">AUF2026@protonmail.com</a> | WYP? SYSTEM | Q.E.D</footer>
 </div>
 
-<button
-    id="demoSubmit"
-    class="btn-execute"
-    type="button"
->
-EXECUTE WYP? SOLVER<br>
-ANALYZE PROBLEM
-</button>
-
-<div style="padding:30px;">
-
-<pre id="demoOutput">
-WYP? ENGINE READY
-
-Inserisci un problema da analizzare.
-Il sistema determinerà se i dati disponibili
-sono sufficienti per arrivare a una soluzione.
-</pre>
-
-</div>
-
-</main>
-
-<footer>
-
-ALAIN FAURE AUF2026&copy;
-
-<a href="mailto:AUF2026@protonmail.com">
-AUF2026@protonmail.com
-</a>
-
-|
-
-WYP? SYSTEM
-
-|
-
-Q.E.D
-
-</footer>
-
-</div>
-
-<!-- FULLSCREEN STATUS -->
-
-<div id="kernel-status">
-
-<div
-    class="status-text"
-    id="status-log"
-></div>
-
-</div>
-
+<div id="kernel-status"><div class="status-text" id="status-log"></div></div>
 
 <script>
 
@@ -801,10 +182,15 @@ Q.E.D
    WYP PUBLIC WEB TERMINAL
    =========================================================
 
-   Backend:
-   Render -> AOS PRIVATE CORE
+   Frontend pubblico
+        ↓
+   Render
+        ↓
+   AOS PRIVATE CORE
+        ↓
+   WYP solver
 
-   Endpoint:
+   Endpoint pubblico del core:
    https://aos-private-core.onrender.com/solve
 
    Il browser NON contiene:
@@ -812,8 +198,12 @@ Q.E.D
    - license key
    - verification key
 
-   La licenza viene verificata esclusivamente
-   dal backend privato.
+   La verifica della licenza rimane nel backend.
+   ========================================================= */
+
+
+/* =========================================================
+   WYP API
    ========================================================= */
 
 const WYP_API =
@@ -821,7 +211,7 @@ const WYP_API =
 
 
 /* =========================================================
-   FORM SUBMISSION
+   FORM LOGIC
    ========================================================= */
 
 const form =
@@ -838,9 +228,9 @@ if (form) {
 
     form.addEventListener(
         "submit",
-        async function (event) {
+        async function (e) {
 
-            event.preventDefault();
+            e.preventDefault();
 
             if (kernel) {
                 kernel.style.display = "flex";
@@ -851,10 +241,8 @@ if (form) {
             }
 
             const sequences = [
-                "> INITIALIZING AOS KERNEL ...",
+                "> INITIALIZING AOS KERNEL...",
                 "> ACCESSING FAURE_CORE_2026...",
-                "> PREPARING REQUEST...",
-                "> VALIDATING SUBMISSION...",
                 "> SUCCESS: DISPATCHED TO ARCHITECT."
             ];
 
@@ -868,7 +256,10 @@ if (form) {
 
                 await new Promise(
                     resolve =>
-                        setTimeout(resolve, 500)
+                        setTimeout(
+                            resolve,
+                            600
+                        )
                 );
             }
 
@@ -878,14 +269,6 @@ if (form) {
 
 
             try {
-
-                /*
-                 * Questa form è distinta dal solver.
-                 *
-                 * Manteniamo l'invio originale verso
-                 * form.action perché potrebbe essere un
-                 * endpoint esterno dedicato alla form.
-                 */
 
                 const response =
                     await fetch(
@@ -928,6 +311,7 @@ if (form) {
             } catch (error) {
 
                 if (log) {
+
                     log.innerHTML +=
                         "<br>> FORM SUBMISSION ERROR.<br>" +
                         "> " +
@@ -948,7 +332,7 @@ if (form) {
 
 
 /* =========================================================
-   WYP SOLVER
+   WYP ENGINE
    ========================================================= */
 
 const demoSubmit =
@@ -968,679 +352,21 @@ const demoProblem =
 
 
 /* =========================================================
-   OUTPUT
+   SAFETY CHECK
    ========================================================= */
 
-function setOutput(
-    html,
-    className = ""
+if (
+    !demoSubmit ||
+    !demoOutput ||
+    !demoProblem
 ) {
 
-    if (!demoOutput) {
-        return;
-    }
-
-    demoOutput.className =
-        className;
-
-    demoOutput.innerHTML =
-        html;
-}
-
-
-/* =========================================================
-   SAFE HTML ESCAPE
-   ========================================================= */
-
-function escapeHtml(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-        return "";
-    }
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-
-/* =========================================================
-   NORMALIZE API ENVELOPE
-   =========================================================
-
-   Il backend attuale restituisce:
-
-       {
-           "status": "SUCCESS",
-           "result": {
-               ...
-           }
-       }
-
-   In caso di errore:
-
-       {
-           "status": "ENGINE_ERROR",
-           "error": "...",
-           "exception": "...",
-           "detail": "..."
-       }
-
-   Il terminale lavora sul contenuto di `result`
-   quando l'envelope API è presente.
-
-   Gli errori NON vengono persi durante
-   l'unwrapping.
-   ========================================================= */
-
-function unwrapApiResponse(data) {
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-        return data;
-    }
-
-
-    /* -----------------------------------------
-       CURRENT WYP API ENVELOPE
-
-       {
-           status: "SUCCESS",
-           result: {...}
-       }
-       ----------------------------------------- */
-
-    if (
-        data.result &&
-        typeof data.result === "object" &&
-        !Array.isArray(data.result)
-    ) {
-
-        return data.result;
-    }
-
-
-    return data;
-}
-
-
-/* =========================================================
-   EXTRACT STATUS
-   ========================================================= */
-
-function extractApiStatus(
-    data,
-    httpStatus = 200
-) {
-
-    /*
-     * HTTP status ha precedenza per gli errori
-     * server/client.
-     */
-
-    if (
-        Number.isFinite(httpStatus) &&
-        httpStatus >= 500
-    ) {
-        return httpStatus;
-    }
-
-
-    if (
-        Number.isFinite(httpStatus) &&
-        httpStatus >= 400
-    ) {
-        return httpStatus;
-    }
-
-
-    if (
-        data &&
-        typeof data === "object"
-    ) {
-
-        const status =
-            data.status;
-
-
-        /*
-         * SUCCESS è il normale envelope
-         * del backend WYP.
-         */
-
-        if (
-            typeof status === "string" &&
-            status.toUpperCase() ===
-                "SUCCESS"
-        ) {
-            return 200;
-        }
-
-
-        /*
-         * Alcuni backend possono restituire
-         * uno status HTTP numerico nel JSON.
-         */
-
-        if (
-            typeof status === "number"
-        ) {
-            return status;
-        }
-
-
-        /*
-         * Errori applicativi WYP.
-         */
-
-        if (
-            typeof status === "string"
-        ) {
-
-            const normalized =
-                status.toUpperCase();
-
-
-            if (
-                normalized ===
-                    "ENGINE_ERROR"
-            ) {
-                return 500;
-            }
-
-
-            if (
-                normalized ===
-                    "LICENSE_REQUIRED"
-            ) {
-                return 403;
-            }
-
-
-            if (
-                normalized ===
-                    "INVALID_REQUEST"
-            ) {
-                return 400;
-            }
-
-
-            if (
-                normalized ===
-                    "NOT_FOUND"
-            ) {
-                return 404;
-            }
-        }
-
-    }
-
-
-    return httpStatus;
-}
-
-
-/* =========================================================
-   EXTRACT ERROR MESSAGE
-   ========================================================= */
-
-function extractApiMessage(
-    data,
-    fallback = "Errore sconosciuto."
-) {
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-        return fallback;
-    }
-
-
-    /*
-     * Per ENGINE_ERROR preferiamo il dettaglio
-     * reale restituito dal core.
-     */
-
-    if (
-        data.detail !== undefined &&
-        data.detail !== null &&
-        String(data.detail).trim()
-    ) {
-        return String(
-            data.detail
-        );
-    }
-
-
-    if (
-        data.error !== undefined &&
-        data.error !== null &&
-        String(data.error).trim()
-    ) {
-        return String(
-            data.error
-        );
-    }
-
-
-    if (
-        data.message !== undefined &&
-        data.message !== null &&
-        String(data.message).trim()
-    ) {
-        return String(
-            data.message
-        );
-    }
-
-
-    return fallback;
-}
-
-
-/* =========================================================
-   EXTRACT SOLVER RESULT
-   ========================================================= */
-
-function extractSolverResult(data) {
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-        return data;
-    }
-
-
-    /*
-     * Formato principale:
-
-         {
-             status: "SUCCESS",
-             result: {...}
-         }
-     */
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            data,
-            "result"
-        )
-    ) {
-        return data.result;
-    }
-
-
-    /*
-     * Compatibilità con eventuali
-     * risposte già unwrap.
-     */
-
-    return unwrapApiResponse(
-        data
-    );
-}
-
-
-/* =========================================================
-   FORMAT SERVER ERROR
-   ========================================================= */
-
-function formatServerError(
-    data,
-    httpStatus
-) {
-
-    const message =
-        extractApiMessage(
-            data,
-            "Protected solver execution failed."
-        );
-
-    const exceptionText =
-        data &&
-        data.exception
-            ? String(data.exception)
-            : "";
-
-    const tracebackText =
-        data &&
-        data.traceback
-            ? String(data.traceback)
-            : "";
-
-
-    return `
-        <div class="result-title">
-            ERRORE DEL CORE
-        </div>
-
-        <div class="result-error">
-            ${escapeHtml(message)}
-        </div>
-
-        ${
-            exceptionText
-                ? `
-                    <div class="result-error">
-                        <strong>Exception:</strong>
-                        ${escapeHtml(
-                            exceptionText
-                        )}
-                    </div>
-                  `
-                : ""
-        }
-
-        ${
-            httpStatus
-                ? `
-                    <div class="result-error">
-                        <strong>HTTP:</strong>
-                        ${escapeHtml(
-                            String(httpStatus)
-                        )}
-                    </div>
-                  `
-                : ""
-        }
-
-        ${
-            tracebackText
-                ? `
-                    <details class="result-error">
-                        <summary>
-                            Dettaglio tecnico
-                        </summary>
-
-                        <pre>${escapeHtml(
-                            tracebackText
-                        )}</pre>
-                    </details>
-                  `
-                : ""
-        }
-
-        <div class="result-error">
-            <br>
-            Il server WYP è raggiungibile,
-            ma il core ha restituito un errore.
-        </div>
-    `;
-}
-
-
-/* =========================================================
-   WYP SOLVER REQUEST
-   ========================================================= */
-
-async function callWypSolver(
-    problem
-) {
-
-    if (
-        typeof problem !== "string" ||
-        !problem.trim()
-    ) {
-        throw new Error(
-            "Inserire un problema valido."
-        );
-    }
-
-
-    /*
-     * IMPORTANTE:
-     *
-     * Il server Python WYP legge:
-     *
-     *     Content-Length
-     *     JSON body
-     *
-     * e cerca:
-     *
-     *     {
-     *         "problem": "..."
-     *     }
-     *
-     * NON deve essere inviato FormData.
-     */
-
-    const response =
-        await fetch(
-            WYP_API,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json",
-
-                    "Accept":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    problem:
-                        problem.trim()
-                })
-            }
-        );
-
-
-    /*
-     * Proviamo sempre a leggere JSON.
-     * Questo permette di mostrare il dettaglio
-     * restituito dal backend anche quando HTTP
-     * è 400/403/500.
-     */
-
-    let data = null;
-
-    const responseText =
-        await response.text();
-
-
-    if (responseText) {
-
-        try {
-
-            data =
-                JSON.parse(
-                    responseText
-                );
-
-        } catch (parseError) {
-
-            data = {
-                error:
-                    responseText
-            };
-
-        }
-
-    }
-
-
-    const status =
-        extractApiStatus(
-            data,
-            response.status
-        );
-
-
-    /*
-     * Gli errori HTTP vengono restituiti
-     * al chiamante con tutte le informazioni
-     * disponibili.
-     */
-
-    if (
-        !response.ok ||
-        status >= 400
-    ) {
-
-        const error =
-            new Error(
-                extractApiMessage(
-                    data,
-                    `WYP HTTP ${response.status}`
-                )
-            );
-
-
-        error.httpStatus =
-            response.status;
-
-        error.apiStatus =
-            status;
-
-        error.apiData =
-            data;
-
-
-        throw error;
-    }
-
-
-    return {
-        status,
-        data,
-        result:
-            extractSolverResult(
-                data
-            )
-    };
-}
-
-
-/* =========================================================
-   SOLVER UI
-   ========================================================= */
-
-if (demoSubmit) {
-
-    demoSubmit.addEventListener(
-        "click",
-        async function () {
-
-            const problem =
-                demoProblem
-                    ? demoProblem.value
-                    : "";
-
-
-            if (
-                !problem ||
-                !problem.trim()
-            ) {
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        RICHIESTA INCOMPLETA
-                    </div>
-
-                    <div class="result-error">
-                        Inserire un problema.
-                    </div>
-                    `,
-                    "error"
-                );
-
-                return;
-            }
-
-
-            setOutput(
-                `
-                <div class="result-title">
-                    WYP CORE
-                </div>
-
-                <div class="result-error">
-                    Elaborazione in corso...
-                </div>
-                `,
-                "loading"
-            );
-
-
-            try {
-
-                const solverResponse =
-                    await callWypSolver(
-                        problem
-                    );
-
-
-                /*
-                 * Risposta valida.
-                 */
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        SOLUTION
-                    </div>
-
-                    <pre class="result-success">${escapeHtml(
-                        JSON.stringify(
-                            solverResponse.result,
-                            null,
-                            2
-                        )
-                    )}</pre>
-                    `,
-                    "success"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "[WYP PUBLIC WEB TERMINAL] "
-                    + "Solver request failed:",
-                    error
-                );
-
-
-                const data =
-                    error &&
-                    error.apiData
-                        ? error.apiData
-                        : null;
-
-                const status =
-                    error &&
-                    error.httpStatus
-                        ? error.httpStatus
-                        : 500;
-
-
-                /*
-                 * Mostriamo il vero errore
-                 * restituito dal backend.
-                 */
-
-                setOutput(
-                    formatServerError(
-                        data,
-                        status
-                    ),
-                    "error"
-                );
-
-            }
-
+    console.error(
+        "[WYP] Elementi solver mancanti:",
+        {
+            demoSubmit,
+            demoOutput,
+            demoProblem
         }
     );
 
@@ -1648,1550 +374,12 @@ if (demoSubmit) {
 
 
 /* =========================================================
-   EXTRACT STATUS
-   ========================================================= */
-
-function extractStatus(data) {
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-        return "";
-    }
-
-
-    /*
-     * -----------------------------------------------------
-     * API ENVELOPE
-     * -----------------------------------------------------
-     *
-     * Il backend può restituire:
-     *
-     * {
-     *     status: "SUCCESS",
-     *     result: {
-     *         resolution: {
-     *             status: "..."
-     *         }
-     *     }
-     * }
-     *
-     * `data.status` rappresenta lo stato HTTP/API.
-     * Non deve avere precedenza sullo stato matematico
-     * contenuto nella resolution.
-     */
-
-    const result =
-        data.result &&
-        typeof data.result === "object" &&
-        !Array.isArray(data.result)
-            ? data.result
-            : null;
-
-
-    const resolution =
-        data.resolution &&
-        typeof data.resolution === "object" &&
-        !Array.isArray(data.resolution)
-            ? data.resolution
-            : null;
-
-
-    const solution =
-        data.solution &&
-        typeof data.solution === "object" &&
-        !Array.isArray(data.solution)
-            ? data.solution
-            : null;
-
-
-    const nestedResolution =
-        result &&
-        result.resolution &&
-        typeof result.resolution === "object" &&
-        !Array.isArray(result.resolution)
-            ? result.resolution
-            : null;
-
-
-    const nestedSolution =
-        result &&
-        result.solution &&
-        typeof result.solution === "object" &&
-        !Array.isArray(result.solution)
-            ? result.solution
-            : null;
-
-
-    /*
-     * -----------------------------------------------------
-     * SOLUTION / RESOLUTION STATUS
-     * -----------------------------------------------------
-     *
-     * Priorità:
-     *
-     * 1. data.resolution.status
-     * 2. data.solution.status
-     * 3. result.resolution.status
-     * 4. result.solution.status
-     * 5. result.status
-     *
-     * `data.status` viene usato solo come ultimo fallback.
-     */
-
-    const status =
-        (
-            resolution &&
-            resolution.status
-        ) ||
-        (
-            solution &&
-            solution.status
-        ) ||
-        (
-            nestedResolution &&
-            nestedResolution.status
-        ) ||
-        (
-            nestedSolution &&
-            nestedSolution.status
-        ) ||
-        (
-            result &&
-            result.status
-        ) ||
-        data.status ||
-        "";
-
-
-    return String(status)
-        .trim()
-        .toUpperCase();
-}
-
-
-/* =========================================================
-   EXTRACT RESOLUTION OBJECT
-   ========================================================= */
-
-function extractResolution(data) {
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-        return {};
-    }
-
-
-    /* -----------------------------------------
-       DIRECT RESOLUTION
-       ----------------------------------------- */
-
-    if (
-        data.resolution &&
-        typeof data.resolution === "object" &&
-        !Array.isArray(data.resolution)
-    ) {
-
-        return data.resolution;
-    }
-
-
-    /* -----------------------------------------
-       NESTED API RESULT
-       ----------------------------------------- */
-
-    if (
-        data.result &&
-        typeof data.result === "object" &&
-        !Array.isArray(data.result)
-    ) {
-
-        const result =
-            data.result;
-
-
-        /* -----------------------------------------
-           result.resolution
-           ----------------------------------------- */
-
-        if (
-            result.resolution &&
-            typeof result.resolution === "object" &&
-            !Array.isArray(result.resolution)
-        ) {
-
-            return result.resolution;
-        }
-
-
-        /* -----------------------------------------
-           result.solution
-           ----------------------------------------- */
-
-        if (
-            result.solution &&
-            typeof result.solution === "object" &&
-            !Array.isArray(result.solution)
-        ) {
-
-            return result.solution;
-        }
-
-
-        /*
-         * Il result stesso può essere già
-         * l'oggetto resolution.
-         */
-
-        return result;
-    }
-
-
-    /* -----------------------------------------
-       DIRECT SOLUTION
-       ----------------------------------------- */
-
-    if (
-        data.solution &&
-        typeof data.solution === "object" &&
-        !Array.isArray(data.solution)
-    ) {
-
-        return data.solution;
-    }
-
-
-    /*
-     * Se data è già una resolution normalizzata,
-     * la restituiamo direttamente.
-     */
-
-    return data;
-}
-
-
-/* =========================================================
-   EXTRACT RESULT VALUE
-   =========================================================
-
-   Supporta esplicitamente:
-
-       resolution.values.result
-
-   e inoltre:
-
-       resolution.values
-       resolution.value
-       resolution.result
-       resolution.answer
-       resolution.solution
-
-   Viene data priorità al valore matematico effettivo.
-   ========================================================= */
-
-function extractResultValue(
-    data,
-    resolution
-) {
-
-    /* -----------------------------------------
-       NORMALIZE RESOLUTION
-       ----------------------------------------- */
-
-    if (
-        !resolution ||
-        typeof resolution !== "object"
-    ) {
-
-        resolution =
-            extractResolution(
-                data
-            );
-    }
-
-
-    /* -----------------------------------------
-       CURRENT WYP FORMAT
-
-       resolution.values.result
-       ----------------------------------------- */
-
-    if (
-        resolution &&
-        resolution.values &&
-        typeof resolution.values === "object" &&
-        !Array.isArray(resolution.values)
-    ) {
-
-        const values =
-            resolution.values;
-
-
-        if (
-            Object.prototype.hasOwnProperty.call(
-                values,
-                "result"
-            )
-        ) {
-
-            return values.result;
-        }
-
-
-        /*
-         * Se esiste un solo valore nel mapping,
-         * mostriamo direttamente quel valore.
-         */
-
-        const valueKeys =
-            Object.keys(values);
-
-
-        if (
-            valueKeys.length === 1
-        ) {
-
-            return values[
-                valueKeys[0]
-            ];
-        }
-    }
-
-
-    /* -----------------------------------------
-       PRESENTATION ANSWER
-
-       resolution.presentation.answer
-       ----------------------------------------- */
-
-    if (
-        resolution &&
-        resolution.presentation &&
-        typeof resolution.presentation === "object" &&
-        !Array.isArray(
-            resolution.presentation
-        )
-    ) {
-
-        const presentation =
-            resolution.presentation;
-
-
-        if (
-            presentation.answer !== null &&
-            presentation.answer !== undefined
-        ) {
-
-            return presentation.answer;
-        }
-    }
-
-
-    /* -----------------------------------------
-       DIRECT RESULT OBJECT
-       ----------------------------------------- */
-
-    if (
-        resolution &&
-        resolution.result &&
-        typeof resolution.result === "object" &&
-        !Array.isArray(resolution.result)
-    ) {
-
-        const nestedResult =
-            resolution.result;
-
-
-        if (
-            Object.prototype.hasOwnProperty.call(
-                nestedResult,
-                "value"
-            )
-        ) {
-
-            return nestedResult.value;
-        }
-
-
-        if (
-            Object.prototype.hasOwnProperty.call(
-                nestedResult,
-                "answer"
-            )
-        ) {
-
-            return nestedResult.answer;
-        }
-    }
-
-
-    /* -----------------------------------------
-       STANDARD CANDIDATES
-       ----------------------------------------- */
-
-    const candidates = [
-
-        resolution &&
-            resolution.value,
-
-        resolution &&
-            resolution.result,
-
-        resolution &&
-            resolution.answer,
-
-        resolution &&
-            resolution.solution,
-
-        data &&
-            data.values,
-
-        data &&
-            data.value,
-
-        data &&
-            data.answer,
-
-        data &&
-            data.solution
-
-    ];
-
-
-    for (
-        const candidate
-        of candidates
-    ) {
-
-        if (
-            candidate === null ||
-            candidate === undefined
-        ) {
-            continue;
-        }
-
-
-        /* -----------------------------------------
-           PRIMITIVE
-           ----------------------------------------- */
-
-        if (
-            typeof candidate === "string" ||
-            typeof candidate === "number" ||
-            typeof candidate === "boolean"
-        ) {
-
-            return candidate;
-        }
-
-
-        /* -----------------------------------------
-           ARRAY
-           ----------------------------------------- */
-
-        if (
-            Array.isArray(candidate)
-        ) {
-
-            if (
-                candidate.length === 0
-            ) {
-                continue;
-            }
-
-
-            return candidate
-                .map(
-                    item =>
-                        formatResultValue(
-                            item
-                        )
-                )
-                .join("\n");
-        }
-
-
-        /* -----------------------------------------
-           OBJECT
-           ----------------------------------------- */
-
-        if (
-            typeof candidate === "object"
-        ) {
-
-            return formatResultValue(
-                candidate
-            );
-        }
-    }
-
-
-    /* -----------------------------------------
-       NESTED RESULT ENVELOPE
-       ----------------------------------------- */
-
-    if (
-        data &&
-        data.result &&
-        typeof data.result === "object" &&
-        !Array.isArray(data.result)
-    ) {
-
-        const nested =
-            data.result;
-
-
-        /* -----------------------------------------
-           nested.values.result
-           ----------------------------------------- */
-
-        if (
-            nested.values &&
-            typeof nested.values === "object" &&
-            !Array.isArray(nested.values)
-        ) {
-
-            if (
-                Object.prototype.hasOwnProperty.call(
-                    nested.values,
-                    "result"
-                )
-            ) {
-
-                return nested.values.result;
-            }
-
-
-            const nestedValueKeys =
-                Object.keys(
-                    nested.values
-                );
-
-
-            if (
-                nestedValueKeys.length === 1
-            ) {
-
-                return nested.values[
-                    nestedValueKeys[0]
-                ];
-            }
-        }
-
-
-        /* -----------------------------------------
-           nested.answer
-           ----------------------------------------- */
-
-        if (
-            nested.answer !== null &&
-            nested.answer !== undefined
-        ) {
-
-            return nested.answer;
-        }
-
-
-        /* -----------------------------------------
-           nested.value
-           ----------------------------------------- */
-
-        if (
-            nested.value !== null &&
-            nested.value !== undefined
-        ) {
-
-            return nested.value;
-        }
-    }
-
-
-    return null;
-}
-
-
-/* =========================================================
-   FORMAT RESULT VALUE
-   ========================================================= */
-
-function formatResultValue(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-        return "";
-    }
-
-
-    /* -----------------------------------------
-       PRIMITIVI
-       ----------------------------------------- */
-
-    if (
-        typeof value === "string" ||
-        typeof value === "number" ||
-        typeof value === "boolean"
-    ) {
-
-        return String(value);
-    }
-
-
-    /* -----------------------------------------
-       ARRAY
-       ----------------------------------------- */
-
-    if (
-        Array.isArray(value)
-    ) {
-
-        return value
-            .map(
-                item =>
-                    formatResultValue(item)
-            )
-            .join(" | ");
-    }
-
-
-    /* -----------------------------------------
-       OGGETTO
-       ----------------------------------------- */
-
-    if (
-        typeof value === "object"
-    ) {
-
-        return Object.entries(value)
-            .map(
-                ([key, val]) =>
-                    `${key}: ${formatResultValue(val)}`
-            )
-            .join(" | ");
-    }
-
-
-    return String(value);
-}
-
-
-/* =========================================================
-   HUMAN-READABLE OUTPUT
-   ========================================================= */
-
-function renderHumanResult(data) {
-
-    /* -----------------------------------------
-       INVALID RESPONSE
-       ----------------------------------------- */
-
-    if (
-        !data ||
-        typeof data !== "object"
-    ) {
-
-        return `
-            <div class="result-title">
-                RISPOSTA NON VALIDA
-            </div>
-
-            <div class="result-error">
-                Il motore ha restituito una risposta
-                non interpretabile.
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       PRESERVE ORIGINAL API ENVELOPE
-       -----------------------------------------
-
-       IMPORTANTE:
-
-       Non dobbiamo eliminare subito l'envelope
-       originale.
-
-       Il backend può restituire:
-
-           {
-               "status": "ENGINE_ERROR",
-               "error": "...",
-               "exception": "...",
-               "detail": "..."
-           }
-
-       oppure:
-
-           {
-               "status": "SUCCESS",
-               "result": {
-                   "resolution": {
-                       ...
-                   }
-               }
-           }
-
-       Conserviamo quindi entrambi:
-
-           original
-           normalized
-    */
-
-    const original =
-        data;
-
-
-    const normalized =
-        unwrapApiResponse(
-            original
-        );
-
-
-    /* -----------------------------------------
-       HTTP / ENGINE ERROR
-
-       Questo controllo deve avvenire PRIMA
-       dell'interpretazione matematica.
-
-       In questo modo non confondiamo:
-
-           HTTP/API SUCCESS
-
-       con:
-
-           solver SUCCESS
-
-       e possiamo mostrare direttamente il
-       messaggio restituito dal backend.
-       ----------------------------------------- */
-
-    const originalStatus =
-        original &&
-        typeof original.status !== "undefined"
-            ? String(
-                original.status
-            )
-                .trim()
-                .toUpperCase()
-            : "";
-
-
-    const normalizedStatus =
-        normalized &&
-        typeof normalized.status !== "undefined"
-            ? String(
-                normalized.status
-            )
-                .trim()
-                .toUpperCase()
-            : "";
-
-
-    const isEngineError =
-        originalStatus === "ENGINE_ERROR" ||
-        originalStatus === "INTERNAL_ERROR" ||
-        originalStatus === "SERVER_ERROR" ||
-        originalStatus === "CORE_ERROR";
-
-
-    if (
-        isEngineError
-    ) {
-
-        const errorMessage =
-            original.detail ||
-            original.error ||
-            original.exception ||
-            "Il core WYP ha restituito un errore interno.";
-
-
-        const exception =
-            original.exception
-                ? String(
-                    original.exception
-                )
-                : "";
-
-
-        return `
-            <div class="result-title">
-                ERRORE DEL CORE
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    errorMessage
-                )}
-
-                ${
-                    exception
-                        ? `
-                            <br><br>
-                            <strong>Tipo:</strong>
-                            ${escapeHtml(
-                                exception
-                            )}
-                        `
-                        : ""
-                }
-
-                <br><br>
-
-                Il server WYP è raggiungibile,
-                ma il core ha restituito un errore.
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       GENERIC API ERROR
-       ----------------------------------------- */
-
-    if (
-        original.error ||
-        original.detail ||
-        original.exception
-    ) {
-
-        const errorMessage =
-            original.detail ||
-            original.error ||
-            original.exception ||
-            "Il server ha restituito un errore.";
-
-
-        return `
-            <div class="result-title">
-                ERRORE DEL MOTORE
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    errorMessage
-                )}
-
-                ${
-                    original.exception
-                        ? `
-                            <br><br>
-                            <strong>Tipo:</strong>
-                            ${escapeHtml(
-                                original.exception
-                            )}
-                        `
-                        : ""
-                }
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       EXTRACT RESOLUTION
-       ----------------------------------------- */
-
-    const resolution =
-        extractResolution(
-            normalized
-        );
-
-
-    /* -----------------------------------------
-       EXTRACT SOLVER STATUS
-       -----------------------------------------
-
-       IMPORTANTE:
-
-       extractStatus() lavora sul contenuto
-       normalizzato, non sul semplice status
-       HTTP/API SUCCESS.
-       ----------------------------------------- */
-
-    const status =
-        extractStatus(
-            normalized
-        );
-
-
-    /* -----------------------------------------
-       DETERMINISTIC
-       ----------------------------------------- */
-
-    if (
-        status === "DETERMINISTIC" ||
-        status === "DETERMINED" ||
-        status === "SOLVED" ||
-        status === "RESOLVED"
-    ) {
-
-        const resultValue =
-            extractResultValue(
-                normalized,
-                resolution
-            );
-
-
-        /* -----------------------------------------
-           RELATION
-           ----------------------------------------- */
-
-        const relation =
-            resolution.relation ||
-            resolution.operation ||
-            resolution.formula ||
-            (
-                normalized &&
-                normalized.relation
-            ) ||
-            (
-                normalized &&
-                normalized.operation
-            ) ||
-            (
-                normalized &&
-                normalized.formula
-            ) ||
-            "";
-
-
-        /* -----------------------------------------
-           PRESENTATION
-           ----------------------------------------- */
-
-        const presentation =
-            resolution &&
-            resolution.presentation &&
-            typeof resolution.presentation === "object" &&
-            !Array.isArray(
-                resolution.presentation
-            )
-                ? resolution.presentation
-                : null;
-
-
-        /* -----------------------------------------
-           EXPLANATION
-           ----------------------------------------- */
-
-        const explanation =
-            (
-                presentation &&
-                presentation.explanation
-            ) ||
-            resolution.explanation ||
-            resolution.message ||
-            normalized.explanation ||
-            normalized.message ||
-            "Il risultato è determinato dai dati forniti e dalla relazione matematica identificata.";
-
-
-        /* -----------------------------------------
-           CALCULATION
-           ----------------------------------------- */
-
-        const calculation =
-            (
-                presentation &&
-                presentation.calculation
-            ) ||
-            resolution.calculation ||
-            relation ||
-            "";
-
-
-        /* -----------------------------------------
-           RESULT VALUE
-           ----------------------------------------- */
-
-        const formattedResult =
-            resultValue !== null &&
-            resultValue !== undefined
-                ? formatResultValue(
-                    resultValue
-                )
-                : "";
-
-
-        return `
-            <div class="result-title">
-                RISULTATO DETERMINATO
-            </div>
-
-            <div class="result-message">
-                ${escapeHtml(
-                    explanation
-                )}
-            </div>
-
-            ${
-                calculation
-                    ? `
-                        <div class="result-operation">
-                            ${escapeHtml(
-                                calculation
-                            )}
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                formattedResult
-                    ? `
-                        <div class="result-answer">
-                            RISULTATO:
-                            ${escapeHtml(
-                                formattedResult
-                            )}
-                        </div>
-                    `
-                    : `
-                        <div class="result-message">
-                            La soluzione è stata determinata,
-                            ma il valore finale non è presente
-                            nel campo previsto.
-                        </div>
-                    `
-            }
-        `;
-    }
-
-
-    /* -----------------------------------------
-       UNDERDETERMINED
-       ----------------------------------------- */
-
-    if (
-        status === "UNDERDETERMINED" ||
-        status === "INSUFFICIENT" ||
-        status === "INSUFFICIENT_DATA" ||
-        status === "INSUFFICIENT-DATA"
-    ) {
-
-        const reason =
-            resolution.reason ||
-            resolution.explanation ||
-            resolution.message ||
-            normalized.reason ||
-            normalized.explanation ||
-            normalized.message ||
-            "Le informazioni disponibili non sono sufficienti per determinare un risultato univoco.";
-
-
-        return `
-            <div class="result-title">
-                RISULTATO NON DETERMINABILE
-            </div>
-
-            <div class="result-insufficient">
-                ${escapeHtml(
-                    reason
-                )}
-
-                <br><br>
-
-                Servono ulteriori dati o una relazione
-                che colleghi le informazioni fornite
-                alla quantità richiesta.
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       UNRESOLVED
-       ----------------------------------------- */
-
-    if (
-        status === "UNRESOLVED" ||
-        status === "FAILED" ||
-        status === "FAILURE"
-    ) {
-
-        const reason =
-            resolution.reason ||
-            resolution.explanation ||
-            resolution.message ||
-            normalized.reason ||
-            normalized.explanation ||
-            normalized.message ||
-            "Il problema non può essere risolto con i dati forniti.";
-
-
-        return `
-            <div class="result-title">
-                RISOLUZIONE NON COMPLETATA
-            </div>
-
-            <div class="result-insufficient">
-                ${escapeHtml(
-                    reason
-                )}
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       LICENSE ERROR
-       ----------------------------------------- */
-
-    if (
-        status === "LICENSE_REQUIRED" ||
-        status === "LICENSE_ERROR" ||
-        status === "FORBIDDEN"
-    ) {
-
-        const licenseMessage =
-            original.detail ||
-            original.error ||
-            normalized.detail ||
-            normalized.error ||
-            "La richiesta richiede una licenza valida.";
-
-
-        return `
-            <div class="result-title">
-                LICENZA RICHIESTA
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    licenseMessage
-                )}
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       UNKNOWN STATUS
-       ----------------------------------------- */
-
-    if (
-        status === "SUCCESS" &&
-        normalized !== original
-    ) {
-
-        const fallbackValue =
-            extractResultValue(
-                normalized,
-                resolution
-            );
-
-
-        if (
-            fallbackValue !== null &&
-            fallbackValue !== undefined
-        ) {
-
-            return `
-                <div class="result-title">
-                    RISULTATO
-                </div>
-
-                <div class="result-answer">
-                    ${escapeHtml(
-                        formatResultValue(
-                            fallbackValue
-                        )
-                    )}
-                </div>
-            `;
-        }
-    }
-
-
-    /* -----------------------------------------
-       UNKNOWN / UNRECOGNIZED RESPONSE
-       ----------------------------------------- */
-
-    const diagnostic =
-        original.detail ||
-        original.error ||
-        original.message ||
-        normalized.detail ||
-        normalized.error ||
-        normalized.message ||
-        (
-            status
-                ? `Stato ricevuto: ${status}`
-                : "Il core ha restituito una risposta non riconosciuta."
-        );
-
-
-    return `
-        <div class="result-title">
-            RISPOSTA DEL CORE
-        </div>
-
-        <div class="result-message">
-            ${escapeHtml(
-                diagnostic
-            )}
-        </div>
-    `;
-}
-
-
-    /* -----------------------------------------
-   GENERIC TEXT RESPONSE
-   ----------------------------------------- */
-
-if (
-    normalized &&
-    typeof normalized.message === "string" &&
-    normalized.message.trim()
-) {
-
-    return `
-        <div class="result-title">
-            RISPOSTA DEL MOTORE
-        </div>
-
-        <div class="result-message">
-            ${escapeHtml(
-                normalized.message
-            )}
-        </div>
-    `;
-}
-
-
-/* -----------------------------------------
-   API SUCCESS ENVELOPE WITHOUT
-   RECOGNIZED INNER STATUS
-   ----------------------------------------- */
-
-if (
-    originalStatus === "SUCCESS" ||
-    (
-        original &&
-        original.status &&
-        String(original.status)
-            .trim()
-            .toUpperCase() === "SUCCESS"
-    )
-) {
-
-    return `
-        <div class="result-title">
-            RISPOSTA RICEVUTA
-        </div>
-
-        <div class="result-message">
-            Il backend ha restituito una risposta
-            valida, ma lo stato interno della
-            risoluzione non è riconosciuto dal terminale.
-        </div>
-
-        <div
-            class="result-operation"
-            style="
-                text-align:left;
-                font-size:0.8rem;
-                overflow-x:auto;
-                white-space:pre-wrap;
-                color:#888;
-            "
-        >
-            ${escapeHtml(
-                JSON.stringify(
-                    original,
-                    null,
-                    2
-                )
-            )}
-        </div>
-    `;
-}
-
-
-/* -----------------------------------------
-   UNKNOWN FORMAT
-   ----------------------------------------- */
-
-return `
-    <div class="result-title">
-        RISPOSTA RICEVUTA
-    </div>
-
-    <div class="result-message">
-        Il backend ha risposto correttamente,
-        ma il formato restituito non corrisponde
-        a uno dei formati riconosciuti dal terminale.
-    </div>
-
-    <div
-        class="result-operation"
-        style="
-            text-align:left;
-            font-size:0.8rem;
-            overflow-x:auto;
-            white-space:pre-wrap;
-            color:#888;
-        "
-    >
-        ${escapeHtml(
-            JSON.stringify(
-                original,
-                null,
-                2
-            )
-        )}
-    </div>
-`;
-}
-
-
-/* =========================================================
-   HTTP ERROR RENDERER
-   ========================================================= */
-
-function renderHttpError(
-    status,
-    data,
-    rawText
-) {
-
-    let message =
-        "Errore HTTP " +
-        status;
-
-
-    /* -----------------------------------------
-       EXTRACT SERVER MESSAGE
-       ----------------------------------------- */
-
-    if (
-        data &&
-        typeof data === "object"
-    ) {
-
-        message =
-            data.detail ||
-            data.error ||
-            data.message ||
-            data.exception ||
-            message;
-    }
-
-
-    /* -----------------------------------------
-       LICENSE
-       ----------------------------------------- */
-
-    if (
-        status === 403
-    ) {
-
-        return `
-            <div class="result-title">
-                ACCESSO NEGATO
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    message
-                )}
-
-                <br><br>
-
-                Il backend è raggiungibile,
-                ma la richiesta non è autorizzata.
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       BAD REQUEST
-       ----------------------------------------- */
-
-    if (
-        status === 400
-    ) {
-
-        return `
-            <div class="result-title">
-                RICHIESTA NON VALIDA
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    message
-                )}
-            </div>
-        `;
-    }
-
-
-    /* -----------------------------------------
-       SERVER / CORE ERROR
-       ----------------------------------------- */
-
-    if (
-        status >= 500
-    ) {
-
-        const errorText =
-            data &&
-            typeof data === "object"
-                ? (
-                    data.detail ||
-                    data.error ||
-                    data.message ||
-                    "Errore interno del server."
-                )
-                : (
-                    message ||
-                    "Errore interno del server."
-                );
-
-
-        const exceptionText =
-            data &&
-            typeof data === "object" &&
-            data.exception
-                ? String(
-                    data.exception
-                )
-                : "";
-
-
-        const tracebackText =
-            data &&
-            typeof data === "object" &&
-            data.traceback
-                ? String(
-                    data.traceback
-                )
-                : "";
-
-
-        return `
-            <div class="result-title">
-                ERRORE DEL CORE
-            </div>
-
-            <div class="result-error">
-                ${escapeHtml(
-                    errorText
-                )}
-            </div>
-
-            ${
-                exceptionText
-                    ? `
-                        <div class="result-error">
-                            <strong>Exception:</strong>
-                            ${escapeHtml(
-                                exceptionText
-                            )}
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                tracebackText
-                    ? `
-                        <details class="result-error">
-                            <summary>
-                                Dettaglio tecnico
-                            </summary>
-
-                            <pre>${escapeHtml(
-                                tracebackText
-                            )}</pre>
-                        </details>
-                    `
-                    : ""
-            }
-
-            <div class="result-error">
-                <br>
-
-                Il server WYP è raggiungibile,
-                ma il core ha restituito un errore.
-            </div>
-
-            ${
-                rawText &&
-                !data
-                    ? `
-                        <div
-                            class="result-operation"
-                            style="
-                                text-align:left;
-                                font-size:0.8rem;
-                                overflow-x:auto;
-                                white-space:pre-wrap;
-                                color:#888;
-                            "
-                        >
-                            ${escapeHtml(
-                                rawText
-                            )}
-                        </div>
-                    `
-                    : ""
-            }
-        `;
-    }
-
-
-    /* -----------------------------------------
-       OTHER HTTP STATUS
-       ----------------------------------------- */
-
-    return `
-        <div class="result-title">
-            RISPOSTA HTTP
-        </div>
-
-        <div class="result-error">
-            ${escapeHtml(
-                message
-            )}
-        </div>
-
-        ${
-            rawText
-                ? `
-                    <div
-                        class="result-operation"
-                        style="
-                            text-align:left;
-                            font-size:0.8rem;
-                            overflow-x:auto;
-                            white-space:pre-wrap;
-                            color:#888;
-                        "
-                    >
-                        ${escapeHtml(
-                            rawText
-                        )}
-                    </div>
-                `
-                : ""
-        }
-    `;
-}
-
-
-/* =========================================================
-   SOLVER REQUEST
+   SOLVER
    ========================================================= */
 
 if (
     demoSubmit &&
+    demoOutput &&
     demoProblem
 ) {
 
@@ -3204,213 +392,105 @@ if (
 
 
             /* -----------------------------------------
-               INPUT VALIDATION
+               INPUT
                ----------------------------------------- */
 
             if (!text) {
 
-                setOutput(
-                    `
-                    <div class="result-title">
-                        INPUT RICHIESTO
-                    </div>
-
-                    <div class="result-message">
-                        Inserisci il problema che vuoi
-                        sottoporre all'analisi.
-                    </div>
-                    `,
-                    "api-error"
-                );
-
-                demoProblem.focus();
+                demoOutput.textContent =
+                    "> ERROR: PROBLEM INPUT REQUIRED";
 
                 return;
             }
 
 
             /* -----------------------------------------
-               LOCK UI
+               LOCK BUTTON
                ----------------------------------------- */
 
             demoSubmit.disabled =
                 true;
 
 
-            setOutput(
-                `
-                <div class="result-title">
-                    ANALISI IN CORSO
-                </div>
+            /* -----------------------------------------
+               INITIAL STATUS
+               ----------------------------------------- */
 
-                <div class="result-message">
-                    Il problema è in fase di analisi.
-                    <br><br>
-                    Il sistema sta verificando struttura,
-                    vincoli e relazioni deterministiche.
-                </div>
-                `
-            );
-
-
-            let timeout =
-                null;
+            demoOutput.textContent =
+                "> WYP ENGINE INITIALIZING...\n" +
+                "> CONNECTING TO AOS PRIVATE CORE...\n" +
+                "> DISPATCHING PROBLEM...\n";
 
 
             try {
 
                 /* -------------------------------------
-                   ABORT CONTROLLER
+                   REQUEST
                    ------------------------------------- */
 
-                const controller =
-                    new AbortController();
+                const response =
+                    await fetch(
+                        WYP_API,
+                        {
+                            method: "POST",
 
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
 
-                timeout =
-                    setTimeout(
-                        function () {
+                                "Accept":
+                                    "application/json"
+                            },
 
-                            controller.abort();
+                            /*
+                             * Il server.py accetta:
+                             *
+                             * {
+                             *     "problem": "2 + 3"
+                             * }
+                             *
+                             * oppure un oggetto strutturato.
+                             *
+                             * Usiamo la forma testuale,
+                             * che viene gestita da solve_text().
+                             */
 
-                        },
-                        30000
+                            body:
+                                JSON.stringify({
+                                    problem: text
+                                })
+                        }
                     );
 
 
                 /* -------------------------------------
-                   API REQUEST
+                   READ RESPONSE
                    ------------------------------------- */
 
-                let response;
-
-
-                try {
-
-                    response =
-                        await fetch(
-                            WYP_API,
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json",
-
-                                    "Accept":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify(
-                                        {
-                                            problem:
-                                                text
-                                        }
-                                    ),
-
-                                signal:
-                                    controller.signal
-                            }
-                        );
-
-                } catch (networkError) {
-
-                    /* ---------------------------------
-                       ABORT
-                       --------------------------------- */
-
-                    if (
-                        networkError &&
-                        networkError.name ===
-                            "AbortError"
-                    ) {
-
-                        throw networkError;
-                    }
-
-
-                    /* ---------------------------------
-                       NETWORK / CORS / TLS / DNS
-                       --------------------------------- */
-
-                    const networkMessage =
-                        networkError &&
-                        networkError.message
-                            ? networkError.message
-                            : "Network request failed.";
-
-
-                    const error =
-                        new Error(
-                            "FETCH_ERROR: " +
-                            networkMessage
-                        );
-
-
-                    error.name =
-                        "WYPNetworkError";
-
-
-                    throw error;
-                }
-
-
-                /* -------------------------------------
-                   READ RESPONSE BODY
-
-                   Il body viene letto SEMPRE,
-                   anche quando response.ok === false.
-
-                   Questo è fondamentale per vedere
-                   il vero errore restituito dal core.
-                   ------------------------------------- */
-
-                const rawText =
+                const raw =
                     await response.text();
 
 
-                /* -------------------------------------
-                   CLEAR TIMEOUT
-                   ------------------------------------- */
-
-                if (
-                    timeout !== null
-                ) {
-
-                    clearTimeout(
-                        timeout
-                    );
-
-                    timeout =
-                        null;
-                }
-
-
-                /* -------------------------------------
-                   PARSE JSON
-                   ------------------------------------- */
-
-                let data =
-                    null;
+                let data = null;
 
 
                 if (
-                    rawText &&
-                    rawText.trim()
+                    raw &&
+                    raw.trim()
                 ) {
 
                     try {
 
                         data =
-                            JSON.parse(
-                                rawText
-                            );
+                            JSON.parse(raw);
 
-                    } catch (parseError) {
+                    } catch (jsonError) {
 
-                        data =
-                            null;
+                        throw new Error(
+                            "Il backend ha restituito " +
+                            "una risposta non JSON: " +
+                            raw
+                        );
                     }
                 }
 
@@ -3419,18 +499,56 @@ if (
                    HTTP ERROR
                    ------------------------------------- */
 
-                if (
-                    !response.ok
-                ) {
+                if (!response.ok) {
 
-                    setOutput(
-                        renderHttpError(
-                            response.status,
-                            data,
-                            rawText
-                        ),
-                        "api-error"
-                    );
+                    if (
+                        data &&
+                        typeof data === "object"
+                    ) {
+
+                        const errorMessage =
+                            data.error ||
+                            data.detail ||
+                            data.message ||
+                            (
+                                "HTTP " +
+                                response.status
+                            );
+
+
+                        const exception =
+                            data.exception ||
+                            "";
+
+
+                        demoOutput.textContent =
+                            "> WYP ENGINE ERROR\n\n" +
+                            "> HTTP STATUS: " +
+                            response.status +
+                            "\n" +
+                            "> ERROR: " +
+                            errorMessage +
+                            (
+                                exception
+                                    ? "\n> EXCEPTION: " +
+                                      exception
+                                    : ""
+                            );
+
+                    } else {
+
+                        demoOutput.textContent =
+                            "> WYP ENGINE ERROR\n\n" +
+                            "> HTTP STATUS: " +
+                            response.status +
+                            "\n" +
+                            "> " +
+                            (
+                                raw ||
+                                "Empty response"
+                            );
+                    }
+
 
                     return;
                 }
@@ -3440,267 +558,163 @@ if (
                    EMPTY RESPONSE
                    ------------------------------------- */
 
-                if (
-                    !rawText ||
-                    !rawText.trim()
-                ) {
+                if (!data) {
 
-                    setOutput(
-                        `
-                        <div class="result-title">
-                            RISPOSTA VUOTA
-                        </div>
-
-                        <div class="result-error">
-                            Il backend ha risposto con HTTP
-                            ${escapeHtml(
-                                response.status
-                            )},
-                            ma non ha restituito alcun
-                            contenuto.
-                        </div>
-                        `,
-                        "api-error"
-                    );
+                    demoOutput.textContent =
+                        "> WYP ENGINE ERROR\n\n" +
+                        "> EMPTY RESPONSE FROM CORE";
 
                     return;
                 }
 
 
                 /* -------------------------------------
-                   NON JSON
+                   LICENSE
                    ------------------------------------- */
 
                 if (
-                    !data
+                    data.status ===
+                    "LICENSE_REQUIRED"
                 ) {
 
-                    setOutput(
-                        `
-                        <div class="result-title">
-                            RISPOSTA DEL MOTORE
-                        </div>
-
-                        <div class="result-message">
-                            Il server ha risposto con HTTP
-                            ${escapeHtml(
-                                response.status
-                            )},
-                            ma la risposta non è in formato
-                            JSON.
-                        </div>
-
-                        <div
-                            class="result-operation"
-                            style="
-                                text-align:left;
-                                font-size:0.8rem;
-                                overflow-x:auto;
-                                white-space:pre-wrap;
-                                color:#888;
-                            "
-                        >
-                            ${escapeHtml(
-                                rawText
-                            )}
-                        </div>
-                        `,
-                        "api-online"
-                    );
+                    demoOutput.textContent =
+                        "> WYP ENGINE ACCESS DENIED\n\n" +
+                        "> " +
+                        (
+                            data.error ||
+                            "License verification required."
+                        );
 
                     return;
                 }
 
 
                 /* -------------------------------------
-                   ENGINE ERROR INSIDE HTTP 200
-
-                   Il backend potrebbe teoricamente
-                   restituire un errore applicativo
-                   anche dentro HTTP 200.
-
-                   Lo mostriamo comunque come errore
-                   del core.
+                   API ERROR
                    ------------------------------------- */
 
-                const responseStatus =
-                    data &&
-                    typeof data.status !== "undefined"
-                        ? String(
-                            data.status
-                        )
-                            .trim()
-                            .toUpperCase()
-                        : "";
-
-
                 if (
-                    responseStatus ===
-                        "ENGINE_ERROR"
+                    data.status ===
+                    "ENGINE_ERROR"
                 ) {
 
-                    setOutput(
-                        renderHttpError(
-                            500,
-                            data,
-                            rawText
-                        ),
-                        "api-error"
-                    );
+                    demoOutput.textContent =
+                        "> WYP ENGINE ERROR\n\n" +
+                        "> CORE EXCEPTION: " +
+                        (
+                            data.exception ||
+                            "Unknown"
+                        ) +
+                        "\n" +
+                        "> DETAIL: " +
+                        (
+                            data.detail ||
+                            data.error ||
+                            "Unknown solver error."
+                        );
 
                     return;
                 }
 
 
                 /* -------------------------------------
-                   HUMAN RESULT
+                   INVALID REQUEST
                    ------------------------------------- */
 
-                setOutput(
-                    renderHumanResult(
-                        data
-                    ),
-                    "api-online"
-                );
+                if (
+                    data.status ===
+                    "INVALID_REQUEST"
+                ) {
+
+                    demoOutput.textContent =
+                        "> WYP INVALID REQUEST\n\n" +
+                        "> " +
+                        (
+                            data.error ||
+                            "Invalid request."
+                        );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   SUCCESS
+                   ------------------------------------- */
+
+                if (
+                    data.status !==
+                    "SUCCESS"
+                ) {
+
+                    demoOutput.textContent =
+                        "> WYP ENGINE ERROR\n\n" +
+                        "> STATUS: " +
+                        (
+                            data.status ||
+                            "UNKNOWN"
+                        ) +
+                        "\n" +
+                        "> " +
+                        (
+                            data.error ||
+                            "Unknown WYP response."
+                        );
+
+                    return;
+                }
+
+
+                /* -------------------------------------
+                   SUCCESS RESULT
+                   ------------------------------------- */
+
+                demoOutput.textContent =
+                    "> WYP ENGINE ONLINE\n" +
+                    "> PROBLEM RECEIVED\n" +
+                    "> STRUCTURE ANALYSIS: COMPLETE\n" +
+                    "> INVARIANT ANALYSIS: COMPLETE\n" +
+                    "> CONSTRAINT ANALYSIS: COMPLETE\n" +
+                    "> QUANTITY ANALYSIS: COMPLETE\n" +
+                    "> MANIFESTATION: COMPLETE\n\n" +
+                    "> STATUS: SUCCESS\n\n" +
+                    JSON.stringify(
+                        data.result,
+                        null,
+                        2
+                    );
+
 
             } catch (error) {
 
                 /* -------------------------------------
-                   TIMEOUT
+                   NETWORK / CORS / CONNECTION ERROR
                    ------------------------------------- */
 
-                if (
-                    error &&
-                    error.name ===
-                        "AbortError"
-                ) {
-
-                    setOutput(
-                        `
-                        <div class="result-title">
-                            TIMEOUT DELLA RICHIESTA
-                        </div>
-
-                        <div class="result-error">
-                            Il browser ha atteso 30 secondi
-                            senza ricevere una risposta dal
-                            backend WYP.
-
-                            <br><br>
-
-                            Questo non significa automaticamente
-                            che il deploy Render sia fallito.
-                        </div>
-                        `,
-                        "api-error"
-                    );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   FETCH / NETWORK / CORS
-                   ------------------------------------- */
-
-                if (
-                    error &&
-                    error.name ===
-                        "WYPNetworkError"
-                ) {
-
-                    setOutput(
-                        `
-                        <div class="result-title">
-                            CONNESSIONE AL BACKEND FALLITA
-                        </div>
-
-                        <div class="result-error">
-                            Il browser non ha ricevuto una
-                            risposta HTTP dal backend WYP.
-
-                            <br><br>
-
-                            Endpoint:
-                            <br>
-
-                            <code>
-                                ${escapeHtml(
-                                    WYP_API
-                                )}
-                            </code>
-
-                            <br><br>
-
-                            Dettaglio browser:
-                            <br>
-
-                            ${escapeHtml(
-                                error.message
-                            )}
-
-                            <br><br>
-
-                            Se il servizio Render è ONLINE,
-                            verificare soprattutto CORS e
-                            raggiungibilità dell'endpoint
-                            dal browser.
-                        </div>
-                        `,
-                        "api-error"
-                    );
-
-                    return;
-                }
-
-
-                /* -------------------------------------
-                   GENERIC CLIENT ERROR
-                   ------------------------------------- */
-
-                const message =
-                    error &&
-                    error.message
-                        ? error.message
-                        : "Errore sconosciuto.";
-
-
-                setOutput(
-                    `
-                    <div class="result-title">
-                        ERRORE CLIENT
-                    </div>
-
-                    <div class="result-error">
-                        ${escapeHtml(
-                            message
-                        )}
-                    </div>
-                    `,
-                    "api-error"
+                console.error(
+                    "[WYP] Solver request failed:",
+                    error
                 );
+
+
+                demoOutput.textContent =
+                    "> WYP ENGINE CONNECTION ERROR\n\n" +
+                    "> ENDPOINT:\n" +
+                    WYP_API +
+                    "\n\n" +
+                    "> " +
+                    (
+                        error &&
+                        error.message
+                            ? error.message
+                            : "Unknown connection error."
+                    );
+
 
             } finally {
 
                 /* -------------------------------------
-                   CLEAR TIMEOUT
-                   ------------------------------------- */
-
-                if (
-                    timeout !== null
-                ) {
-
-                    clearTimeout(
-                        timeout
-                    );
-
-                    timeout =
-                        null;
-                }
-
-
-                /* -------------------------------------
-                   UNLOCK UI
+                   UNLOCK BUTTON
                    ------------------------------------- */
 
                 demoSubmit.disabled =
@@ -3712,7 +726,7 @@ if (
 
 
     /* =====================================================
-       ENTER KEY SUPPORT
+       CTRL/CMD + ENTER
        ===================================================== */
 
     demoProblem.addEventListener(
@@ -3738,6 +752,5 @@ if (
 }
 
 </script>
-
 </body>
 </html>
