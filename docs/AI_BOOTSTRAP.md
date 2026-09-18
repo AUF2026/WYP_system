@@ -1,1157 +1,777 @@
-AI BOOTSTRAP — WYP / AUF2026
+WYP AI BOOTSTRAP
+1. Scopo
 
-# AI BOOTSTRAP — WYP / AUF2026
+WYP è un sistema matematico modulare nel quale un modello linguistico può interpretare richieste in linguaggio naturale, trasformarle in strutture matematiche eseguibili e coordinare moduli di calcolo e verifica.
 
- ## 0\. SCOPO
+Il modello linguistico non costituisce l'autorità matematica finale.
 
- Questo file è il punto ufficiale di ripresa del progetto per una nuova istanza AI.
+Principio fondamentale:
 
- Una nuova istanza deve:
+LLM
+  ↓
+interpretazione
+  ↓
+WYP Problem / IR
+  ↓
+WYP Orchestrator
+  ↓
+moduli matematici
+  ↓
+verifica indipendente
+  ↓
+risultati strutturati
+  ↓
+LLM
+  ↓
+risposta finale
 
- 1. leggere questo file prima di modificare il codice;
-2. verificare lo stato reale della repository;
-3. rispettare i componenti già completati;
-4. non ripartire da zero;
-5. non reintrodurre problemi già risolti;
-6. procedere un componente alla volta;
-7. mantenere aggiornata questa documentazione dopo ogni milestone verificata.
 
- Il progetto è WYP, nell'ecosistema AUF2026 / AOS-PRIVATE-CORE.
+Il sistema deve privilegiare risultati calcolati e verificati rispetto a conclusioni generate esclusivamente dal modello linguistico.
 
- Obiettivo architetturale:
+2. Architettura canonica
+                         USER
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │     LLM     │
+                    │ interpreter │
+                    └──────┬──────┘
+                           │
+                           ▼
+                    WYP Problem / IR
+                           │
+                           ▼
+                  ┌──────────────────┐
+                  │ WYP Orchestrator │
+                  └────────┬─────────┘
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+          NUMERIC        SYMBOLIC       FDM
+           ENGINE         ENGINE       ENGINE
+             │             │             │
+             └─────────────┼─────────────┘
+                           │
+                    ┌──────▼──────┐
+                    │ VERIFICATION│
+                    └──────┬──────┘
+                           │
+                           ▼
+                    Verified Results
+                           │
+                           ▼
+                          LLM
+                           │
+                           ▼
+                    Natural Response
 
- > fornire un sistema WYP pubblico attraverso GitHub Pages, mantenendo matematica, solver, teoremi, verifica e licensing nel private core.
 
----
+Il sistema può successivamente integrare:
 
- # 1\. ARCHITETTURA
+Lean
+LaTeX
+PDF
+JSON
+Markdown
+TXT
+database matematici
+altri verificatori
+altri solver
 
- L'architettura prevista è:
+3. Regola fondamentale
 
-```
-PUBLIC INTERNET
-      |
-      v
-GitHub Pages
-AUF2026/WYP_system
-      |
-      v
-Public WYP Tester
-      |
-      v
-Cloudflare Worker
-wyp.auf2026.workers.dev
-      |
-      v
-Private WYP Core
-AOS-PRIVATE-CORE
-Render
-      |
-      +------------------+
-      |                  |
-      v                  v
-   THEOREMS             FDM
-      |                  |
-      +--------+---------+
-               |
-               v
-          NUMERICAL CORE
-               |
-               v
-        VERIFICATION
-               |
-               v
-          JSON RESULT
-```
+L'LLM interpreta.
 
- Il browser pubblico non deve contenere la matematica privata.
+WYP calcola.
 
- Il Cloudflare Worker deve rimanere un gateway.
+I verificatori controllano.
 
- Il private core rimane l'autorità per:
+L'LLM compone la risposta.
 
- - matematica;
-- teoremi;
-- FDM;
-- numerical kernel;
-- verifica;
-- licensing;
-- solver.
+L'LLM non deve inventare un risultato quando esiste un modulo WYP capace di calcolarlo o verificarlo.
 
----
+Esempio:
 
- # 2\. REPOSITORY PUBBLICA
+Utente:
+"risolvi x^2 - 4 = 0"
 
- Repository:
+LLM:
+  riconosce un'equazione polinomiale
 
-```
-https://github.com/AUF2026/WYP_system
-```
+WYP:
+  costruisce il problema strutturato
 
- GitHub Pages:
+Symbolic Engine:
+  calcola x = -2, 2
 
-```
-https://auf2026.github.io/WYP_system/
-```
+Verification:
+  sostituisce le soluzioni nell'equazione
 
- La repository pubblica può contenere:
+LLM:
+  compone la spiegazione finale
 
-```
-index.html
-about.html
-research.html
-documentation.html
-license.html
-README.md
-LICENSE.md
-assets/
-css/
-js/
-images/
-docs/
-```
+4. WYP Intermediate Representation
 
- Non deve contenere:
+Tutte le richieste interpretate dal modello devono poter essere trasformate in una rappresentazione strutturata interna.
 
- - private key;
-- signing key;
-- license token;
-- Render secrets;
-- Cloudflare credentials;
-- solver privato;
-- implementazioni matematiche protette;
-- sorgenti Lean privati;
-- teoremi privati;
-- copie della logica interna del solver.
+Nome concettuale:
 
- Il JavaScript pubblico deve essere solamente un client del gateway.
+WYP-IR
 
----
 
- # 3\. REPOSITORY PRIVATA
+Esempio:
 
- Repository:
+{
+  "problem_type": "polynomial_equation",
+  "variables": ["x"],
+  "domain": "real",
+  "expression": "x^2 - 4",
+  "condition": {
+    "operator": "=",
+    "value": "0"
+  },
+  "requested_action": "solve",
+  "required_tools": [
+    "symbolic"
+  ]
+}
 
-```
-https://github.com/AUF2026/AOS-PRIVATE-CORE
-```
 
- Questa repository contiene il motore WYP.
+WYP-IR deve essere indipendente dal modello linguistico utilizzato.
 
- Struttura principale:
+Il modello può cambiare senza modificare il nucleo matematico.
 
-```
-src/wyp/
-    core/
-    fdm/
-    theorems/
-    license/
-    server.py
-```
+5. Tipi di problema
 
- La matematica privata rimane qui.
+Il sistema deve poter classificare almeno:
 
- In particolare:
+numeric_calculation
+equation
+system_of_equations
+polynomial
+algebra
+calculus
+linear_algebra
+geometry
+probability
+statistics
+number_theory
+optimization
+symbolic_manipulation
+mathematical_proof
+formal_proof
+open_mathematical_problem
+knowledge_query
+document_extraction
+fdm_problem
 
-```
-wyp.core
-wyp.fdm
-wyp.theorems
-wyp.license
-server
-```
 
- La repository pubblica non deve duplicare questi componenti.
+La classificazione non deve essere considerata una soluzione matematica.
 
----
+È soltanto la fase di routing verso gli strumenti appropriati.
 
- # 4\. STATO CORRENTE DEL PRIVATE CORE
+6. Tool orchestration
 
- ## COMPLETATO E VERIFICATO
+Il modello linguistico deve poter produrre un piano strutturato.
 
- I seguenti componenti sono completati:
+Esempio:
 
-```
-src/wyp/theorems/base.py
-src/wyp/theorems/registry.py
-src/wyp/theorems/__init__.py
+{
+  "problem_type": "equation",
+  "plan": [
+    {
+      "tool": "symbolic",
+      "operation": "solve"
+    },
+    {
+      "tool": "verification",
+      "operation": "substitute"
+    }
+  ]
+}
 
-src/wyp/fdm/engine.py
-src/wyp/fdm/model.py
-src/wyp/fdm/verification.py
 
-src/wyp/core/numeric.py
-src/wyp/core/result.py
+L'orchestratore WYP decide quali strumenti sono effettivamente disponibili ed eseguibili.
 
-src/wyp/server.py
-```
+Il modello non deve poter dichiarare autonomamente che un calcolo è stato eseguito.
 
- Stato:
+Deve ricevere il risultato dal tool.
 
-```
-8 / 8 componenti completati
-```
+7. Numerical layer
 
- Questi componenti costituiscono il baseline corrente.
+Il numerical layer rimane indipendente dall'LLM.
 
- Non devono essere riscritti da zero senza una necessità verificata.
+Componenti esistenti:
 
----
+NumericEngine
+NumericResult
+VerificationResult
+ExecutionResult
 
- # 5\. FDM MODEL
 
- Il modello FDM canonico è:
+Rappresentazioni supportate:
 
-```
+exact
+decimal
+float
+
+
+Il valore numerico effettivo rimane sempre distinto dalla sua rappresentazione testuale.
+
+8. FDM layer
+
+FDM rimane un modulo matematico specializzato.
+
+Relazione canonica:
+
 M_d(U) = Q(U)^d
-```
 
- Le strutture principali sono:
 
-```
+Componenti:
+
 FDMModel
 FDMDerivation
 FDMComputation
-```
-
- `FDMModel` rappresenta la specifica matematica.
-
- `FDMDerivation` conserva la derivazione strutturale.
-
- `FDMComputation` rappresenta il risultato dell'esecuzione.
-
- Il modello non deve contenere HTTP, licensing o logica web.
-
----
-
- # 6\. FDM ENGINE
-
- Il componente:
-
-```
-src/wyp/fdm/engine.py
-```
-
- è il livello di esecuzione del modello FDM.
-
- Responsabilità:
-
-```
-FDMModel
-    |
-    v
 FDMEngine
-    |
-    v
-numerical kernel
-    |
-    v
+FDM verification
+
+
+L'LLM non deve implementare la relazione FDM.
+
+Deve soltanto riconoscere quando una richiesta richiede il modulo FDM e fornire al modulo i parametri strutturati.
+
+9. Verification-first
+
+Ogni risultato verificabile deve seguire, quando possibile:
+
+compute
+  ↓
+verify
+  ↓
+return
+
+
+Non:
+
+LLM guesses
+  ↓
+answer
+
+
+Esempio numerico:
+
+input
+ ↓
+NumericEngine
+ ↓
+NumericResult
+ ↓
+VerificationResult
+ ↓
+LLM explanation
+
+
+Esempio FDM:
+
+FDMModel
+ ↓
+FDMEngine
+ ↓
 FDMComputation
-```
+ ↓
+FDM verification
+ ↓
+LLM
 
- La relazione canonica eseguita è:
+10. Formal verification
 
-```
+Lean può essere utilizzato come verificatore formale.
+
+Architettura:
+
+LLM
+ ↓
+proposed proof / formalization
+ ↓
+Lean
+ ↓
+compiler / checker
+ ↓
+PASS / FAIL
+
+
+Il modello non deve dichiarare una dimostrazione formalmente verificata finché il verificatore formale non ha restituito un risultato positivo.
+
+Una dimostrazione proposta dal modello e una dimostrazione verificata da Lean sono due stati differenti.
+
+11. Open mathematical problems
+
+Il sistema deve distinguere tra:
+
+problema risolvibile
+problema calcolabile
+problema dimostrabile
+problema formalmente verificabile
+problema aperto
+problema non sufficientemente specificato
+
+
+Esempio:
+
+"risolvi P vs NP"
+
+
+deve essere classificato come problema matematico aperto, non trasformato artificialmente in una falsa dimostrazione.
+
+Il sistema deve separare:
+
+conoscenza documentata
+risultato calcolato
+congettura
+ipotesi
+proposta del modello
+dimostrazione verificata
+
+12. Artifact ingestion
+
+WYP deve poter utilizzare materiale matematico esterno.
+
+Formati previsti:
+
+JSON
+Lean
+LaTeX
+PDF
+Markdown
+TXT
+
+
+Pipeline:
+
+ARTIFACT
+   ↓
+IMPORTER
+   ↓
+EXTRACTOR
+   ↓
+NORMALIZER
+   ↓
+WYP-IR
+   ↓
+KNOWLEDGE / TOOL INPUT
+
+
+L'obiettivo non è soltanto estrarre testo.
+
+È estrarre struttura matematica.
+
+13. JSON
+
+JSON strutturato può essere utilizzato direttamente come input WYP-IR quando conforme allo schema.
+
+Esempio:
+
+{
+  "definitions": [],
+  "assumptions": [],
+  "variables": [],
+  "equations": [],
+  "claims": [],
+  "requested_action": "prove"
+}
+
+
+Il sistema deve validare lo schema prima dell'esecuzione.
+
+14. LaTeX
+
+LaTeX deve essere trattato come sorgente strutturale.
+
+Esempio:
+
 M_d(U) = Q(U)^d
-```
 
- Il motore supporta i domini numerici previsti:
 
-```
-exact
-decimal
-float
-```
+può essere normalizzato in una rappresentazione interna equivalente.
 
- Il motore non deve duplicare la logica numerica del kernel.
+Il testo LaTeX originale deve comunque essere conservato come sorgente.
 
----
+Non bisogna perdere la provenienza dell'informazione.
 
- # 7\. NUMERICAL CORE
+15. Lean
 
- Il livello numerico è separato dalla matematica FDM.
+Il codice Lean deve essere conservato come artefatto verificabile.
 
- Il componente:
+Pipeline:
 
-```
-src/wyp/core/numeric.py
-```
+Lean source
+   ↓
+parser / project environment
+   ↓
+formal declarations
+   ↓
+verification
+   ↓
+structured result
 
- gestisce conversione e aritmetica numerica.
 
- Rappresentazioni:
+L'LLM può:
 
-```
-exact
-decimal
-float
-```
+leggere
+spiegare
+proporre
+trasformare
+generare
 
- Il kernel numerico deve rimanere indipendente da:
 
- - HTTP;
-- Cloudflare;
-- licensing;
-- linguaggio naturale;
-- UI;
-- Jotform;
-- teoremi.
+ma la validità formale deve essere determinata dal sistema Lean.
 
- La separazione architetturale è intenzionale.
+16. PDF
 
----
+I PDF devono essere trattati come documenti sorgente.
 
- # 8\. RESULT LAYER
+Pipeline concettuale:
 
- Il componente:
+PDF
+ ↓
+text extraction
+ ↓
+layout / section extraction
+ ↓
+formula extraction
+ ↓
+definition extraction
+ ↓
+theorem / lemma extraction
+ ↓
+WYP-IR
 
-```
-src/wyp/core/result.py
-```
 
- fornisce strutture risultato condivise:
+Quando l'estrazione è ambigua, il sistema deve conservare l'incertezza invece di inventare contenuto.
 
-```
+Le informazioni estratte devono mantenere la provenienza:
+
+{
+  "source": "document.pdf",
+  "page": 12,
+  "section": "Theorem 3",
+  "content": "..."
+}
+
+17. Provenance
+
+Ogni informazione derivata da un artifact dovrebbe poter mantenere:
+
+source
+source_type
+document_id
+page
+section
+line
+hash
+extraction_method
+
+
+La provenienza permette di ricostruire da dove è arrivata un'informazione.
+
+18. WYP Artifact
+
+Il sistema dovrà introdurre un contenitore concettuale:
+
+WYPArtifact
+
+
+Responsabilità:
+
+identità dell'artefatto
+sorgente
+formato
+contenuto originale
+contenuto estratto
+metadati
+provenienza
+hash
+stato di parsing
+
+
+L'artefatto originale non deve essere modificato dall'estrazione.
+
+19. WYP Tool
+
+I moduli matematici devono progressivamente convergere verso un'interfaccia comune.
+
+Concettualmente:
+
+WYPTool
+ ├── name
+ ├── capabilities
+ ├── input schema
+ ├── execute()
+ ├── output schema
+ └── verification
+
+
+Esempi:
+
+NumericTool
+SymbolicTool
+FDMTool
+LeanTool
+DocumentTool
+
+
+Questo permette all'orchestratore di selezionare gli strumenti senza legarsi a una singola implementazione.
+
+20. WYP Execution
+
+Ogni richiesta complessa dovrebbe poter produrre una traccia strutturata:
+
+WYPExecution
+
+
+Esempio:
+
+{
+  "request": "...",
+  "problem": {},
+  "plan": [],
+  "tool_calls": [],
+  "results": [],
+  "verification": [],
+  "warnings": [],
+  "final_answer": "..."
+}
+
+
+Questo permette audit, debugging e riproducibilità.
+
+21. LLM backend
+
+L'LLM deve essere un componente sostituibile.
+
+Possibili backend:
+
+remote API
+local model
+GGUF
+llama.cpp
+altri runtime compatibili
+
+
+Il resto del sistema non deve dipendere dal formato del modello.
+
+Architettura:
+
+LLM Adapter
+     ↓
+WYP-IR
+     ↓
+WYP Orchestrator
+
+
+Il modello può quindi essere sostituito senza riscrivere FDM, NumericEngine o Verification.
+
+22. GGUF
+
+GGUF è considerato un possibile formato di distribuzione/esecuzione per un modello locale.
+
+Non deve essere confuso con il solver matematico.
+
+GGUF
+  =
+modello linguistico
+
+WYP
+  =
+sistema di interpretazione, calcolo, orchestrazione e verifica
+
+
+Il GGUF non sostituisce i moduli matematici.
+
+23. Regola di affidabilità
+
+Il sistema deve preferire:
+
+calcolo verificato
+
+
+rispetto a:
+
+affermazione generata
+
+
+Esempio:
+
+LLM:
+"Il risultato dovrebbe essere 1728."
+
+WYP:
+calcola 1728
+
+Verifier:
+PASS
+
+LLM:
+"Il risultato verificato è 1728."
+
+
+Se il verifier restituisce FAIL:
+
+LLM:
+non deve trasformare il risultato in una certezza.
+
+24. Error handling
+
+Ogni livello deve poter restituire:
+
+success
+failure
+unsupported
+ambiguous
+verification_failed
+artifact_parse_failed
+tool_unavailable
+
+
+Gli errori non devono essere trasformati in risultati matematici.
+
+25. Security boundary
+
+L'LLM non deve avere accesso arbitrario al sistema operativo.
+
+Le operazioni devono passare attraverso tool autorizzati.
+
+In particolare:
+
+LLM
+  ≠
+shell arbitraria
+
+LLM
+  ≠
+accesso filesystem arbitrario
+
+LLM
+  ≠
+esecuzione codice arbitrario
+
+
+L'esecuzione deve essere mediata da componenti WYP espliciti.
+
+26. Stato corrente
+
+Componenti già presenti:
+
+FDMModel
+FDMDerivation
+FDMComputation
+
+NumericEngine
+
 NumericResult
 VerificationCheck
 VerificationResult
 ExecutionResult
-```
 
- Il valore numerico contenuto nel risultato rimane autorevole.
+FDM verification
 
- La serializzazione è solamente una rappresentazione per API/JSON.
+WYP HTTP server
 
- Non deve alterare il valore numerico interno.
+WYP public API
 
----
 
- # 9\. FDM VERIFICATION
+Il deployment HTTP è stato portato a esecuzione tramite Python standard library e il servizio è stato verificato in deployment.
 
- Il componente:
+Il file wyp/api.py espone il percorso applicativo:
 
-```
-src/wyp/fdm/verification.py
-```
-
- fornisce verifica indipendente del modello FDM.
-
- La verifica ricostruisce indipendentemente:
-
-```
-Q^d
-```
-
- e confronta il risultato con la computazione.
-
- La verifica deve rimanere separata dall'esecuzione.
-
- Flusso:
-
-```
+request
+ ↓
 FDMModel
-    |
-    +--> FDMEngine
-    |
-    +--> independent verification
-```
-
- Questo evita che il verifier diventi semplicemente una copia dell'engine.
-
----
-
- # 10\. THEOREMS
-
- Il sottosistema:
-
-```
-src/wyp/theorems/
-```
-
- è completato nella sua struttura iniziale.
-
- Componenti:
-
-```
-base.py
-registry.py
-__init__.py
-```
-
- Il theorem registry deve diventare il punto di ingresso per la futura trasformazione:
-
-```
-problema
-    |
-    v
-theorem discovery
-    |
-    v
-teorema applicabile
-    |
-    v
-modello matematico
-    |
-    v
-FDM / numerical engine
-    |
-    v
-verification
-```
-
- Questo passaggio non è ancora considerato completato.
-
----
-
- # 11\. SERVER
-
- Il server:
-
-```
-src/wyp/server.py
-```
-
- è stato rifatto come server HTTP standard-library.
-
- Non usa FastAPI.
-
- Il comando di avvio verificato è:
-
-```
-PYTHONPATH=src python -m wyp.server
-```
-
- Il server utilizza:
-
-```
-http.server
-ThreadingHTTPServer
-BaseHTTPRequestHandler
-```
-
- Endpoint presenti:
-
-```
-GET /
-HEAD /
-GET /health
-POST /solve
-OPTIONS
-```
-
- Il server gestisce:
-
-```
-HTTP
-    |
-    v
-request validation
-    |
-    v
-license verification
-    |
-    v
-FDM processing
-    |
-    v
-JSON response
-```
-
- Il server non deve diventare il luogo dove duplicare la matematica privata.
-
----
-
- # 12\. RENDER DEPLOY
-
- Il private core è deployato su Render:
-
-```
-https://aos-private-core.onrender.com
-```
-
- Il deploy è stato verificato come riuscito.
-
- Ambiente verificato:
-
-```
-Python 3.14.3
-```
-
- Build command:
-
-```
-pip install --upgrade pip && pip install -r src/wyp/requirements.txt
-```
-
- Start command:
-
-```
-PYTHONPATH=src python -m wyp.server
-```
-
- Il server si avvia sulla porta fornita da Render.
-
- Il log verificato include:
-
-```
-[WYP] service=WYP
-[WYP] component=FDM
-[WYP] HTTP backend ready
-```
-
- Il servizio è quindi considerato:
-
-```
-RENDER DEPLOYMENT = GREEN
-```
-
----
-
- # 13\. FASTAPI
-
- FastAPI NON è necessario per l'attuale server.
-
- La precedente dipendenza FastAPI è stata rimossa.
-
- Non reintrodurre FastAPI automaticamente.
-
- Prima di aggiungere una dipendenza HTTP:
-
- 1. verificare la necessità;
-2. verificare l'impatto sul deploy;
-3. verificare il contratto architetturale;
-4. evitare di modificare il server standard-library senza motivo.
-
----
-
- # 14\. LICENSING
-
- Il licensing è server-side.
-
- Modulo:
-
-```
-wyp.license
-```
-
- La verifica utilizza Ed25519.
-
- Il private signing key non deve essere presente nella repository.
-
- Configurazione server-side:
-
-```
-WYP_LICENSE_KEY
-WYP_LICENSE_PUBLIC_KEY
-```
-
- La funzione principale è:
-
-```
-require_license()
-```
-
- La licenza viene verificata prima dell'esecuzione protetta.
-
- Non mettere mai nel frontend:
-
- - license token;
-- signing key;
-- Render secret;
-- credenziali private.
-
----
-
- # 15\. CLOUDFLARE WORKER
-
- Worker pubblico:
-
-```
-https://wyp.auf2026.workers.dev/
-```
-
- Il Worker deve rimanere un gateway.
-
- Architettura:
-
-```
-Browser
-   |
-   v
-Cloudflare Worker
-   |
-   v
-AOS-PRIVATE-CORE
-```
-
- Il Worker non deve contenere:
-
- - solver;
-- matematica;
-- FDM implementation;
-- teoremi privati;
-- Lean;
-- private key;
-- license token;
-- Render secrets.
-
- Il Worker deve:
-
- 1. ricevere HTTP;
-2. gestire CORS;
-3. validare superficialmente il JSON;
-4. inoltrare la richiesta;
-5. restituire la risposta.
-
----
-
- # 16\. PUBLIC SOLVER
-
- Il browser pubblico non deve chiamare direttamente:
-
-```
-https://aos-private-core.onrender.com
-```
-
- Il browser deve chiamare:
-
-```
-https://wyp.auf2026.workers.dev/solve
-```
-
- Il flusso corretto è:
-
-```
-USER
- |
- v
-PUBLIC WYP TESTER
- |
- v
-CLOUDFLARE WORKER
- |
- v
-PRIVATE CORE
- |
- v
-THEOREMS
- |
- v
-FDM ENGINE
- |
- v
-NUMERICAL CORE
- |
- v
-VERIFICATION
- |
- v
-RESULT
-```
-
----
-
- # 17\. ATTUALE PROBLEMA API
-
- Il precedente `/solve` era orientato direttamente al modello FDM.
-
- Richiedeva campi come:
-
-```
-{
-  "modulus": 12,
-  "dimension": 3,
-  "name": "faure"
-}
-```
-
- Questo è utile per testare direttamente FDM, ma non rappresenta ancora il contratto definitivo del WYP Solver pubblico.
-
- Il tester pubblico deve poter inviare un problema.
-
- Esempio:
-
-```
-{
-  "problem": "2 + 3"
-}
-```
-
- oppure:
-
-```
-{
-  "problem": "Dimostra che ...",
-  "mode": "exact"
-}
-```
-
- Il formato definitivo deve essere stabilito dal private core.
-
- Il frontend NON deve inventare:
-
-```
-modulus
-dimension
-quotient
-```
-
- solo per adattarsi all'implementazione interna.
-
----
-
- # 18\. NUOVO SOLVER CONTRACT
-
- Il prossimo obiettivo architetturale è:
-
-```
-POST /solve
-```
-
- con un input orientato al problema.
-
- Pipeline prevista:
-
-```
-POST /solve
-      |
-      v
-require_license()
-      |
-      v
-problem parser
-      |
-      v
-theorem registry
-      |
-      v
-mathematical model
-      |
-      v
-FDMEngine / numerical kernel
-      |
-      v
-independent verification
-      |
-      v
-structured result
-```
-
- Questo è il prossimo grande passaggio.
-
- Non è ancora da considerarsi completato.
-
----
-
- # 19\. PUBLIC JAVASCRIPT
-
- Il JavaScript pubblico deve:
-
- - gestire la UI;
-- raccogliere il problema;
-- inviare il POST al Worker;
-- mostrare il risultato;
-- gestire gli errori;
-- eventualmente mostrare lo stato del servizio.
-
- Non deve contenere:
-
-```
-FDM equations
-solver logic
-theorem implementation
-license verification
-license token
-private key
-Render secrets
-```
-
- Non deve implementare matematica.
-
----
-
- # 20\. JOTFORM
-
- Jotform è separato dal solver.
-
- Il form contatti non deve essere trasformato in una richiesta `/solve`.
-
- Architettura:
-
-```
-Jotform
-   |
-   | indipendente
-   |
-WYP Solver
-   |
-   v
-Cloudflare
-```
-
- Il comportamento del form deve rimanere invariato salvo esplicita necessità.
-
----
-
- # 21\. PUBLIC PAGES
-
- La repository pubblica prevede:
-
-```
-Home
-About
-Research
-Documentation
-License
-```
-
- File possibili:
-
-```
-index.html
-about.html
-research.html
-documentation.html
-license.html
-```
-
- Il sito deve rimanere semplice e statico.
-
- Non introdurre framework inutili.
-
----
-
- # 22\. STATO ATTUALE
-
- ## COMPLETATO
-
-```
-☑ theorems/base.py
-☑ theorems/registry.py
-☑ theorems/__init__.py
-
-☑ fdm/engine.py
-☑ fdm/model.py
-☑ fdm/verification.py
-
-☑ core/numeric.py
-☑ core/result.py
-
-☑ server.py
-
-☑ Render build
-☑ Render deploy
-☑ Python 3.14.3
-☑ server HTTP standard-library
-☑ GET /
-☑ HEAD /
-☑ /health
-☑ POST /solve
-☑ licensing server-side
-☑ separazione public/private
-```
-
- ## DA FARE
-
-```
-⬜ problem parser
-⬜ theorem discovery
-⬜ collegamento problem -> theorem registry
-⬜ collegamento theorem -> mathematical model
-⬜ nuovo contratto pubblico /solve
-⬜ verifica end-to-end del nuovo /solve
-⬜ allineamento Cloudflare Worker al nuovo contratto
-⬜ aggiornamento public JavaScript
-⬜ aggiornamento public tester
-⬜ test completo Browser -> Worker -> Render -> Engine -> Verification
-```
-
----
-
- # 23\. ORDINE DI LAVORO
-
- Procedere esclusivamente in questo ordine:
-
- ## Step 1 — Problem parser
-
- Creare il livello che riceve:
-
-```
-{
-  "problem": "..."
-}
-```
-
- e costruisce una rappresentazione interna del problema.
-
- ## Step 2 — Theorem discovery
-
- Collegare il problema al:
-
-```
-theorems/registry.py
-```
-
- senza duplicare i teoremi nel server.
-
- ## Step 3 — Mathematical model
-
- Trasformare il problema riconosciuto in un modello matematico interno.
-
- ## Step 4 — FDM execution
-
- Utilizzare:
-
-```
+ ↓
 FDMEngine
-```
+ ↓
+FDMComputation
+ ↓
+public dictionary
 
- e il numerical kernel già presente.
+27. Prossima evoluzione
 
- ## Step 5 — Independent verification
+La prossima fase non consiste nel sostituire FDM.
 
- Utilizzare:
+Consiste nell'aggiungere sopra i componenti esistenti:
 
-```
-fdm/verification.py
-```
+WYPProblem
+WYP-IR
+WYPTool
+WYPArtifact
+WYPExecution
+LLM Adapter
+WYP Orchestrator
 
- e/o:
 
-```
-core/result.py
-```
+Ordine consigliato:
 
- per produrre una verifica strutturata.
+1. definire WYP-IR
+2. definire WYPProblem
+3. definire WYPTool
+4. definire WYPExecution
+5. definire WYPArtifact
+6. creare artifact ingestion
+7. collegare FDM come tool
+8. collegare NumericEngine come tool
+9. aggiungere symbolic tool
+10. aggiungere verification routing
+11. aggiungere Lean integration
+12. aggiungere LLM adapter
+13. aggiungere local/GGUF backend
+14. collegare il solver HTML
 
- ## Step 6 — API result
+28. Principio di continuità
 
- Restituire JSON strutturato.
+Ogni nuova istanza AI che riprende il progetto deve leggere questo documento prima di modificare il codice.
 
- ## Step 7 — Direct Render test
+Prima di intervenire deve:
 
- Testare:
+1. identificare l'architettura esistente
+2. leggere i moduli coinvolti
+3. non duplicare componenti già presenti
+4. non sostituire FDM con il modello linguistico
+5. mantenere la verifica indipendente
+6. mantenere la provenienza degli artifact
+7. modificare un livello alla volta
+8. eseguire test prima del deploy
+9. verificare il deployment dopo modifiche al boundary HTTP
 
-```
-client
-  |
-  v
-Render /solve
-```
+29. Regola finale
 
- prima di modificare il frontend.
+WYP non deve diventare semplicemente:
 
- ## Step 8 — Cloudflare
+LLM → risposta
 
- Testare:
 
-```
-client
-  |
-  v
-Cloudflare
-  |
-  v
-Render
-```
+La destinazione architetturale è:
 
- ## Step 9 — Public JS
-
- Solo dopo la verifica backend, aggiornare il tester pubblico.
-
- ## Step 10 — End-to-end
-
- Verificare:
-
-```
-GitHub Pages
-    |
-    v
-WYP Tester
-    |
-    v
-Cloudflare Worker
-    |
-    v
-Private Core
-    |
-    v
-License
-    |
-    v
-Problem Parser
-    |
-    v
-Theorem Registry
-    |
-    v
-Mathematical Model
-    |
-    v
-FDM / Numerical Core
-    |
-    v
-Verification
-    |
-    v
-JSON
-    |
-    v
-Browser
-```
-
----
-
- # 24\. REGOLE PER LA NUOVA ISTANZA AI
-
- Prima di modificare codice:
-
- 1. leggere `docs/AI_BOOTSTRAP.md`;
-2. controllare la repository reale;
-3. controllare i file già completati;
-4. non ripartire da zero;
-5. non modificare componenti verificati senza motivo;
-6. non reintrodurre FastAPI;
-7. non spostare matematica privata nella repository pubblica;
-8. non mettere licenze o segreti nel frontend;
-9. non mettere private key in Git;
-10. non far chiamare Render direttamente dal browser;
-11. usare Cloudflare Worker come gateway;
-12. non confondere Jotform con il solver;
-13. non esporre strutture FDM interne come contratto pubblico senza necessità;
-14. modificare prima il backend;
-15. testare il backend prima del frontend;
-16. dopo ogni milestone verificata aggiornare questo file;
-17. procedere in parti quando un file è grande, evitando sostituzioni corrotte;
-18. non dichiarare completato un componente finché non è stato effettivamente verificato.
-
----
-
- # 25\. REGOLA DI CONTINUITÀ
-
- Questo file deve essere aggiornato durante lo sviluppo.
-
- Ogni nuova istanza AI deve poter capire immediatamente:
-
-```
-cosa è completato
-cosa è verificato
-cosa è in corso
-cosa è ancora da fare
-qual è il prossimo singolo passaggio
-```
-
- Non usare questo documento come semplice descrizione storica.
-
- È il registro operativo del progetto.
-
----
-
- # 26\. PUNTO ESATTO DI RIPRESA
-
- Stato attuale:
-
-```
-PRIVATE CORE
-     |
-     +-- THEOREMS          READY
-     |
-     +-- FDM MODEL         READY
-     |
-     +-- FDM ENGINE        READY
-     |
-     +-- FDM VERIFICATION  READY
-     |
-     +-- NUMERIC CORE      READY
-     |
-     +-- RESULT LAYER      READY
-     |
-     +-- SERVER            READY
-     |
-     +-- RENDER            GREEN
-```
-
- Il prossimo punto da implementare è:
-
-```
-PROBLEM INPUT
-     |
-     v
-PROBLEM PARSER
-     |
-     v
-THEOREM REGISTRY
-     |
-     v
-MATHEMATICAL MODEL
-     |
-     v
-FDM ENGINE
-     |
-     v
-VERIFICATION
-     |
-     v
-STRUCTURED RESPONSE
-```
-
- Non ripartire dal deploy Render.
-
- Non modificare il numerical core senza necessità.
-
- Non riscrivere FDM.
-
- Non riscrivere il theorem subsystem già completato.
-
- Il prossimo obiettivo concreto è:
-
-```
-PRIVATE CORE /solve
-        ↓
-problem-oriented request
-        ↓
-theorem discovery
-        ↓
-mathematical execution
-        ↓
+utente
+  ↓
+LLM
+  ↓
+WYP-IR
+  ↓
+orchestrator
+  ↓
+specialized mathematical tools
+  ↓
 independent verification
-        ↓
-structured JSON
-```
+  ↓
+structured execution result
+  ↓
+LLM
+  ↓
+human-readable answer
 
- Solo dopo:
 
-```
-CLOUDFLARE /solve
-        ↓
-PUBLIC WYP TESTER
-```
+Il modello linguistico fornisce comprensione e composizione.
 
- e infine:
+WYP fornisce struttura, calcolo, strumenti, provenienza e verifica.
 
-```
-FULL END-TO-END TEST
-```
-
----
-
- # 27\. BASELINE
-
- Baseline corrente:
-
-```
-WYP / AUF2026
-Private Core: AOS-PRIVATE-CORE
-Public Repo: WYP_system
-
-FDM subsystem: COMPLETE
-Theorem subsystem: COMPLETE
-Numerical/result layer: COMPLETE
-HTTP server: COMPLETE
-Render deployment: VERIFIED
-Public solver contract: NEXT
-```
-
- Questo è il punto ufficiale da cui la prossima istanza AI deve continuare.
-
- Questo sostituisce il bootstrap precedente e soprattutto **toglie l'ambiguità tra ciò che era previsto e ciò che abbiamo realmente completato**. Il prossimo lavoro rimane quindi chiaramente il `problem parser → theorem registry → model → execution → verification`, senza toccare inutilmente ciò che è già verde.
+Questa separazione deve essere mantenuta durante tutte le successive evoluzioni del sistema.
