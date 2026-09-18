@@ -1,10 +1,4 @@
-Ho letto **l'intero `AI_BOOTSTRAP.md` attuale** della repo pubblica, compresa la parte finale aggiunta sullo stato del backend.  GitHub+1
-
- Ci sono però alcune informazioni ormai superate rispetto allo stato che mi hai appena mostrato: soprattutto **Render è già verde**, il server parte con `PYTHONPATH=src python -m wyp.server`, il Worker è operativo come gateway e il JS pubblico è già stato riallineato al Worker. Quindi il bootstrap va riscritto per fotografare **lo stato reale attuale**, senza lasciare istruzioni vecchie come "definire il vero `/solve`" se quello è già stato implementato.  GitHub
-
- Ti lascio quindi il file completo aggiornato, pronto da sostituire a `docs/AI_BOOTSTRAP.md`.
-
- # AI BOOTSTRAP — WYP / AUF2026
+# AI BOOTSTRAP — WYP / AUF2026
 
  ## 0\. SCOPO DI QUESTO FILE
 
