@@ -1,8 +1,4 @@
-Ho letto **prima l'`AI_BOOTSTRAP.md` attuale**. È diventato obsoleto in diversi punti: continua a descrivere come “prossimo lavoro” cose che sono già state fatte, e soprattutto contiene il vecchio stato degli errori/import e una licenza di sviluppo che **non deve stare nel bootstrap pubblico**.  GitHub+1
-
- Questo è il bootstrap aggiornato allo stato attuale: **Render verde, Worker operativo, frontend pubblico passato al Worker, core `pipeline/router/llm` presenti, prossimo punto reale = verificare/chiudere il contratto `server.py /solve` end-to-end.**
-
- # AI BOOTSTRAP — WYP / AUF2026
+# AI BOOTSTRAP — WYP / AUF2026
 
  ## 0\. SCOPO
 
